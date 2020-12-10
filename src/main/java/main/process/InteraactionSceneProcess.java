@@ -7,10 +7,9 @@ import main.ProgressButton;
 import main.SecondStage;
 import main.gaze.devicemanager.AbstractGazeDeviceManager;
 
-import java.io.File;
 import java.io.IOException;
 
-public class AugComProcess implements AppProcess {
+public class InteraactionSceneProcess implements AppProcess {
 
     ProcessBuilder pb;
 
@@ -20,7 +19,7 @@ public class AugComProcess implements AppProcess {
                 // "--fullscreen","--app="+"http://www.augcom.net");
                 // "--new-window", "--disable-pinch", "--overscroll-history-navigation=0",
                 "--kiosk",
-                "--window-position=0,0", "--disable-gpu", "--no-sandbox", "--fullscreen", "http://augcom.net/");
+                "--window-position=0,0", "--disable-gpu", "--no-sandbox", "--fullscreen", "http://interaactionScene.net/");
         //"--start-fullscreen" ,"--new-window","--window-position=0,0",  "--disable-gpu", "--no-sandbox", "http://www.augcom.net");
     }
 

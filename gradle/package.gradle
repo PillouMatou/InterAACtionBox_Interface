@@ -1,0 +1,10 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+task('packageAllDists').dependsOn('linuxDistTar', 'windowsDistZip', 'assembleNoJREDist')
+
+task packageApp(dependsOn: ['packageAllDists'], group: 'distribution') {
+}
+
+task packageAppWithDistPermissions(dependsOn: packageApp, type: Exec, group: 'distribution') {
+    commandLine 'chmod', '-R', '777', "${rootDir}/build/distributions"
+}

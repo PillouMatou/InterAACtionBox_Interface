@@ -2,13 +2,10 @@
 /out/
 /.idea
 /.gradle
-/gradle
 /src/.gradle
 /src/build
-/src/gradle
 .gradle
 .idea
-/gradle/
 /.idea/
 /.gradle/
 /build/

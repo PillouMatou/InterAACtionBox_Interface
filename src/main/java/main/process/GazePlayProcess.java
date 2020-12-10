@@ -14,6 +14,12 @@ import java.util.LinkedList;
 
 public class GazePlayProcess implements AppProcess {
     ProcessBuilder pb;
+    String gazePlayInstallationRepo;
+
+    public GazePlayProcess( String gazePlayInstallationRepo){
+        super();
+        this.gazePlayInstallationRepo = gazePlayInstallationRepo;
+    }
 
     @Override
     public Process start() {
@@ -31,12 +37,10 @@ public class GazePlayProcess implements AppProcess {
     }
 
     private ProcessBuilder createGazePlayBuilder() {
-        String javaBin = "C:\\Program Files (x86)\\GazePlay\\lib\\jre\\bin\\java.exe";
-        String classpath = "C:\\Program Files (x86)\\GazePlay\\lib\\*";
+        String javaBin = gazePlayInstallationRepo + "\\lib\\jre\\bin\\java.exe";
+        String classpath = gazePlayInstallationRepo + "\\lib\\*";
 
         LinkedList<String> commands = new LinkedList<>(Arrays.asList(javaBin, "-cp", classpath, "net.gazeplay.GazePlayLauncher"));
-
-        System.out.println(javaBin + " " + "-cp" + " " + classpath + " " + "net.gazeplay.GazePlayLauncher");
 
         return new ProcessBuilder(commands);
     }
@@ -44,8 +48,7 @@ public class GazePlayProcess implements AppProcess {
     @Override
     public ProgressButton createButton(BorderPane borderPane, SecondStage stage, AbstractGazeDeviceManager tgdm) {
         ProgressButton pb = new ProgressButton();
-        File f = new File("src/ressources/images/gazeplayicon.png");
-        ImageView logo = new ImageView(new Image("file:" + f.getAbsolutePath()));
+        ImageView logo = new ImageView(new Image("images/gazeplayicon.png"));
         pb.getButton().setRadius(100);
         logo.setFitWidth(pb.getButton().getRadius() * 0.7);
         logo.setFitHeight(pb.getButton().getRadius() * 0.7);
@@ -56,7 +59,6 @@ public class GazePlayProcess implements AppProcess {
         pb.assignIndicator((e) -> {
             stage.proc = this.start();
         }, 500);
-        // Button button = initButton("src/ressources/images/angular.png", borderPane);
         this.init();
         pb.active();
         return pb;

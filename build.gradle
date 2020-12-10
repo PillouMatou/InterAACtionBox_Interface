@@ -1,26 +1,61 @@
 
 buildscript {
-    group = 'com.github.gazeplay'
+    group = 'com.github.InteraactionGroup'
     repositories {
         mavenLocal()
         mavenCentral()
         jcenter()
     }
 }
+
 plugins {
+    id 'application'
+    id 'distribution'
+    id 'de.undercouch.download' version '3.2.0'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
     id 'io.freefair.lombok' version '4.1.4'
 }
+
+ext.javafxVersion = "11.0.2"
+
+// Make it available everywhere via the project ext:
+ext {
+    Download = de.undercouch.gradle.tasks.download.Download
+    download = download
+}
+
+javafx {
+    version = javafxVersion
+    modules = ['javafx.controls', 'javafx.swing', 'javafx.media', 'javafx.web']
+}
+
 apply plugin: 'java'
+apply plugin: 'distribution'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
 apply plugin: 'jacoco'
-//apply plugin: "pmd"
 apply plugin: 'distribution'
 
+apply from: "${rootDir}/gradle/package.gradle"
+apply from: "${rootDir}/gradle/jre.gradle"
+apply from: "${rootDir}/gradle/drivers.gradle"
 
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/resources"
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'main.Main'
+    }
+}
 
 allprojects {
-    group = 'com.github.gazeplay'
+    group = 'com.github.gazePlay'
 
     repositories {
         mavenLocal()
@@ -30,13 +65,8 @@ allprojects {
         maven {
             url = 'https://jitpack.io'
         }
-
-        maven {
-            url = 'https://raw.github.com/agomezmoron/screen-recorder/mvn-repo'
-        }
     }
 }
-
 
 dependencies {
     compile 'com.github.GazePlay:TobiiStreamEngineForJava:5.0'
@@ -53,9 +83,70 @@ dependencies {
     runtime 'org.slf4j:log4j-over-slf4j:1.7.25'
 }
 
-allprojects {
-    group = 'com.github.gazeplay'
-    repositories {
-        mavenCentral()
+
+distributions {
+    noJRE {
+        contents {
+            with distributions.main.contents
+            from("build/reports")
+            from("build/bin") {
+                into 'bin'
+            }
+        }
+    }
+
+    windows {
+        contents {
+            with distributions.main.contents
+            from("build/reports")
+            from("build/bin/interaactionBoxOS-windows.bat") {
+                into 'bin'
+            }
+            from("build/jre/windows-x64") {
+                into 'lib/jre'
+            }
+        }
+    }
+
+    linux {
+        contents {
+            with distributions.main.contents
+            from("build/reports")
+            from("build/bin/interaactionBoxOS-linux.sh") {
+                into 'bin'
+            }
+            from("build/jre/linux-x64") {
+                into 'lib/jre'
+            }
+            from("build/tobiiDrivers") {
+                into 'tobiiDrivers'
+            }
+        }
     }
 }
+
+task('downloadAndExtractLinuxDependecies').dependsOn('downloadAndExtractLinuxJREwithLibavPlugin', 'downloadAndExtractTobiiDriversForLinux')
+
+windowsDistZip.dependsOn(downloadAndExtractWindowsJRE)
+linuxDistTar.dependsOn(downloadAndExtractLinuxDependecies)
+
+tasks.withType(Tar){
+    compression = Compression.GZIP
+    archiveExtension.set('tar.gz')
+}
+
+distZip {
+    duplicatesStrategy = 'exclude'
+}
+
+tasks.withType(Tar){
+    compression = Compression.GZIP
+    archiveExtension.set('tar.gz')
+}
+
+distZip {
+    duplicatesStrategy = 'exclude'
+}
+
+defaultTasks 'clean', 'build'
+startScripts.enabled = false
