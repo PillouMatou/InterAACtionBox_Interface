@@ -27,7 +27,7 @@ public class YoutubeProcess implements AppProcess {
 
     @Override
     public void init() {
-        pb = new ProcessBuilder("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
+        pb = new ProcessBuilder(AppProcess.getBrowser(),
                 // "--fullscreen","--app="+"https://www.youtube.com");
                 //"--new-window", "--disable-pinch", "--overscroll-history-navigation=0",
                 "--kiosk", "--window-position=0,0", "--disable-gpu", "--no-sandbox", "--fullscreen", "https://www.youtube.com");

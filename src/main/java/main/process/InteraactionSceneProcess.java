@@ -15,7 +15,7 @@ public class InteraactionSceneProcess implements AppProcess {
 
     @Override
     public void init() {
-        pb = new ProcessBuilder("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
+        pb = new ProcessBuilder(AppProcess.getBrowser(),
                 // "--fullscreen","--app="+"http://www.augcom.net");
                 // "--new-window", "--disable-pinch", "--overscroll-history-navigation=0",
                 "--kiosk",

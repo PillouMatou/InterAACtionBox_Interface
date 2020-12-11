@@ -19,7 +19,7 @@ public class Main extends Application {
         if(rawArguments.size() > 0){
             return rawArguments.get(0);
         } else {
-            return "C:\\Program Files (x86)\\GazePlay";
+            return "C:/Program Files (x86)/GazePlay";
         }
     }
 

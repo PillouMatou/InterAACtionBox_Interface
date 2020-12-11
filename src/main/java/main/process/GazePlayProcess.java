@@ -5,6 +5,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import main.ProgressButton;
 import main.SecondStage;
+import main.UtilsOS;
 import main.gaze.devicemanager.AbstractGazeDeviceManager;
 
 import java.io.File;
@@ -37,8 +38,13 @@ public class GazePlayProcess implements AppProcess {
     }
 
     private ProcessBuilder createGazePlayBuilder() {
-        String javaBin = gazePlayInstallationRepo + "\\lib\\jre\\bin\\java.exe";
-        String classpath = gazePlayInstallationRepo + "\\lib\\*";
+        String javaBin;
+        if(UtilsOS.isWindows()) {
+            javaBin = gazePlayInstallationRepo + "/lib/jre/bin/java.exe";
+        } else {
+            javaBin = gazePlayInstallationRepo + "/lib/jre/bin/java";
+        }
+        String classpath = gazePlayInstallationRepo + "/lib/*";
 
         LinkedList<String> commands = new LinkedList<>(Arrays.asList(javaBin, "-cp", classpath, "net.gazeplay.GazePlayLauncher"));
 

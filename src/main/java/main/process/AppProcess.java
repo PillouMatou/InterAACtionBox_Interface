@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import main.SecondStage;
+import main.UtilsOS;
 import main.gaze.devicemanager.AbstractGazeDeviceManager;
 
 import java.io.File;
@@ -19,6 +20,15 @@ public interface AppProcess {
     void init();
 
     StackPane createButton(BorderPane borderPane, SecondStage stage, AbstractGazeDeviceManager tgdm);
+
+    static String getBrowser(){
+        if(UtilsOS.isWindows()) {
+            return "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe";
+        } else if (UtilsOS.isUnix()) {
+            return "chromium-browser";
+        }
+        return "";
+    }
 
     default Button initButton(String ressourcePath, BorderPane borderPane) {
         Button newButton = new Button();
