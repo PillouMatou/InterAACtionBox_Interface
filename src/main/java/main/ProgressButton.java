@@ -83,8 +83,8 @@ public class ProgressButton extends StackPane {
     }
 
     public void active2() {
-        this.button.addEventFilter(GazeEvent.GAZE_ENTERED, enterbuttonHandler);
-        this.button.addEventFilter(GazeEvent.GAZE_EXITED, exitbuttonHandler);
+//        this.button.addEventFilter(GazeEvent.GAZE_ENTERED, enterbuttonHandler);
+//        this.button.addEventFilter(GazeEvent.GAZE_EXITED, exitbuttonHandler);
         this.setDisable(false);
         this.button.setDisable(false);
         this.setOpacity(1);
@@ -116,7 +116,7 @@ public class ProgressButton extends StackPane {
         indicator.setMouseTransparent(true);
         indicator.setOpacity(0);
         final ProgressButton pb = this;
-        final Event e1 = new Event(pb, pb, GazeEvent.ANY);
+        final Event e1 = new Event(pb, pb, MouseEvent.MOUSE_CLICKED);
 
         enterbuttonHandler = e -> {
             if (inuse) {

@@ -2,10 +2,17 @@ package main;
 
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import main.gaze.devicemanager.AbstractGazeDeviceManager;
@@ -16,31 +23,20 @@ import main.process.InteraactionSceneProcess;
 import main.process.YoutubeProcess;
 
 import java.awt.*;
-import java.io.File;
 
 public class HomeScreen extends BorderPane {
 
-    int MOUSE_INTERACTION = 0;
-    int GAZE_INTERACTION = 1;
-    int selectionMode = MOUSE_INTERACTION;
-
     private Stage primaryStage;
     public SecondStage secondStage;
-    final AbstractGazeDeviceManager tgdm;
+    AbstractGazeDeviceManager tgdm;
+    final Configuration configuration;
 
-    HomeScreen(Stage primaryStage, String gazePlayInstallationRepo) {
+    HomeScreen(Configuration configuration, Stage primaryStage, String gazePlayInstallationRepo) {
         super();
+        this.configuration = configuration;
+        this.configuration.setHomeScreen(this);
         this.primaryStage = primaryStage;
-        if (selectionMode == GAZE_INTERACTION) {
-            this.tgdm = new TobiiGazeDeviceManager();
-        } else {
-            this.tgdm = new AbstractGazeDeviceManager() {
-                @Override
-                public void destroy() {
-
-                }
-            };
-        }
+        this.tgdm = new TobiiGazeDeviceManager();
 
         ImageView backgroundBlured = new ImageView(new Image("images/blured.jpg"));
 
@@ -56,9 +52,37 @@ public class HomeScreen extends BorderPane {
 
         this.setCenter(menuBar);
 
+
+
+        StackPane titlePane = new StackPane();
+        javafx.scene.shape.Rectangle backgroundForTitle = new Rectangle(0,0, 600,50);
+        backgroundForTitle.widthProperty().bind(primaryStage.widthProperty());
+        backgroundForTitle.setOpacity(0.3);
+
+        javafx.scene.control.Label title = new Label("InteraactionBox");
+        title.setFont(new Font(30));
+
+        Button optionButton = new Button("Options");
+        optionButton.setPrefHeight(50);
+        optionButton.setOnMouseClicked((e)->{
+            configuration.scene.setRoot(configuration.optionsPane);
+        });
+
+        HBox titleBox = new HBox(optionButton, title);
+        title.prefWidthProperty().bind(primaryStage.widthProperty().subtract(optionButton.widthProperty().multiply(2)));
+        titleBox.prefWidthProperty().bind(primaryStage.widthProperty());
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.setAlignment(Pos.CENTER);
+        titlePane.getChildren().addAll(backgroundForTitle, titleBox);
+
+        BorderPane.setAlignment(titlePane,Pos.CENTER);
+        this.setTop(titlePane);
+
+        ((TobiiGazeDeviceManager) tgdm).init(configuration);
         startMouseListener();
 //        backgroundBlured.setOpacity(0.5);
 //        this.setOpacity(0.5);
+
     }
 
 
@@ -95,10 +119,7 @@ public class HomeScreen extends BorderPane {
     }
 
     private void createSecondStage(String gazePlayInstallationRepo) {
-        secondStage = new SecondStage(primaryStage, tgdm, gazePlayInstallationRepo);
-        if (selectionMode == GAZE_INTERACTION) {
-            ((TobiiGazeDeviceManager) tgdm).init(secondStage);
-        }
+        secondStage = new SecondStage(configuration, primaryStage, tgdm, gazePlayInstallationRepo);
     }
 
     private void startMouseListener() {

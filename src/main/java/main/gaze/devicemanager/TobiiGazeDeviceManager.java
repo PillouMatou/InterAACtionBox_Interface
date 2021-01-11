@@ -1,6 +1,7 @@
 package main.gaze.devicemanager;
 
 import lombok.extern.slf4j.Slf4j;
+import main.Configuration;
 import main.SecondStage;
 
 import java.awt.*;
@@ -18,9 +19,9 @@ public class TobiiGazeDeviceManager extends AbstractGazeDeviceManager {
         super();
     }
 
-    public void init(SecondStage stage) {
+    public void init(Configuration configuration) {
         try {
-            positionPollerRunnable = new PositionPollerRunnable(this, stage);
+            positionPollerRunnable = new PositionPollerRunnable(configuration);
         } catch (AWTException e) {
             e.printStackTrace();
         }

@@ -23,7 +23,7 @@ public class SecondStage extends Stage {
     public AbstractGazeDeviceManager tgdm;
 
 
-    public SecondStage(Stage primaryStage, AbstractGazeDeviceManager tgdm, String gazePlayInstallationRepo) {
+    public SecondStage(Configuration configuration, Stage primaryStage, AbstractGazeDeviceManager tgdm, String gazePlayInstallationRepo) {
         super();
         this.initStyle(StageStyle.TRANSPARENT);
         this.tgdm = tgdm;
@@ -40,6 +40,13 @@ public class SecondStage extends Stage {
 
         Scene scene = new Scene(secondSageRoot, Color.TRANSPARENT);
         this.setScene(scene);
+
+        scene.setOnMouseMoved((e)->{
+            if (configuration.isGazeInteraction()) {
+                configuration.analyse(e.getScreenX(), e.getScreenY());
+            }
+        });
+
     }
 
     public LinkedList<ProgressButton> setButtons(Stage primaryStage, String gazePlayInstallationRepo) {

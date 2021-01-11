@@ -2,14 +2,12 @@ package main;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.util.List;
-import java.util.Map;
 
 public class Main extends Application {
 
@@ -28,7 +26,12 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setTitle("Hello World");
-        Scene scene = new Scene(new HomeScreen(primaryStage, getGazePlayInstallationRepo()), Color.TRANSPARENT);
+
+        Configuration configuration = new Configuration();
+        HomeScreen homeScreen = new HomeScreen(configuration, primaryStage, getGazePlayInstallationRepo());
+        OptionsPane optionsPane = new OptionsPane(configuration, primaryStage);
+        Scene scene = new Scene( homeScreen , Color.TRANSPARENT);
+        configuration.setScene(scene);
         primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());
         primaryStage.setHeight(Screen.getPrimary().getBounds().getHeight());
 
@@ -36,7 +39,11 @@ public class Main extends Application {
 
         StageUtils.displayUnclosable(primaryStage);
 
-        primaryStage.setOpacity(0.2);
+        scene.setOnMouseMoved((e)->{
+            if (configuration.isGazeInteraction()) {
+                configuration.analyse(e.getScreenX(), e.getScreenY());
+            }
+        });
     }
 
     public static void main(String[] args) {
