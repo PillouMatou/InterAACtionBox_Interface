@@ -40,7 +40,7 @@ public class HomeScreen extends BorderPane {
 
         ImageView backgroundBlured = new ImageView(new Image("images/blured.jpg"));
 
-        backgroundBlured.setOpacity(0.9);
+        backgroundBlured.setOpacity(1);
 
         backgroundBlured.fitWidthProperty().bind(primaryStage.widthProperty());
         backgroundBlured.fitHeightProperty().bind(primaryStage.heightProperty());
@@ -80,8 +80,6 @@ public class HomeScreen extends BorderPane {
 
         ((TobiiGazeDeviceManager) tgdm).init(configuration);
         startMouseListener();
-//        backgroundBlured.setOpacity(0.5);
-//        this.setOpacity(0.5);
 
     }
 
@@ -127,7 +125,7 @@ public class HomeScreen extends BorderPane {
             while (true) {
                 checkMouse();
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -138,13 +136,16 @@ public class HomeScreen extends BorderPane {
     }
 
     synchronized private void checkMouse() {
-        PointerInfo a = MouseInfo.getPointerInfo();
-        Point b = a.getLocation();
-        int x = (int) b.getX();
-        int y = (int) b.getY();
+        PointerInfo pointer = MouseInfo.getPointerInfo();
+        Point pointerLocation = pointer.getLocation();
+        int x = (int) pointerLocation.getX();
+        int y = (int) pointerLocation.getY();
         if (x > 500 && x < Screen.getPrimary().getBounds().getWidth() - 500 && y <= 10) {
             Platform.runLater(() -> {
                 primaryStage.hide();
+                if(secondStage.proc!=null) {
+                    secondStage.proc.destroy();
+                }
                 StageUtils.displayUnclosable(secondStage);
             });
         }

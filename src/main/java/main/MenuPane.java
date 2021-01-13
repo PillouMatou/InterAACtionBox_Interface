@@ -29,7 +29,7 @@ public class MenuPane extends Pane {
 
         backgroundBlured = new ImageView(new Image("images/blured.jpg" ));
 
-        setOpacityBackground(0.8);
+        setOpacityBackground(1);
 
         backgroundBlured.fitWidthProperty().bind(this.primaryStage.widthProperty());
         backgroundBlured.fitHeightProperty().bind(this.primaryStage.heightProperty());
@@ -38,7 +38,7 @@ public class MenuPane extends Pane {
         setBackgroundListener(backgroundBlured);
 
         closeMenuButton = createCloseMenuButton();
-        this.getChildren().add(closeMenuButton);
+       // this.getChildren().add(closeMenuButton);
     }
 
     public void setCloseMenuHandler(EventHandler<MouseEvent> eventHandler) {

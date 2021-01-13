@@ -21,13 +21,13 @@ import java.util.LinkedList;
 public class SecondStage extends Stage {
     public Process proc;
     public AbstractGazeDeviceManager tgdm;
-
+    public MenuPane secondSageRoot;
 
     public SecondStage(Configuration configuration, Stage primaryStage, AbstractGazeDeviceManager tgdm, String gazePlayInstallationRepo) {
         super();
         this.initStyle(StageStyle.TRANSPARENT);
         this.tgdm = tgdm;
-        MenuPane secondSageRoot = new MenuPane(primaryStage);
+        secondSageRoot = new MenuPane(primaryStage);
         secondSageRoot.setCloseMenuHandler((event) -> {
             if (proc == null) {
                 primaryStage.show();
@@ -85,7 +85,6 @@ public class SecondStage extends Stage {
                     logo.setPreserveRatio(true);
                     logo.setFitWidth(100);
                     logo.setFitHeight(100);
-                    // buttons.get(i).setText("");
                     buttons.get(i).setImage(logo);
                     eventhandler = e -> {
                         if (proc != null) {
@@ -95,6 +94,15 @@ public class SecondStage extends Stage {
                         AugComProcess augComProcess = new AugComProcess();
                         augComProcess.init();
                         proc = augComProcess.start();
+                        proc.onExit().thenRunAsync(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        primaryStage.show();
+                                        primaryStage.toFront();
+                                    }
+                                }
+                        );
                     };
                     break;
                 case 3:
@@ -113,6 +121,15 @@ public class SecondStage extends Stage {
                         InteraactionSceneProcess interaactionSceneProcess = new InteraactionSceneProcess();
                         interaactionSceneProcess.init();
                         proc = interaactionSceneProcess.start();
+                        proc.onExit().thenRunAsync(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        primaryStage.show();
+                                        primaryStage.toFront();
+                                    }
+                                }
+                        );
                     };
                     break;
                 case 4:
@@ -131,6 +148,15 @@ public class SecondStage extends Stage {
                         YoutubeProcess youtubeProcess = new YoutubeProcess();
                         youtubeProcess.init();
                         proc = youtubeProcess.start();
+                        proc.onExit().thenRunAsync(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        primaryStage.show();
+                                        primaryStage.toFront();
+                                    }
+                                }
+                        );
                     };
                     break;
                 case 5:
@@ -149,12 +175,22 @@ public class SecondStage extends Stage {
                         GazePlayProcess gazePlayProcess = new GazePlayProcess(gazePlayInstallationRepo);
                         gazePlayProcess.init();
                         proc = gazePlayProcess.start();
+                        proc.onExit().thenRunAsync(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        primaryStage.show();
+                                        primaryStage.toFront();
+                                    }
+                                }
+                        );
                     };
                     break;
 
                 default:
                     break;
             }
+
             buttons.get(i).setOnMouseClicked(eventhandler);
             buttons.get(i).assignIndicator(eventhandler, 500);
             buttons.get(i).active();

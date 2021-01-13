@@ -31,7 +31,6 @@ public class StageUtils {
             if (newValue)
                 primaryStage.setIconified(false);
         });
-
         Platform.setImplicitExit(false);
         primaryStage.setOnCloseRequest(Event::consume);
 

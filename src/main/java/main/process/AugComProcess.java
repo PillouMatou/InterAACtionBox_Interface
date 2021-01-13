@@ -7,27 +7,23 @@ import main.ProgressButton;
 import main.SecondStage;
 import main.gaze.devicemanager.AbstractGazeDeviceManager;
 
-import java.io.File;
 import java.io.IOException;
 
 public class AugComProcess implements AppProcess {
 
-    ProcessBuilder pb;
+    ProcessBuilder processBuilder;
 
     @Override
     public void init() {
-        pb = new ProcessBuilder(AppProcess.getBrowser(),
-                // "--fullscreen","--app="+"http://www.augcom.net");
-                // "--new-window", "--disable-pinch", "--overscroll-history-navigation=0",
+        processBuilder = new ProcessBuilder(AppProcess.getBrowser(),
                 "--kiosk",
                 "--window-position=0,0", "--disable-gpu", "--no-sandbox", "--fullscreen", "http://augcom.net/");
-        //"--start-fullscreen" ,"--new-window","--window-position=0,0",  "--disable-gpu", "--no-sandbox", "http://www.augcom.net");
     }
 
     @Override
     public Process start() {
         try {
-            return pb.inheritIO().start();
+            return processBuilder.inheritIO().start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,21 +32,21 @@ public class AugComProcess implements AppProcess {
 
     @Override
     public ProgressButton createButton(BorderPane borderPane, SecondStage stage, AbstractGazeDeviceManager tgdm) {
-        ProgressButton pb = new ProgressButton();
+        ProgressButton progressButton = new ProgressButton();
         ImageView logo = new ImageView(new Image("images/angular.png"));
-        pb.getButton().setRadius(100);
-        logo.setFitWidth(pb.getButton().getRadius() * 0.7);
-        logo.setFitHeight(pb.getButton().getRadius() * 0.7);
-        logo.fitWidthProperty().bind(pb.getButton().radiusProperty().multiply(0.7));
-        logo.fitHeightProperty().bind(pb.getButton().radiusProperty().multiply(0.7));
+        progressButton.getButton().setRadius(100);
+        logo.setFitWidth(progressButton.getButton().getRadius() * 0.7);
+        logo.setFitHeight(progressButton.getButton().getRadius() * 0.7);
+        logo.fitWidthProperty().bind(progressButton.getButton().radiusProperty().multiply(0.7));
+        logo.fitHeightProperty().bind(progressButton.getButton().radiusProperty().multiply(0.7));
         logo.setPreserveRatio(true);
-        pb.setImage(logo);
-        pb.assignIndicator((e) -> {
+        progressButton.setImage(logo);
+        progressButton.assignIndicator((e) -> {
             stage.proc = this.start();
         }, 500);
         this.init();
-        pb.active();
-        return pb;
+        progressButton.active();
+        return progressButton;
     }
 
 }

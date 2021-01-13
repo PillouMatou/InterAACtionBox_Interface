@@ -26,7 +26,7 @@ public class OptionsPane extends BorderPane {
 
         ImageView backgroundBlured = new ImageView(new Image("images/blured.jpg"));
 
-        backgroundBlured.setOpacity(0.9);
+        backgroundBlured.setOpacity(1);
 
         backgroundBlured.fitWidthProperty().bind(primaryStage.widthProperty());
         backgroundBlured.fitHeightProperty().bind(primaryStage.heightProperty());
