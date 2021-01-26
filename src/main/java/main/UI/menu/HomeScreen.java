@@ -1,4 +1,4 @@
-package main;
+package main.UI.menu;
 
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -15,6 +14,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import main.Configuration;
+import main.UI.ProgressButton;
+import main.utils.StageUtils;
 import main.gaze.devicemanager.AbstractGazeDeviceManager;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.AugComProcess;
@@ -27,11 +29,11 @@ import java.awt.*;
 public class HomeScreen extends BorderPane {
 
     private Stage primaryStage;
-    public SecondStage secondStage;
+    public QuickMenu quickMenu;
     AbstractGazeDeviceManager tgdm;
     final Configuration configuration;
 
-    HomeScreen(Configuration configuration, Stage primaryStage, String gazePlayInstallationRepo) {
+    public HomeScreen(Configuration configuration, Stage primaryStage, String gazePlayInstallationRepo) {
         super();
         this.configuration = configuration;
         this.configuration.setHomeScreen(this);
@@ -47,7 +49,7 @@ public class HomeScreen extends BorderPane {
 
         this.getChildren().add(backgroundBlured);
 
-        createSecondStage(gazePlayInstallationRepo);
+        createMenuPane(gazePlayInstallationRepo, this);
         HBox menuBar = createMenuBar(gazePlayInstallationRepo);
 
         this.setCenter(menuBar);
@@ -65,7 +67,7 @@ public class HomeScreen extends BorderPane {
         Button optionButton = new Button("Options");
         optionButton.setPrefHeight(50);
         optionButton.setOnMouseClicked((e)->{
-            configuration.scene.setRoot(configuration.optionsPane);
+            configuration.scene.setRoot(configuration.optionsMenu);
         });
 
         HBox titleBox = new HBox(optionButton, title);
@@ -90,13 +92,13 @@ public class HomeScreen extends BorderPane {
         InteraactionSceneProcess interaactionSceneProcess = new InteraactionSceneProcess();
         GazePlayProcess gazePlayProcess = new GazePlayProcess(gazePlayInstallationRepo);
 
-        ProgressButton youtubeProgressButton = youtubeProcess.createButton(this, secondStage, tgdm);
+        ProgressButton youtubeProgressButton = youtubeProcess.createButton(new Image("images/yt.png" ), quickMenu);
         youtubeProgressButton.getLabel().setText("Youtube");
-        ProgressButton augComProcessButton = augComProcess.createButton(this, secondStage, tgdm);
+        ProgressButton augComProcessButton = augComProcess.createButton(new Image("images/angular.png"), quickMenu);
         augComProcessButton.getLabel().setText("AugCom");
-        ProgressButton interaactionSceneProcessButton = interaactionSceneProcess.createButton(this, secondStage, tgdm);
+        ProgressButton interaactionSceneProcessButton = interaactionSceneProcess.createButton(new Image("images/angular.png"), quickMenu);
         interaactionSceneProcessButton.getLabel().setText("InteraactionScene");
-        ProgressButton gazePlayProcessButton = gazePlayProcess.createButton(this, secondStage, tgdm);
+        ProgressButton gazePlayProcessButton = gazePlayProcess.createButton(new Image("images/gazeplayicon.png"), quickMenu);
         gazePlayProcessButton.getLabel().setText("GazePlay");
         HBox menuBar = new HBox(
                 youtubeProgressButton,
@@ -116,8 +118,8 @@ public class HomeScreen extends BorderPane {
         return menuBar;
     }
 
-    private void createSecondStage(String gazePlayInstallationRepo) {
-        secondStage = new SecondStage(configuration, primaryStage, tgdm, gazePlayInstallationRepo);
+    private void createMenuPane(String gazePlayInstallationRepo, HomeScreen homeScreen) {
+        quickMenu = new QuickMenu(primaryStage, tgdm, gazePlayInstallationRepo, homeScreen);
     }
 
     private void startMouseListener() {
@@ -143,10 +145,10 @@ public class HomeScreen extends BorderPane {
         if (x > 500 && x < Screen.getPrimary().getBounds().getWidth() - 500 && y <= 10) {
             Platform.runLater(() -> {
                 primaryStage.hide();
-                if(secondStage.proc!=null) {
-                    secondStage.proc.destroy();
+                if(quickMenu.process !=null) {
+                    quickMenu.process.destroy();
                 }
-                StageUtils.displayUnclosable(secondStage);
+                StageUtils.displayUnclosable(quickMenu, primaryStage);
             });
         }
     }

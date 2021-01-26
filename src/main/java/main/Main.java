@@ -6,6 +6,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.UI.menu.HomeScreen;
+import main.UI.menu.OptionsMenu;
+import main.utils.StageUtils;
 
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class Main extends Application {
 
         Configuration configuration = new Configuration();
         HomeScreen homeScreen = new HomeScreen(configuration, primaryStage, getGazePlayInstallationRepo());
-        OptionsPane optionsPane = new OptionsPane(configuration, primaryStage);
+        OptionsMenu optionsMenu = new OptionsMenu(configuration, primaryStage);
         Scene scene = new Scene( homeScreen , Color.TRANSPARENT);
         configuration.setScene(scene);
         primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());

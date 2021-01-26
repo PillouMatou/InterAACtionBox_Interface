@@ -1,15 +1,12 @@
 package main;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.control.ProgressIndicator;
-import javafx.util.Duration;
 import lombok.Setter;
+import main.UI.menu.HomeScreen;
+import main.UI.menu.OptionsMenu;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -17,11 +14,11 @@ import java.util.LinkedList;
 public class Configuration {
 
     @Setter
-    HomeScreen homeScreen;
+    public HomeScreen homeScreen;
     @Setter
-    OptionsPane optionsPane;
+    public OptionsMenu optionsMenu;
     @Setter
-    Scene scene;
+    public Scene scene;
 
     public int numberOfLastPositionsToCheck = 200;
     public LinkedList<Point2D> lastPositions = new LinkedList<>();

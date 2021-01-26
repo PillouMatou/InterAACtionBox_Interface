@@ -1,28 +1,26 @@
-package main;
+package main.UI.menu;
 
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import main.Configuration;
 
-public class OptionsPane extends BorderPane {
+public class OptionsMenu extends BorderPane {
 
     final Configuration configuration;
 
-    public OptionsPane(Configuration configuration, Stage primaryStage){
+    public OptionsMenu(Configuration configuration, Stage primaryStage){
         super();
         this.configuration = configuration;
-        this.configuration.setOptionsPane(this);
+        this.configuration.setOptionsMenu(this);
 
         ImageView backgroundBlured = new ImageView(new Image("images/blured.jpg"));
 
