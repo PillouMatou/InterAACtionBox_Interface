@@ -14,10 +14,10 @@ import java.util.List;
 
 public class Main extends Application {
 
-    public String getGazePlayInstallationRepo(){
-        Parameters parameters = getParameters ();
-        List<String> rawArguments = parameters.getRaw ();
-        if(rawArguments.size() > 0){
+    public String getGazePlayInstallationRepo() {
+        Parameters parameters = getParameters();
+        List<String> rawArguments = parameters.getRaw();
+        if (rawArguments.size() > 0) {
             return rawArguments.get(0);
         } else {
             return "C:/Program Files (x86)/GazePlay";
@@ -33,7 +33,7 @@ public class Main extends Application {
         Configuration configuration = new Configuration();
         HomeScreen homeScreen = new HomeScreen(configuration, primaryStage, getGazePlayInstallationRepo());
         OptionsMenu optionsMenu = new OptionsMenu(configuration, primaryStage);
-        Scene scene = new Scene( homeScreen , Color.TRANSPARENT);
+        Scene scene = new Scene(homeScreen, Color.TRANSPARENT);
         configuration.setScene(scene);
         primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());
         primaryStage.setHeight(Screen.getPrimary().getBounds().getHeight());
@@ -42,7 +42,7 @@ public class Main extends Application {
 
         StageUtils.displayUnclosable(primaryStage);
 
-        scene.setOnMouseMoved((e)->{
+        scene.setOnMouseMoved((e) -> {
             if (configuration.isGazeInteraction()) {
                 configuration.analyse(e.getScreenX(), e.getScreenY());
             }

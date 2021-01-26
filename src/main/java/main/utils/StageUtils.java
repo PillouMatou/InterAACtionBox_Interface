@@ -61,7 +61,7 @@ public class StageUtils {
         primaryStage.show();
     }
 
-/*---------------Code For forcing the primaryStage to be always on front using thread---------------*/
+    /*---------------Code For forcing the primaryStage to be always on front using thread---------------*/
 //
 //    public void onFrontThread(Stage primaryStage) {
 //        Thread t = new Thread(() -> {
@@ -79,6 +79,6 @@ public class StageUtils {
 //        t.start();
 //    }
 //
-/*------------------------------------------------------------------------------------------------*/
+    /*------------------------------------------------------------------------------------------------*/
 
 }

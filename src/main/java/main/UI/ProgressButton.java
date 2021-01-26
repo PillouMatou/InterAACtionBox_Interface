@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProgressButton extends StackPane {
 
-    private static final int FIXATION_LENGTH  = 500;
+    private static final int FIXATION_LENGTH = 500;
 
     @Getter
     private final Circle button;
@@ -61,7 +61,7 @@ public class ProgressButton extends StackPane {
             indicator.setMinHeight(2 * newVal.doubleValue());
             indicator.setMinWidth(2 * newVal.doubleValue());
             double width = newVal.doubleValue() * 2;
-            this.getImage().setFitWidth( ( 90 * width ) /100);
+            this.getImage().setFitWidth((90 * width) / 100);
         });
     }
 
@@ -104,13 +104,13 @@ public class ProgressButton extends StackPane {
         }
     }
 
-    public void start(){
+    public void start() {
         disable(false);
         started = true;
         this.indicator.setOpacity(0);
     }
 
-    public void stop(){
+    public void stop() {
         disable(true);
         started = false;
     }

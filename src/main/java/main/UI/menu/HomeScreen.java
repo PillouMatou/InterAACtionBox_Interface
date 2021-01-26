@@ -16,13 +16,13 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import main.Configuration;
 import main.UI.ProgressButton;
-import main.utils.StageUtils;
 import main.gaze.devicemanager.AbstractGazeDeviceManager;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.AugComProcess;
 import main.process.GazePlayProcess;
 import main.process.InteraactionSceneProcess;
 import main.process.YoutubeProcess;
+import main.utils.StageUtils;
 
 import java.awt.*;
 
@@ -55,9 +55,8 @@ public class HomeScreen extends BorderPane {
         this.setCenter(menuBar);
 
 
-
         StackPane titlePane = new StackPane();
-        javafx.scene.shape.Rectangle backgroundForTitle = new Rectangle(0,0, 600,50);
+        javafx.scene.shape.Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
         backgroundForTitle.widthProperty().bind(primaryStage.widthProperty());
         backgroundForTitle.setOpacity(0.3);
 
@@ -66,7 +65,7 @@ public class HomeScreen extends BorderPane {
 
         Button optionButton = new Button("Options");
         optionButton.setPrefHeight(50);
-        optionButton.setOnMouseClicked((e)->{
+        optionButton.setOnMouseClicked((e) -> {
             configuration.scene.setRoot(configuration.optionsMenu);
         });
 
@@ -77,7 +76,7 @@ public class HomeScreen extends BorderPane {
         title.setAlignment(Pos.CENTER);
         titlePane.getChildren().addAll(backgroundForTitle, titleBox);
 
-        BorderPane.setAlignment(titlePane,Pos.CENTER);
+        BorderPane.setAlignment(titlePane, Pos.CENTER);
         this.setTop(titlePane);
 
         ((TobiiGazeDeviceManager) tgdm).init(configuration);
@@ -92,7 +91,7 @@ public class HomeScreen extends BorderPane {
         InteraactionSceneProcess interaactionSceneProcess = new InteraactionSceneProcess();
         GazePlayProcess gazePlayProcess = new GazePlayProcess(gazePlayInstallationRepo);
 
-        ProgressButton youtubeProgressButton = youtubeProcess.createButton(new Image("images/yt.png" ), quickMenu);
+        ProgressButton youtubeProgressButton = youtubeProcess.createButton(new Image("images/yt.png"), quickMenu);
         youtubeProgressButton.getLabel().setText("Youtube");
         ProgressButton augComProcessButton = augComProcess.createButton(new Image("images/angular.png"), quickMenu);
         augComProcessButton.getLabel().setText("AugCom");
@@ -145,7 +144,7 @@ public class HomeScreen extends BorderPane {
         if (x > 500 && x < Screen.getPrimary().getBounds().getWidth() - 500 && y <= 10) {
             Platform.runLater(() -> {
                 primaryStage.hide();
-                if(quickMenu.process !=null) {
+                if (quickMenu.process != null) {
                     quickMenu.process.destroy();
                 }
                 StageUtils.displayUnclosable(quickMenu, primaryStage);

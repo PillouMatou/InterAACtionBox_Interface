@@ -37,7 +37,7 @@ public class QuickMenu extends Pane {
         this.gazeDeviceManager = gazeDeviceManager;
         this.setStyle("-fx-background-color: transparent;");
 
-        backgroundBlured = new ImageView(new Image("images/blured.jpg" ));
+        backgroundBlured = new ImageView(new Image("images/blured.jpg"));
 
         setOpacityBackground(1);
 
@@ -239,7 +239,7 @@ public class QuickMenu extends Pane {
     }
 
 
-    public void initAndStartProcess(AppProcess process){
+    public void initAndStartProcess(AppProcess process) {
         process.setUpProcessBuilder();
         this.process = process.start();
         this.process.onExit().thenRunAsync(
