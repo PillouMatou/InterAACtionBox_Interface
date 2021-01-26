@@ -11,7 +11,6 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import main.UI.ProgressButton;
-import main.gaze.devicemanager.AbstractGazeDeviceManager;
 import main.process.*;
 
 import java.awt.geom.Point2D;
@@ -21,28 +20,25 @@ public class QuickMenu extends Pane {
 
 
     public Process process;
-    public AbstractGazeDeviceManager gazeDeviceManager;
-    final Stage primaryStage;
-    final HomeScreen homeScreen;
 
     final LinkedList<ProgressButton> buttons;
 
     final ImageView backgroundBlured;
     final Button closeMenuButton;
 
-    public QuickMenu(Stage primaryStage, AbstractGazeDeviceManager gazeDeviceManager, String gazePlayInstallationRepo, HomeScreen homeScreen) {
+    final GraphicalMenus graphicalMenus;
+
+    public QuickMenu(GraphicalMenus graphicalMenus) {
         super();
-        this.primaryStage = primaryStage;
-        this.homeScreen = homeScreen;
-        this.gazeDeviceManager = gazeDeviceManager;
+        this.graphicalMenus = graphicalMenus;
         this.setStyle("-fx-background-color: transparent;");
 
         backgroundBlured = new ImageView(new Image("images/blured.jpg"));
 
         setOpacityBackground(1);
 
-        backgroundBlured.fitWidthProperty().bind(this.primaryStage.widthProperty());
-        backgroundBlured.fitHeightProperty().bind(this.primaryStage.heightProperty());
+        backgroundBlured.fitWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+        backgroundBlured.fitHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
         getChildren().add(backgroundBlured);
         setBackgroundListener(backgroundBlured);
@@ -51,7 +47,7 @@ public class QuickMenu extends Pane {
         closeMenuButton = createCloseMenuButton();
         getChildren().add(closeMenuButton);
 
-        buttons = setButtons(primaryStage, gazePlayInstallationRepo);
+        buttons = setButtons(graphicalMenus.primaryStage, graphicalMenus.getGazePlayInstallationRepo());
         createCircularButtons();
     }
 
@@ -62,8 +58,8 @@ public class QuickMenu extends Pane {
 
         closeButton.setShape(new Circle(50));
 
-        closeButton.layoutXProperty().bind(primaryStage.widthProperty().divide(2).subtract(25));
-        closeButton.layoutYProperty().bind(primaryStage.heightProperty().divide(2).subtract(25));
+        closeButton.layoutXProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(2).subtract(25));
+        closeButton.layoutYProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(2).subtract(25));
 
         ImageView logo = new ImageView(new Image("images/cross.png"));
         logo.setFitWidth(20);
@@ -158,7 +154,7 @@ public class QuickMenu extends Pane {
                         }
                         primaryStage.show();
                         primaryStage.toFront();
-                        primaryStage.getScene().setRoot(homeScreen);
+                        primaryStage.getScene().setRoot(graphicalMenus.getHomeScreen());
                     };
                     break;
                 case 2:
@@ -233,7 +229,7 @@ public class QuickMenu extends Pane {
             buttons.get(i).setOnMouseClicked(eventhandler);
             buttons.get(i).assignIndicator(eventhandler);
             buttons.get(i).start();
-            gazeDeviceManager.addEventFilter(buttons.get(i));
+            graphicalMenus.getGazeDeviceManager().addEventFilter(buttons.get(i));
         }
         return buttons;
     }
@@ -246,8 +242,8 @@ public class QuickMenu extends Pane {
                 new Runnable() {
                     @Override
                     public void run() {
-                        primaryStage.show();
-                        primaryStage.toFront();
+                        graphicalMenus.primaryStage.show();
+                        graphicalMenus.primaryStage.toFront();
                     }
                 }
         );

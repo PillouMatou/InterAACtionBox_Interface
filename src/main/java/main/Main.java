@@ -6,8 +6,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.UI.menu.GraphicalMenus;
 import main.UI.menu.HomeScreen;
 import main.UI.menu.OptionsMenu;
+import main.gaze.devicemanager.AbstractGazeDeviceManager;
 import main.utils.StageUtils;
 
 import java.util.List;
@@ -30,11 +32,9 @@ public class Main extends Application {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setTitle("Hello World");
 
-        Configuration configuration = new Configuration();
-        HomeScreen homeScreen = new HomeScreen(configuration, primaryStage, getGazePlayInstallationRepo());
-        OptionsMenu optionsMenu = new OptionsMenu(configuration, primaryStage);
-        Scene scene = new Scene(homeScreen, Color.TRANSPARENT);
-        configuration.setScene(scene);
+        GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage, getGazePlayInstallationRepo());
+        Scene scene = new Scene(graphicalMenus.getHomeScreen(), Color.TRANSPARENT);
+        graphicalMenus.getConfiguration().setScene(scene);
         primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());
         primaryStage.setHeight(Screen.getPrimary().getBounds().getHeight());
 
@@ -43,8 +43,8 @@ public class Main extends Application {
         StageUtils.displayUnclosable(primaryStage);
 
         scene.setOnMouseMoved((e) -> {
-            if (configuration.isGazeInteraction()) {
-                configuration.analyse(e.getScreenX(), e.getScreenY());
+            if (graphicalMenus.getConfiguration().isGazeInteraction()) {
+                graphicalMenus.getConfiguration().analyse(e.getScreenX(), e.getScreenY());
             }
         });
     }

@@ -13,10 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
-import javafx.stage.Stage;
-import main.Configuration;
 import main.UI.ProgressButton;
-import main.gaze.devicemanager.AbstractGazeDeviceManager;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.AugComProcess;
 import main.process.GazePlayProcess;
@@ -28,36 +25,30 @@ import java.awt.*;
 
 public class HomeScreen extends BorderPane {
 
-    private Stage primaryStage;
-    public QuickMenu quickMenu;
-    AbstractGazeDeviceManager tgdm;
-    final Configuration configuration;
+    private final GraphicalMenus graphicalMenus;
 
-    public HomeScreen(Configuration configuration, Stage primaryStage, String gazePlayInstallationRepo) {
+
+    public HomeScreen(GraphicalMenus graphicalMenus) {
         super();
-        this.configuration = configuration;
-        this.configuration.setHomeScreen(this);
-        this.primaryStage = primaryStage;
-        this.tgdm = new TobiiGazeDeviceManager();
+        this.graphicalMenus = graphicalMenus;
 
         ImageView backgroundBlured = new ImageView(new Image("images/blured.jpg"));
 
         backgroundBlured.setOpacity(1);
 
-        backgroundBlured.fitWidthProperty().bind(primaryStage.widthProperty());
-        backgroundBlured.fitHeightProperty().bind(primaryStage.heightProperty());
+        backgroundBlured.fitWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+        backgroundBlured.fitHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
         this.getChildren().add(backgroundBlured);
 
-        createMenuPane(gazePlayInstallationRepo, this);
-        HBox menuBar = createMenuBar(gazePlayInstallationRepo);
+        HBox menuBar = createMenuBar(graphicalMenus.getGazePlayInstallationRepo());
 
         this.setCenter(menuBar);
 
 
         StackPane titlePane = new StackPane();
         javafx.scene.shape.Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
-        backgroundForTitle.widthProperty().bind(primaryStage.widthProperty());
+        backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setOpacity(0.3);
 
         javafx.scene.control.Label title = new Label("InteraactionBox");
@@ -66,12 +57,12 @@ public class HomeScreen extends BorderPane {
         Button optionButton = new Button("Options");
         optionButton.setPrefHeight(50);
         optionButton.setOnMouseClicked((e) -> {
-            configuration.scene.setRoot(configuration.optionsMenu);
+            graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu());
         });
 
         HBox titleBox = new HBox(optionButton, title);
-        title.prefWidthProperty().bind(primaryStage.widthProperty().subtract(optionButton.widthProperty().multiply(2)));
-        titleBox.prefWidthProperty().bind(primaryStage.widthProperty());
+        title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(optionButton.widthProperty().multiply(2)));
+        titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
         titlePane.getChildren().addAll(backgroundForTitle, titleBox);
@@ -79,7 +70,7 @@ public class HomeScreen extends BorderPane {
         BorderPane.setAlignment(titlePane, Pos.CENTER);
         this.setTop(titlePane);
 
-        ((TobiiGazeDeviceManager) tgdm).init(configuration);
+        ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
         startMouseListener();
 
     }
@@ -91,13 +82,13 @@ public class HomeScreen extends BorderPane {
         InteraactionSceneProcess interaactionSceneProcess = new InteraactionSceneProcess();
         GazePlayProcess gazePlayProcess = new GazePlayProcess(gazePlayInstallationRepo);
 
-        ProgressButton youtubeProgressButton = youtubeProcess.createButton(new Image("images/yt.png"), quickMenu);
+        ProgressButton youtubeProgressButton = youtubeProcess.createButton(new Image("images/yt.png"), graphicalMenus.getQuickMenu());
         youtubeProgressButton.getLabel().setText("Youtube");
-        ProgressButton augComProcessButton = augComProcess.createButton(new Image("images/angular.png"), quickMenu);
+        ProgressButton augComProcessButton = augComProcess.createButton(new Image("images/angular.png"), graphicalMenus.getQuickMenu());
         augComProcessButton.getLabel().setText("AugCom");
-        ProgressButton interaactionSceneProcessButton = interaactionSceneProcess.createButton(new Image("images/angular.png"), quickMenu);
+        ProgressButton interaactionSceneProcessButton = interaactionSceneProcess.createButton(new Image("images/angular.png"), graphicalMenus.getQuickMenu());
         interaactionSceneProcessButton.getLabel().setText("InteraactionScene");
-        ProgressButton gazePlayProcessButton = gazePlayProcess.createButton(new Image("images/gazeplayicon.png"), quickMenu);
+        ProgressButton gazePlayProcessButton = gazePlayProcess.createButton(new Image("images/gazeplayicon.png"), graphicalMenus.getQuickMenu());
         gazePlayProcessButton.getLabel().setText("GazePlay");
         HBox menuBar = new HBox(
                 youtubeProgressButton,
@@ -105,20 +96,16 @@ public class HomeScreen extends BorderPane {
                 interaactionSceneProcessButton,
                 gazePlayProcessButton
         );
-        tgdm.addEventFilter(youtubeProgressButton.getButton());
-        tgdm.addEventFilter(augComProcessButton.getButton());
-        tgdm.addEventFilter(interaactionSceneProcessButton.getButton());
-        tgdm.addEventFilter(gazePlayProcessButton.getButton());
+        graphicalMenus.getGazeDeviceManager().addEventFilter(youtubeProgressButton.getButton());
+        graphicalMenus.getGazeDeviceManager().addEventFilter(augComProcessButton.getButton());
+        graphicalMenus.getGazeDeviceManager().addEventFilter(interaactionSceneProcessButton.getButton());
+        graphicalMenus.getGazeDeviceManager().addEventFilter(gazePlayProcessButton.getButton());
 
         menuBar.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(menuBar, Pos.CENTER);
 
         menuBar.spacingProperty().bind(this.widthProperty().divide(10));
         return menuBar;
-    }
-
-    private void createMenuPane(String gazePlayInstallationRepo, HomeScreen homeScreen) {
-        quickMenu = new QuickMenu(primaryStage, tgdm, gazePlayInstallationRepo, homeScreen);
     }
 
     private void startMouseListener() {
@@ -143,11 +130,11 @@ public class HomeScreen extends BorderPane {
         int y = (int) pointerLocation.getY();
         if (x > 500 && x < Screen.getPrimary().getBounds().getWidth() - 500 && y <= 10) {
             Platform.runLater(() -> {
-                primaryStage.hide();
-                if (quickMenu.process != null) {
-                    quickMenu.process.destroy();
+                graphicalMenus.primaryStage.hide();
+                if (graphicalMenus.getQuickMenu().process != null) {
+                    graphicalMenus.getQuickMenu().process.destroy();
                 }
-                StageUtils.displayUnclosable(quickMenu, primaryStage);
+                StageUtils.displayUnclosable(graphicalMenus.getQuickMenu(), graphicalMenus.primaryStage);
             });
         }
     }

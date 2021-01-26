@@ -13,33 +13,28 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
 import main.Configuration;
 
 public class OptionsMenu extends BorderPane {
 
-    final Configuration configuration;
-
-    public OptionsMenu(Configuration configuration, Stage primaryStage) {
+    public OptionsMenu(GraphicalMenus graphicalMenus) {
         super();
-        this.configuration = configuration;
-        this.configuration.setOptionsMenu(this);
 
         ImageView backgroundBlured = new ImageView(new Image("images/blured.jpg"));
 
         backgroundBlured.setOpacity(1);
 
-        backgroundBlured.fitWidthProperty().bind(primaryStage.widthProperty());
-        backgroundBlured.fitHeightProperty().bind(primaryStage.heightProperty());
+        backgroundBlured.fitWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+        backgroundBlured.fitHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
         this.getChildren().add(backgroundBlured);
 
-        this.prefWidthProperty().bind(primaryStage.widthProperty());
-        this.prefHeightProperty().bind(primaryStage.heightProperty());
+        this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+        this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
-        backgroundForTitle.widthProperty().bind(primaryStage.widthProperty());
+        backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setOpacity(0.3);
 
         Label title = new Label("Options");
@@ -48,12 +43,12 @@ public class OptionsMenu extends BorderPane {
         Button back = new Button("Retour");
         back.setPrefHeight(50);
         back.setOnMouseClicked((e) -> {
-            configuration.scene.setRoot(configuration.homeScreen);
+            graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen());
         });
 
         HBox titleBox = new HBox(back, title);
-        title.prefWidthProperty().bind(primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));
-        titleBox.prefWidthProperty().bind(primaryStage.widthProperty());
+        title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));
+        titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
         titlePane.getChildren().addAll(backgroundForTitle, titleBox);
@@ -70,9 +65,9 @@ public class OptionsMenu extends BorderPane {
             CheckBox useEyeTrackerCheckBox = new CheckBox();
             useEyeTrackerCheckBox.selectedProperty().addListener((obj, newVal, oldVal) -> {
                 if (newVal) {
-                    configuration.setMode(Configuration.GAZE_INTERACTION);
+                    graphicalMenus.getConfiguration().setMode(Configuration.GAZE_INTERACTION);
                 } else {
-                    configuration.setMode(Configuration.MOUSE_INTERACTION);
+                    graphicalMenus.getConfiguration().setMode(Configuration.MOUSE_INTERACTION);
                 }
             });
 

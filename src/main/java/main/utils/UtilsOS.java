@@ -18,7 +18,7 @@ public class UtilsOS {
 
     public static boolean isUnix() {
 
-        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
+        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix") );
 
     }
 }
