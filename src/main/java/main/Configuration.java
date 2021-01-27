@@ -5,18 +5,12 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import lombok.Setter;
-import main.UI.menu.HomeScreen;
-import main.UI.menu.OptionsMenu;
 
 import java.awt.*;
 import java.util.LinkedList;
 
 public class Configuration {
 
-    @Setter
-    public HomeScreen homeScreen;
-    @Setter
-    public OptionsMenu optionsMenu;
     @Setter
     public Scene scene;
 

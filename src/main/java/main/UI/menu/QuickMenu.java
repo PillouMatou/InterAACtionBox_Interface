@@ -4,9 +4,12 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -35,14 +38,15 @@ public class QuickMenu extends Pane {
 
         backgroundBlured = new ImageView(new Image("images/blured.jpg"));
 
-        setOpacityBackground(1);
-
         backgroundBlured.fitWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundBlured.fitHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
         getChildren().add(backgroundBlured);
         setBackgroundListener(backgroundBlured);
-        backgroundBlured.setOpacity(0.5);
+        backgroundBlured.setOpacity(0.1);
+        backgroundBlured.setOnMouseClicked((e)-> {
+            graphicalMenus.primaryStage.hide();
+        });
 
         closeMenuButton = createCloseMenuButton();
         getChildren().add(closeMenuButton);
@@ -67,11 +71,18 @@ public class QuickMenu extends Pane {
         logo.setPreserveRatio(true);
         closeButton.setGraphic(logo);
 
-        return closeButton;
-    }
+        closeButton.setOnMouseClicked((e)-> {
+            graphicalMenus.primaryStage.hide();
+        });
 
-    public void setOpacityBackground(double d) {
-        backgroundBlured.setOpacity(d);
+
+        DropShadow shadow = new DropShadow();
+        shadow.setOffsetX(0);
+        shadow.setOffsetY(10);
+        shadow.setRadius(50);
+        closeButton.setEffect(shadow);
+
+        return closeButton;
     }
 
     public void setBackgroundListener(ImageView backgroundBlured) {
@@ -132,7 +143,15 @@ public class QuickMenu extends Pane {
         ImageView logo;
         LinkedList<ProgressButton> buttons = new LinkedList<ProgressButton>();
         for (int i = 0; i < 6; i++) {
-            buttons.add(new ProgressButton());
+            ProgressButton progressButton = new ProgressButton();
+            progressButton.getButton().setStroke(Color.DARKGRAY);
+            progressButton.getButton().setStrokeWidth(3);
+            DropShadow shadow = new DropShadow();
+            shadow.setOffsetX(0);
+            shadow.setOffsetY(10);
+            shadow.setRadius(50);
+            progressButton.setEffect(shadow);
+            buttons.add(progressButton);
             switch (i) {
                 case 0:
                     buttons.get(i).getLabel().setText("Exit");

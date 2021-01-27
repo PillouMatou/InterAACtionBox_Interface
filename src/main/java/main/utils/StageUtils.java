@@ -37,6 +37,7 @@ public class StageUtils {
             }
         });
 
+
         primaryStage.setAlwaysOnTop(true);
 
         primaryStage.iconifiedProperty().addListener((observable, oldValue, newValue) -> {

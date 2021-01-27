@@ -7,9 +7,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.UI.menu.GraphicalMenus;
-import main.UI.menu.HomeScreen;
-import main.UI.menu.OptionsMenu;
-import main.gaze.devicemanager.AbstractGazeDeviceManager;
 import main.utils.StageUtils;
 
 import java.util.List;
@@ -26,11 +23,10 @@ public class Main extends Application {
         }
     }
 
-
     @Override
     public void start(Stage primaryStage) {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("InteraactionBox");
 
         GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage, getGazePlayInstallationRepo());
         Scene scene = new Scene(graphicalMenus.getHomeScreen(), Color.TRANSPARENT);

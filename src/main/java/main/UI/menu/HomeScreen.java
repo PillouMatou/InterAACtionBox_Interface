@@ -130,10 +130,10 @@ public class HomeScreen extends BorderPane {
         int y = (int) pointerLocation.getY();
         if (x > 500 && x < Screen.getPrimary().getBounds().getWidth() - 500 && y <= 10) {
             Platform.runLater(() -> {
-                graphicalMenus.primaryStage.hide();
-                if (graphicalMenus.getQuickMenu().process != null) {
-                    graphicalMenus.getQuickMenu().process.destroy();
-                }
+                //graphicalMenus.primaryStage.hide();
+//                if (graphicalMenus.getQuickMenu().process != null) {
+//                    graphicalMenus.getQuickMenu().process.destroy();
+//                }
                 StageUtils.displayUnclosable(graphicalMenus.getQuickMenu(), graphicalMenus.primaryStage);
             });
         }
