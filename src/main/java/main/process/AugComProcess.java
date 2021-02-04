@@ -12,9 +12,10 @@ public class AugComProcess implements AppProcess {
                 "--kiosk",
                 "--window-position=0,0",
                 "--disable-gpu",
-                "--no-sandbox",
                 "--fullscreen",
+                "--no-sandbox",
                 "http://augcom.net/");
+        //"http://localhost:4200/");
     }
 
     @Override

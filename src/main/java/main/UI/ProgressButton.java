@@ -40,12 +40,15 @@ public class ProgressButton extends StackPane {
         timelineProgressBar = new Timeline();
 
         button = new Circle();
-        button.setFill(Color.LIGHTGREY);
+        button.setFill(Color.web("#faeaed"));
 
         ImageView image = new ImageView();
         image.setPreserveRatio(true);
 
         Label text = new Label();
+
+        text.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
+        text.setTextFill(Color.web("#cd2653"));
 
         imageAndText = new VBox(image, text);
         imageAndText.setMouseTransparent(true);

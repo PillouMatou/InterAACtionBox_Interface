@@ -15,7 +15,7 @@ public class GraphicalMenus {
     @Getter
     private final String gazePlayInstallationRepo;
 
-    final Stage primaryStage;
+    final public Stage primaryStage;
 
     @Getter
     private final HomeScreen homeScreen;

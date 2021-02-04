@@ -4,19 +4,24 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import main.UI.ProgressButton;
 import main.process.*;
+import main.utils.UtilsOS;
 
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.LinkedList;
 
 public class QuickMenu extends Pane {
@@ -25,8 +30,6 @@ public class QuickMenu extends Pane {
     public Process process;
 
     final LinkedList<ProgressButton> buttons;
-
-    final ImageView backgroundBlured;
     final Button closeMenuButton;
 
     final GraphicalMenus graphicalMenus;
@@ -36,15 +39,22 @@ public class QuickMenu extends Pane {
         this.graphicalMenus = graphicalMenus;
         this.setStyle("-fx-background-color: transparent;");
 
-        backgroundBlured = new ImageView(new Image("images/blured.jpg"));
+//        backgroundBlured = new ImageView(new Image("images/blured.jpg"));
+//
+//        backgroundBlured.fitWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+//        backgroundBlured.fitHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        backgroundBlured.fitWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        backgroundBlured.fitHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
+        Rectangle r = new Rectangle();
+        r.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+        r.heightProperty().bind(graphicalMenus.primaryStage.heightProperty());
+        Stop[] stops = new Stop[]{new Stop(0, Color.web("#faeaed")), new Stop(1, Color.web("#cd2653"))};
+        LinearGradient lg1 = new LinearGradient(0, 1, 1.5, 0, true, CycleMethod.NO_CYCLE, stops);
+        r.setFill(lg1);
 
-        getChildren().add(backgroundBlured);
-        setBackgroundListener(backgroundBlured);
-        backgroundBlured.setOpacity(0.1);
-        backgroundBlured.setOnMouseClicked((e)-> {
+        getChildren().add(r);
+        setBackgroundListener(r);
+        r.setOpacity(0.1);
+        r.setOnMouseClicked((e) -> {
             graphicalMenus.primaryStage.hide();
         });
 
@@ -71,7 +81,16 @@ public class QuickMenu extends Pane {
         logo.setPreserveRatio(true);
         closeButton.setGraphic(logo);
 
-        closeButton.setOnMouseClicked((e)-> {
+        closeButton.setStyle(
+                "-fx-border-color: #cd2653; " +
+                        "-fx-border-width: 3; " +
+                        "-fx-background-color: #faeaed; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-font-family: Helvetica; " +
+                        "-fx-text-fill: #faeaed"
+        );
+
+        closeButton.setOnMouseClicked((e) -> {
             graphicalMenus.primaryStage.hide();
         });
 
@@ -85,7 +104,7 @@ public class QuickMenu extends Pane {
         return closeButton;
     }
 
-    public void setBackgroundListener(ImageView backgroundBlured) {
+    public void setBackgroundListener(Rectangle backgroundBlured) {
         backgroundBlured.setOnMouseMoved(event -> {
 
             for (ProgressButton button : buttons) {
@@ -142,9 +161,9 @@ public class QuickMenu extends Pane {
         EventHandler<Event> eventhandler = null;
         ImageView logo;
         LinkedList<ProgressButton> buttons = new LinkedList<ProgressButton>();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             ProgressButton progressButton = new ProgressButton();
-            progressButton.getButton().setStroke(Color.DARKGRAY);
+            progressButton.getButton().setStroke(Color.web("#cd2653"));
             progressButton.getButton().setStrokeWidth(3);
             DropShadow shadow = new DropShadow();
             shadow.setOffsetX(0);
@@ -162,6 +181,7 @@ public class QuickMenu extends Pane {
                         }
                         Platform.exit();
                         System.exit(0);
+
                     };
                     break;
                 case 1:
@@ -240,7 +260,20 @@ public class QuickMenu extends Pane {
                         initAndStartProcess(gazePlayProcess);
                     };
                     break;
-
+                case 6:
+                    buttons.get(i).getLabel().setText("Eteindre");
+                    eventhandler = e -> {
+//                        if (process != null) {
+//                            process.destroy();
+//                            process = null;
+//                        }
+//                        try {
+//                            shutdown();
+//                        } catch (IOException ex) {
+//                            ex.printStackTrace();
+//                        }
+                    };
+                    break;
                 default:
                     break;
             }
@@ -268,4 +301,19 @@ public class QuickMenu extends Pane {
         );
     }
 
+    public static void shutdown() throws RuntimeException, IOException {
+        String shutdownCommand;
+
+        if (UtilsOS.isUnix()) {
+            shutdownCommand = "shutdown -h now";
+        } else if (UtilsOS.isWindows()) {
+            shutdownCommand = "shutdown.exe -s -t 0";
+        } else {
+            throw new RuntimeException("Unsupported operating system.");
+        }
+
+        Runtime.getRuntime().exec(shutdownCommand);
+        Platform.exit();
+        System.exit(0);
+    }
 }

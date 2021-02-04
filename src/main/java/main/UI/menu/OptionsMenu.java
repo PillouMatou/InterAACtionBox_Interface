@@ -4,12 +4,15 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -20,14 +23,21 @@ public class OptionsMenu extends BorderPane {
     public OptionsMenu(GraphicalMenus graphicalMenus) {
         super();
 
-        ImageView backgroundBlured = new ImageView(new Image("images/blured.jpg"));
+//        ImageView backgroundBlured = new ImageView(new Image("images/blured.jpg"));
+//
+//        backgroundBlured.setOpacity(1);
+//
+//        backgroundBlured.fitWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+//        backgroundBlured.fitHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        backgroundBlured.setOpacity(1);
+        Rectangle r = new Rectangle();
+        r.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+        r.heightProperty().bind(graphicalMenus.primaryStage.heightProperty());
+        Stop[] stops = new Stop[]{new Stop(0, Color.web("#faeaed")), new Stop(1, Color.web("#cd2653"))};
+        LinearGradient lg1 = new LinearGradient(0, 1, 1.5, 0, true, CycleMethod.NO_CYCLE, stops);
+        r.setFill(lg1);
 
-        backgroundBlured.fitWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        backgroundBlured.fitHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
-
-        this.getChildren().add(backgroundBlured);
+        this.getChildren().add(r);
 
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
@@ -35,13 +45,30 @@ public class OptionsMenu extends BorderPane {
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        backgroundForTitle.setOpacity(0.3);
+        //backgroundForTitle.setOpacity(0.3);
+        backgroundForTitle.setFill(Color.web("#cd2653"));
 
         Label title = new Label("Options");
         title.setFont(new Font(30));
+        title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
+        title.setTextFill(Color.web("#faeaed"));
 
         Button back = new Button("Retour");
         back.setPrefHeight(50);
+        back.setMaxHeight(50);
+        back.setStyle(
+                "-fx-border-color: transparent; " +
+                        "-fx-border-width: 0; " +
+                        "-fx-background-radius: 0; " +
+                        "-fx-background-color: transparent; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-font-family: Helvetica; " +
+                        "-fx-text-fill: #faeaed"
+        );
+        ImageView graphic = new ImageView("images/back.png");
+        graphic.setPreserveRatio(true);
+        graphic.setFitHeight(30);
+        back.setGraphic(graphic);
         back.setOnMouseClicked((e) -> {
             graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen());
         });
@@ -62,6 +89,11 @@ public class OptionsMenu extends BorderPane {
 
         {
             Label useEyeTracker = new Label("Desactiver l'eye Tracker:");
+
+            useEyeTracker.setFont(new Font(20));
+            useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
+            useEyeTracker.setTextFill(Color.web("#cd2653"));
+
             CheckBox useEyeTrackerCheckBox = new CheckBox();
             useEyeTrackerCheckBox.selectedProperty().addListener((obj, newVal, oldVal) -> {
                 if (newVal) {
