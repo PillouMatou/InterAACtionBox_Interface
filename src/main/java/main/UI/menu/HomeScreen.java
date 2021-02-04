@@ -1,11 +1,15 @@
 package main.UI.menu;
 
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -176,9 +180,22 @@ public class HomeScreen extends BorderPane {
 //                if (graphicalMenus.getQuickMenu().process != null) {
 //                    graphicalMenus.getQuickMenu().process.destroy();
 //                }
+                this.takeSnapShot();
                 StageUtils.displayUnclosable(graphicalMenus.getQuickMenu(), graphicalMenus.primaryStage);
             });
         }
     }
 
+    private void takeSnapShot(){
+        try {
+            Robot robot = new Robot();
+            WritableImage writableImage = SwingFXUtils.toFXImage(robot.createScreenCapture(new java.awt.Rectangle(0, 0, (int) this.graphicalMenus.primaryStage.getWidth(), (int) this.graphicalMenus.primaryStage.getHeight())), null);
+            ImageView img = new ImageView(writableImage);
+            img.setFitWidth(50);
+            img.setFitHeight(50);
+            graphicalMenus.getQuickMenu().closeMenuButton.setImage(img);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+    }
 }

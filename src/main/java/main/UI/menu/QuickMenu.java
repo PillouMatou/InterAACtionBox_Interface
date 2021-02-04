@@ -1,12 +1,15 @@
 package main.UI.menu;
 
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -20,7 +23,9 @@ import main.UI.ProgressButton;
 import main.process.*;
 import main.utils.UtilsOS;
 
+import javax.imageio.ImageIO;
 import java.awt.geom.Point2D;
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -30,7 +35,7 @@ public class QuickMenu extends Pane {
     public Process process;
 
     final LinkedList<ProgressButton> buttons;
-    final Button closeMenuButton;
+    final ProgressButton closeMenuButton;
 
     final GraphicalMenus graphicalMenus;
 
@@ -53,7 +58,7 @@ public class QuickMenu extends Pane {
 
         getChildren().add(r);
         setBackgroundListener(r);
-        r.setOpacity(0.1);
+        r.setOpacity(1);
         r.setOnMouseClicked((e) -> {
             graphicalMenus.primaryStage.hide();
         });
@@ -65,8 +70,8 @@ public class QuickMenu extends Pane {
         createCircularButtons();
     }
 
-    public Button createCloseMenuButton() {
-        Button closeButton = new Button();
+    public ProgressButton createCloseMenuButton() {
+        ProgressButton closeButton = new ProgressButton();
         closeButton.setPrefWidth(50);
         closeButton.setPrefHeight(50);
 
@@ -74,12 +79,11 @@ public class QuickMenu extends Pane {
 
         closeButton.layoutXProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(2).subtract(25));
         closeButton.layoutYProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(2).subtract(25));
-
         ImageView logo = new ImageView(new Image("images/cross.png"));
         logo.setFitWidth(20);
         logo.setFitHeight(20);
         logo.setPreserveRatio(true);
-        closeButton.setGraphic(logo);
+        closeButton.setImage(logo);
 
         closeButton.setStyle(
                 "-fx-border-color: #cd2653; " +
@@ -315,5 +319,15 @@ public class QuickMenu extends Pane {
         Runtime.getRuntime().exec(shutdownCommand);
         Platform.exit();
         System.exit(0);
+    }
+
+    private void takeSnapShot(Scene scene){
+        WritableImage writableImage =
+                new WritableImage((int)scene.getWidth(), (int)scene.getHeight());
+        scene.snapshot(writableImage);
+        ImageView img = new ImageView(writableImage);
+        img.setFitWidth(50);
+        img.setFitHeight(50);
+        closeMenuButton.setImage(img);
     }
 }
