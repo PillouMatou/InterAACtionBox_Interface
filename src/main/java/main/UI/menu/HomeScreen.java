@@ -74,9 +74,7 @@ public class HomeScreen extends BorderPane {
         Button optionButton = createTopBarButton(
                 "Options",
                 "images/settings_white.png",
-                (e) -> {
-                    graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu());
-                }
+                (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu())
         );
 
         Button wifiButton = createTopBarButton(
@@ -118,8 +116,11 @@ public class HomeScreen extends BorderPane {
                 }
         );
 
-        HBox titleBox = new HBox(optionButton, title, wifiButton, exitButton);
-        title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(optionButton.widthProperty().add(wifiButton.widthProperty()).add(exitButton.widthProperty())));
+        BorderPane titleBox = new BorderPane();
+        titleBox.setLeft(optionButton);
+        titleBox.setCenter(title);
+        titleBox.setRight(new HBox(tobiiButton, wifiButton, exitButton));
+      //  title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(optionButton.widthProperty().add(wifiButton.widthProperty()).add(exitButton.widthProperty())));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
@@ -158,7 +159,6 @@ public class HomeScreen extends BorderPane {
     private HBox createMenuBar(String gazePlayInstallationRepo) {
         YoutubeProcess youtubeProcess = new YoutubeProcess();
         AugComProcess augComProcess = new AugComProcess();
-        TobiiManagerProcess tobiiManagerProcess = new TobiiManagerProcess();
         InteraactionSceneProcess interaactionSceneProcess = new InteraactionSceneProcess();
         GazePlayProcess gazePlayProcess = new GazePlayProcess(gazePlayInstallationRepo);
 
@@ -170,9 +170,6 @@ public class HomeScreen extends BorderPane {
         interaactionSceneProcessButton.getLabel().setText("InteraactionScene");
         ProgressButton gazePlayProcessButton = gazePlayProcess.createButton(new Image("images/gazeplayicon.png"), graphicalMenus, "gazeplay");
         gazePlayProcessButton.getLabel().setText("GazePlay");
-        ProgressButton tobiiManagerProcessButton = tobiiManagerProcess.createButton(new Image("images/angular.png"), graphicalMenus, "tobiiproeyetrackermanager");
-        tobiiManagerProcessButton.getLabel().setText("Tobii Manager");
-
         youtubeProgressButton.getButton().setStroke(Color.web("#cd2653"));
         youtubeProgressButton.getButton().setStrokeWidth(3);
         augComProcessButton.getButton().setStroke(Color.web("#cd2653"));
@@ -181,21 +178,17 @@ public class HomeScreen extends BorderPane {
         interaactionSceneProcessButton.getButton().setStrokeWidth(3);
         gazePlayProcessButton.getButton().setStroke(Color.web("#cd2653"));
         gazePlayProcessButton.getButton().setStrokeWidth(3);
-        tobiiManagerProcessButton.getButton().setStroke(Color.web("#cd2653"));
-        tobiiManagerProcessButton.getButton().setStrokeWidth(3);
 
         HBox menuBar = new HBox(
                 youtubeProgressButton,
                 augComProcessButton,
                 interaactionSceneProcessButton,
-                gazePlayProcessButton,
-                tobiiManagerProcessButton
+                gazePlayProcessButton
         );
         graphicalMenus.getGazeDeviceManager().addEventFilter(youtubeProgressButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(augComProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(interaactionSceneProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(gazePlayProcessButton.getButton());
-        graphicalMenus.getGazeDeviceManager().addEventFilter(tobiiManagerProcessButton.getButton());
 
         menuBar.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(menuBar, Pos.CENTER);
@@ -231,7 +224,8 @@ public class HomeScreen extends BorderPane {
 //                    graphicalMenus.getQuickMenu().process.destroy();
 //                }
                 this.takeSnapShot();
-                StageUtils.displayUnclosable(graphicalMenus.getQuickMenu(), graphicalMenus.primaryStage);
+                graphicalMenus.primaryStage.show();
+                //StageUtils.displayUnclosable(graphicalMenus.getQuickMenu(), graphicalMenus.primaryStage);
             });
         }
     }
