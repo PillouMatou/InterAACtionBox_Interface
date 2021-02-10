@@ -30,7 +30,7 @@ public class PositionPollerRunnable implements Runnable {
             try {
                 if (configuration.isGazeInteraction()) {
                     configuration.analyse(MouseInfo.getPointerInfo().getLocation().getX(),MouseInfo.getPointerInfo().getLocation().getY());
-                    poll();
+              //      poll();
                 }
             } catch (final RuntimeException e) {
                 log.warn("Exception while polling position of main.gaze", e);

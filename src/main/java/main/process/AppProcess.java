@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.UI.ProgressButton;
 import main.UI.menu.GraphicalMenus;
+import main.process.xdotoolProcess.GoogleChromeXdotoolProcess;
 import main.utils.UtilsOS;
 
 import java.io.File;
@@ -43,37 +44,21 @@ public interface AppProcess {
 
         setUpProcessBuilder();
         progressButton.assignIndicator((e) -> {
-            Date now = new Date();
             graphicalMenus.getQuickMenu().process = this.start();
             if (needsGoogleChrome) {
-                Timer t = new Timer();
-                t.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-                        File file;
-                        if (UtilsOS.isWindows()) {
-                            file = new File(System.getProperty("user.home") + "/AppData/Local/Google/Chrome/User Data/Last Browser");
-                        } else { //if( UtilsOS.isUnix()) {
-                            file = new File(System.getProperty("user.home") + "/.config/google-chrome/Local State");
-                        }
-                        if (file.exists()) {
-                            System.out.println("Time: " + sdf.format(now));
-                            System.out.println("Time Last Modified " + sdf.format(file.lastModified()));
-                            if (file.lastModified() > now.getTime()) {
-                                System.out.println("Hiding primary Stage");
-                                Platform.runLater(graphicalMenus.primaryStage::hide);
-                                t.purge();
-                                t.cancel();
-                            }
-                        } else {
-                            System.out.println("file does not exist");
-                            Platform.runLater(graphicalMenus.primaryStage::hide);
-                            t.purge();
-                            t.cancel();
-                        }
+                GoogleChromeXdotoolProcess gcxp = new GoogleChromeXdotoolProcess();
+                gcxp.setUpProcessBuilder();
+                gcxp.start();
+
+                File file = new File("google-chrome_windowId.txt");
+                while (!file.exists()){
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException err) {
+                        err.printStackTrace();
                     }
-                }, 0, 100);
+                }
+               Platform.runLater(graphicalMenus.primaryStage::hide);
             } else {
                 Platform.runLater(graphicalMenus.primaryStage::hide);
             }
