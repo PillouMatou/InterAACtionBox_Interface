@@ -2,7 +2,6 @@ package main.process;
 
 import javafx.application.Platform;
 import main.UI.menu.GraphicalMenus;
-import main.process.xdotoolProcess.TobiiXdotoolProcess;
 import main.process.xdotoolProcess.WifiXdotoolProcess;
 
 import java.io.IOException;

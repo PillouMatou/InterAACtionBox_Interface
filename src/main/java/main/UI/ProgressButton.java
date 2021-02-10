@@ -25,10 +25,10 @@ public class ProgressButton extends StackPane {
 
     @Getter
     private final Circle button;
-    private VBox imageAndText;
-    private ProgressIndicator indicator;
+    private final VBox imageAndText;
+    private final ProgressIndicator indicator;
 
-    private Timeline timelineProgressBar;
+    private final Timeline timelineProgressBar;
 
     private EventHandler<Event> enterButtonHandler;
     private EventHandler<Event> exitButtonHandler;

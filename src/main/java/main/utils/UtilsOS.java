@@ -2,7 +2,7 @@ package main.utils;
 
 public class UtilsOS {
 
-    private static String OS = System.getProperty("os.name").toLowerCase();
+    private static final String OS = System.getProperty("os.name").toLowerCase();
 
     public static boolean isWindows() {
 

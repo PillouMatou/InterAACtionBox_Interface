@@ -5,10 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.UI.ProgressButton;
 import main.UI.menu.GraphicalMenus;
-import main.process.xdotoolProcess.GazePlayXdotoolProcess;
-import main.process.xdotoolProcess.GoogleChromeXdotoolProcess;
-import main.process.xdotoolProcess.TobiiXdotoolProcess;
-import main.process.xdotoolProcess.WifiXdotoolProcess;
 import main.utils.UtilsOS;
 
 import java.io.File;
@@ -52,7 +48,7 @@ public interface AppProcess {
     }
 
 
-    public static void startWindowIdSearcher(GraphicalMenus graphicalMenus, String name) {
+    static void startWindowIdSearcher(GraphicalMenus graphicalMenus, String name) {
         Thread t = new Thread(() -> {
             File file = new File(name + "_windowId.txt");
             while (!file.exists()) {

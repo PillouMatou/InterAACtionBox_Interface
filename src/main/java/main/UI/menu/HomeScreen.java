@@ -133,7 +133,7 @@ public class HomeScreen extends BorderPane {
 
     }
 
-    private Button createTopBarButton(String text, String imagePath, EventHandler eventhandler){
+    private Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
         Button optionButton = new Button(text);
         optionButton.setPrefHeight(50);
         optionButton.setMaxHeight(50);
