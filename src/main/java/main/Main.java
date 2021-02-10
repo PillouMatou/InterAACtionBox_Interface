@@ -7,10 +7,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.UI.menu.GraphicalMenus;
-import main.process.xdotoolProcess.GoogleChromeXdotoolProcess;
 import main.utils.StageUtils;
 
-import java.io.File;
 import java.util.List;
 
 public class Main extends Application {

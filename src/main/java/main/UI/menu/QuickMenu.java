@@ -1,11 +1,9 @@
 package main.UI.menu;
 
 import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,9 +21,7 @@ import main.UI.ProgressButton;
 import main.process.*;
 import main.utils.UtilsOS;
 
-import javax.imageio.ImageIO;
 import java.awt.geom.Point2D;
-import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -179,12 +175,13 @@ public class QuickMenu extends Pane {
                 case 0:
                     buttons.get(i).getLabel().setText("Exit");
                     eventhandler = e -> {
+
                         if (process != null) {
                             process.destroy();
                             process = null;
                         }
                         Platform.exit();
-                        System.exit(0);
+                        System.exit(1);
 
                     };
                     break;
@@ -293,16 +290,7 @@ public class QuickMenu extends Pane {
 
     public void initAndStartProcess(AppProcess process) {
         process.setUpProcessBuilder();
-        this.process = process.start();
-        this.process.onExit().thenRunAsync(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        graphicalMenus.primaryStage.show();
-                        graphicalMenus.primaryStage.toFront();
-                    }
-                }
-        );
+        this.process = process.start(graphicalMenus);
     }
 
     public static void shutdown() throws RuntimeException, IOException {
@@ -321,9 +309,9 @@ public class QuickMenu extends Pane {
         System.exit(0);
     }
 
-    private void takeSnapShot(Scene scene){
+    private void takeSnapShot(Scene scene) {
         WritableImage writableImage =
-                new WritableImage((int)scene.getWidth(), (int)scene.getHeight());
+                new WritableImage((int) scene.getWidth(), (int) scene.getHeight());
         scene.snapshot(writableImage);
         ImageView img = new ImageView(writableImage);
         img.setFitWidth(50);

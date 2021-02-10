@@ -5,18 +5,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.UI.ProgressButton;
 import main.UI.menu.GraphicalMenus;
+import main.process.xdotoolProcess.GazePlayXdotoolProcess;
 import main.process.xdotoolProcess.GoogleChromeXdotoolProcess;
+import main.process.xdotoolProcess.TobiiXdotoolProcess;
+import main.process.xdotoolProcess.WifiXdotoolProcess;
 import main.utils.UtilsOS;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public interface AppProcess {
 
-    Process start();
+    Process start(GraphicalMenus graphicalMenus);
 
     void setUpProcessBuilder();
 
@@ -29,7 +28,7 @@ public interface AppProcess {
         return "";
     }
 
-    default ProgressButton createButton(Image image, GraphicalMenus graphicalMenus, boolean needsGoogleChrome) {
+    default ProgressButton createButton(Image image, GraphicalMenus graphicalMenus, String windowNameToSearch) {
         ProgressButton progressButton = new ProgressButton();
         progressButton.getButton().setRadius(100);
 
@@ -44,28 +43,28 @@ public interface AppProcess {
 
         setUpProcessBuilder();
         progressButton.assignIndicator((e) -> {
-            graphicalMenus.getQuickMenu().process = this.start();
-            if (needsGoogleChrome) {
-                GoogleChromeXdotoolProcess gcxp = new GoogleChromeXdotoolProcess();
-                gcxp.setUpProcessBuilder();
-                gcxp.start();
-
-                File file = new File("google-chrome_windowId.txt");
-                while (!file.exists()){
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException err) {
-                        err.printStackTrace();
-                    }
-                }
-               Platform.runLater(graphicalMenus.primaryStage::hide);
-            } else {
-                Platform.runLater(graphicalMenus.primaryStage::hide);
-            }
+            graphicalMenus.getQuickMenu().process = this.start(graphicalMenus);
         });
 
 
         progressButton.start();
         return progressButton;
+    }
+
+
+    public static void startWindowIdSearcher(GraphicalMenus graphicalMenus, String name) {
+        Thread t = new Thread(() -> {
+            File file = new File(name + "_windowId.txt");
+            while (!file.exists()) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException err) {
+                    err.printStackTrace();
+                }
+            }
+            Platform.runLater(graphicalMenus.primaryStage::hide);
+        });
+        t.setDaemon(true);
+        t.start();
     }
 }

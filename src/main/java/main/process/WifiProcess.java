@@ -2,22 +2,26 @@ package main.process;
 
 import javafx.application.Platform;
 import main.UI.menu.GraphicalMenus;
-import main.process.xdotoolProcess.GoogleChromeXdotoolProcess;
+import main.process.xdotoolProcess.TobiiXdotoolProcess;
+import main.process.xdotoolProcess.WifiXdotoolProcess;
 
 import java.io.IOException;
 
-public class YoutubeProcess implements AppProcess {
+public class WifiProcess implements AppProcess {
 
     ProcessBuilder processBuilder;
 
     @Override
+    public void setUpProcessBuilder() {
+        processBuilder = new ProcessBuilder("nm-connection-editor");
+    }
+
+    @Override
     public Process start(GraphicalMenus graphicalMenus) {
         try {
-
-            GoogleChromeXdotoolProcess gcxp = new GoogleChromeXdotoolProcess();
+            WifiXdotoolProcess gcxp = new WifiXdotoolProcess();
             gcxp.setUpProcessBuilder();
             gcxp.start();
-            AppProcess.startWindowIdSearcher(graphicalMenus, "google-chrome");
 
             Process process = processBuilder.inheritIO().start();
 
@@ -32,22 +36,13 @@ public class YoutubeProcess implements AppProcess {
                         }
                     }
             );
+
+            AppProcess.startWindowIdSearcher(graphicalMenus, "wifi");
             return process;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
-    }
-
-    @Override
-    public void setUpProcessBuilder() {
-        processBuilder = new ProcessBuilder(AppProcess.getBrowser(),
-                "--kiosk",
-                "--window-position=0,0",
-                "--disable-gpu",
-                "--no-sandbox",
-                "--fullscreen",
-                "https://www.youtube.com");
     }
 
 }

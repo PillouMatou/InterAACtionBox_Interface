@@ -1,5 +1,9 @@
 package main.process;
 
+import javafx.application.Platform;
+import main.UI.menu.GraphicalMenus;
+import main.process.xdotoolProcess.GoogleChromeXdotoolProcess;
+
 import java.io.IOException;
 
 public class AugComProcess implements AppProcess {
@@ -19,9 +23,28 @@ public class AugComProcess implements AppProcess {
     }
 
     @Override
-    public Process start() {
+    public Process start(GraphicalMenus graphicalMenus) {
         try {
-            return processBuilder.inheritIO().start();
+
+            GoogleChromeXdotoolProcess gcxp = new GoogleChromeXdotoolProcess();
+            gcxp.setUpProcessBuilder();
+            gcxp.start();
+            AppProcess.startWindowIdSearcher(graphicalMenus, "google-chrome");
+
+            Process process = processBuilder.inheritIO().start();
+
+            process.onExit().thenRun(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            Platform.runLater((() -> {
+                                graphicalMenus.primaryStage.show();
+                                graphicalMenus.primaryStage.toFront();
+                            }));
+                        }
+                    }
+            );
+            return process;
         } catch (IOException e) {
             e.printStackTrace();
         }
