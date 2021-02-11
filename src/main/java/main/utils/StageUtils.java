@@ -6,7 +6,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import main.UI.menu.QuickMenu;
 
 import java.awt.*;
 
@@ -47,12 +46,6 @@ public class StageUtils {
 
         Platform.setImplicitExit(false);
         primaryStage.setOnCloseRequest(Event::consume);
-    }
-
-    public static void displayUnclosable(QuickMenu quickMenu, Stage primaryStage) {
-        primaryStage.getScene().setRoot(quickMenu);
-        displayUnclosable(primaryStage);
-
     }
 
     public static void displayUnclosable(Stage primaryStage) {

@@ -3,11 +3,9 @@ package main.UI.menu;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -27,8 +25,6 @@ import java.util.LinkedList;
 
 public class QuickMenu extends Pane {
 
-
-    public Process process;
 
     final LinkedList<ProgressButton> buttons;
     final ProgressButton closeMenuButton;
@@ -176,9 +172,9 @@ public class QuickMenu extends Pane {
                     buttons.get(i).getLabel().setText("Exit");
                     eventhandler = e -> {
 
-                        if (process != null) {
-                            process.destroy();
-                            process = null;
+                        if (graphicalMenus.process.get() != null) {
+                            graphicalMenus.process.destroy();
+                            graphicalMenus.process.set(null);
                         }
                         Platform.exit();
                         System.exit(1);
@@ -188,10 +184,11 @@ public class QuickMenu extends Pane {
                 case 1:
                     buttons.get(i).getLabel().setText("Menu");
                     eventhandler = (event) -> {
-                        if (process != null) {
-                            process.destroy();
-                            process = null;
+                        if (graphicalMenus.process.get() != null) {
+                            graphicalMenus.process.destroy();
+                            graphicalMenus.process.set(null);
                         }
+                        graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
                         primaryStage.show();
                         primaryStage.toFront();
                         primaryStage.getScene().setRoot(graphicalMenus.getHomeScreen());
@@ -205,9 +202,9 @@ public class QuickMenu extends Pane {
                     logo.setFitHeight(100);
                     buttons.get(i).setImage(logo);
                     eventhandler = e -> {
-                        if (process != null) {
-                            process.destroy();
-                            process = null;
+                        if (graphicalMenus.process.get() != null) {
+                            graphicalMenus.process.destroy();
+                            graphicalMenus.process.set(null);
                         }
                         AugComProcess augComProcess = new AugComProcess();
                         initAndStartProcess(augComProcess);
@@ -221,9 +218,9 @@ public class QuickMenu extends Pane {
                     logo.setFitHeight(100);
                     buttons.get(i).setImage(logo);
                     eventhandler = e -> {
-                        if (process != null) {
-                            process.destroy();
-                            process = null;
+                        if (graphicalMenus.process.get() != null) {
+                            graphicalMenus.process.destroy();
+                            graphicalMenus.process.set(null);
                         }
                         InteraactionSceneProcess interaactionSceneProcess = new InteraactionSceneProcess();
                         initAndStartProcess(interaactionSceneProcess);
@@ -237,9 +234,9 @@ public class QuickMenu extends Pane {
                     logo.setFitHeight(100);
                     buttons.get(i).setImage(logo);
                     eventhandler = e -> {
-                        if (process != null) {
-                            process.destroy();
-                            process = null;
+                        if (graphicalMenus.process.get() != null) {
+                            graphicalMenus.process.destroy();
+                            graphicalMenus.process.set(null);
                         }
                         YoutubeProcess youtubeProcess = new YoutubeProcess();
                         initAndStartProcess(youtubeProcess);
@@ -253,9 +250,9 @@ public class QuickMenu extends Pane {
                     logo.setFitHeight(100);
                     buttons.get(i).setImage(logo);
                     eventhandler = e -> {
-                        if (process != null) {
-                            process.destroy();
-                            process = null;
+                        if (graphicalMenus.process.get() != null) {
+                            graphicalMenus.process.destroy();
+                            graphicalMenus.process.set(null);
                         }
                         GazePlayProcess gazePlayProcess = new GazePlayProcess(gazePlayInstallationRepo);
                         initAndStartProcess(gazePlayProcess);
@@ -290,7 +287,7 @@ public class QuickMenu extends Pane {
 
     public void initAndStartProcess(AppProcess process) {
         process.setUpProcessBuilder();
-        this.process = process.start(graphicalMenus);
+        this.graphicalMenus.process = process.start(graphicalMenus);
     }
 
     public static void shutdown() throws RuntimeException, IOException {
@@ -309,13 +306,4 @@ public class QuickMenu extends Pane {
         System.exit(0);
     }
 
-    private void takeSnapShot(Scene scene) {
-        WritableImage writableImage =
-                new WritableImage((int) scene.getWidth(), (int) scene.getHeight());
-        scene.snapshot(writableImage);
-        ImageView img = new ImageView(writableImage);
-        img.setFitWidth(50);
-        img.setFitHeight(50);
-        closeMenuButton.setImage(img);
-    }
 }

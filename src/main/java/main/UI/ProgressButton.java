@@ -77,6 +77,11 @@ public class ProgressButton extends StackPane {
         this.imageAndText.getChildren().set(0, img);
     }
 
+    public void setSpacing(double value) {
+        this.imageAndText.setTranslateY(value);
+        this.imageAndText.setSpacing(value);
+    }
+
     public Label getLabel() {
         return (Label) imageAndText.getChildren().get(1);
     }

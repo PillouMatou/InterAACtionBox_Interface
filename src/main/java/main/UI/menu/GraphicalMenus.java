@@ -5,6 +5,7 @@ import lombok.Getter;
 import main.Configuration;
 import main.gaze.devicemanager.AbstractGazeDeviceManager;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
+import main.utils.NamedProcess;
 
 public class GraphicalMenus {
 
@@ -24,6 +25,8 @@ public class GraphicalMenus {
     @Getter
     private final QuickMenu quickMenu;
 
+    public NamedProcess process = new NamedProcess();
+
     public GraphicalMenus(Stage primaryStage, String gazePlayInstallationRepo) {
         this.primaryStage = primaryStage;
         this.gazePlayInstallationRepo = gazePlayInstallationRepo;
@@ -32,3 +35,4 @@ public class GraphicalMenus {
         this.homeScreen = new HomeScreen(this);
     }
 }
+

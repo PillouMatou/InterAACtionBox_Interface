@@ -12,10 +12,12 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -24,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import main.UI.ProgressButton;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
-import main.utils.StageUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -33,6 +34,8 @@ import java.awt.image.BufferedImage;
 public class HomeScreen extends BorderPane {
 
     private final GraphicalMenus graphicalMenus;
+    private final ProgressButton closeMenuButton;
+    private final VBox centerMenu;
 
 
     public HomeScreen(GraphicalMenus graphicalMenus) {
@@ -55,10 +58,20 @@ public class HomeScreen extends BorderPane {
 
         this.getChildren().add(r);
 
+        centerMenu = new VBox();
+
+        centerMenu.setAlignment(Pos.TOP_CENTER);
+        BorderPane.setAlignment(centerMenu, Pos.CENTER);
+        centerMenu.spacingProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(6));
+        centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(5));
+
         HBox menuBar = createMenuBar(graphicalMenus.getGazePlayInstallationRepo());
 
-        this.setCenter(menuBar);
+        closeMenuButton = createCloseMenuButton();
+        centerMenu.getChildren().addAll(closeMenuButton, menuBar);
+        this.setCenter(centerMenu);
 
+        showCloseMenuIfProcessNotNull();
 
         StackPane titlePane = new StackPane();
         javafx.scene.shape.Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
@@ -81,12 +94,12 @@ public class HomeScreen extends BorderPane {
                 "Wi-Fi",
                 "images/cross.png",
                 (e) -> {
-                    if (graphicalMenus.getQuickMenu().process != null) {
-                        graphicalMenus.getQuickMenu().process.destroy();
+                    if (graphicalMenus.process.get() != null) {
+                        graphicalMenus.process.destroy();
                     }
                     WifiProcess wifiProcess = new WifiProcess();
                     wifiProcess.setUpProcessBuilder();
-                    graphicalMenus.getQuickMenu().process = wifiProcess.start(graphicalMenus);
+                    graphicalMenus.process = wifiProcess.start(graphicalMenus);
                 }
         );
 
@@ -94,12 +107,12 @@ public class HomeScreen extends BorderPane {
                 "Tobii Manager",
                 "images/cross.png",
                 (e) -> {
-                    if (graphicalMenus.getQuickMenu().process != null) {
-                        graphicalMenus.getQuickMenu().process.destroy();
+                    if (graphicalMenus.process.get() != null) {
+                        graphicalMenus.process.destroy();
                     }
                     TobiiManagerProcess tobiiManagerProcess = new TobiiManagerProcess();
                     tobiiManagerProcess.setUpProcessBuilder();
-                    graphicalMenus.getQuickMenu().process = tobiiManagerProcess.start(graphicalMenus);
+                    graphicalMenus.process = tobiiManagerProcess.start(graphicalMenus);
                 }
         );
 
@@ -107,12 +120,12 @@ public class HomeScreen extends BorderPane {
                 "Exit",
                 "images/cross.png",
                 (e) -> {
-                    if (graphicalMenus.getQuickMenu().process != null) {
-                        graphicalMenus.getQuickMenu().process.destroy();
-                        graphicalMenus.getQuickMenu().process = null;
+                    if (graphicalMenus.process.get() != null) {
+                        graphicalMenus.process.destroy();
+                        graphicalMenus.process.set(null);
                     }
                     Platform.exit();
-                    System.exit(1);
+                    System.exit(0);
                 }
         );
 
@@ -120,7 +133,6 @@ public class HomeScreen extends BorderPane {
         titleBox.setLeft(optionButton);
         titleBox.setCenter(title);
         titleBox.setRight(new HBox(tobiiButton, wifiButton, exitButton));
-      //  title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(optionButton.widthProperty().add(wifiButton.widthProperty()).add(exitButton.widthProperty())));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
@@ -131,7 +143,6 @@ public class HomeScreen extends BorderPane {
 
         ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
         startMouseListener();
-
     }
 
     private Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
@@ -192,7 +203,6 @@ public class HomeScreen extends BorderPane {
 
         menuBar.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(menuBar, Pos.CENTER);
-
         menuBar.spacingProperty().bind(this.widthProperty().divide(2 * (menuBar.getChildren().size() + 1)));
         return menuBar;
     }
@@ -224,6 +234,7 @@ public class HomeScreen extends BorderPane {
 //                    graphicalMenus.getQuickMenu().process.destroy();
 //                }
                 this.takeSnapShot();
+                graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
                 graphicalMenus.primaryStage.show();
                 //StageUtils.displayUnclosable(graphicalMenus.getQuickMenu(), graphicalMenus.primaryStage);
             });
@@ -237,9 +248,10 @@ public class HomeScreen extends BorderPane {
                 BufferedImage bufi = robot.createScreenCapture(new java.awt.Rectangle(0, 0, (int) this.graphicalMenus.primaryStage.getWidth(), (int) this.graphicalMenus.primaryStage.getHeight()));
                 Platform.runLater(() -> {
                     ImageView img = new ImageView(convertToFxImage(bufi));
-                    img.setFitWidth(50);
-                    img.setFitHeight(50);
-                    graphicalMenus.getQuickMenu().closeMenuButton.setImage(img);
+                    img.fitWidthProperty().bind(closeMenuButton.widthProperty().divide(1.5));
+                    img.fitHeightProperty().bind(closeMenuButton.heightProperty().divide(1.5));
+                    img.setPreserveRatio(true);
+                    closeMenuButton.setImage(img);
                 });
             } catch (AWTException e) {
                 e.printStackTrace();
@@ -247,6 +259,45 @@ public class HomeScreen extends BorderPane {
         });
         t.setDaemon(true);
         t.start();
+    }
+
+    public ProgressButton createCloseMenuButton() {
+        ProgressButton closeButton = new ProgressButton();
+        closeButton.prefWidthProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
+        closeButton.maxWidthProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
+        closeButton.minWidthProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
+        closeButton.minHeightProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
+        closeButton.minHeightProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
+        closeButton.minHeightProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
+
+        Circle shape = new Circle();
+        shape.radiusProperty().bind(closeButton.heightProperty().divide(2));
+
+        closeButton.setShape(shape);
+
+        closeButton.setStyle(
+                "-fx-border-color: #cd2653; " +
+                        "-fx-border-width: 3; " +
+                        "-fx-background-color: #faeaed; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-font-family: Helvetica; " +
+                        "-fx-text-fill: #faeaed"
+        );
+
+        closeButton.setOnMouseClicked((e) -> {
+            graphicalMenus.primaryStage.hide();
+        });
+
+//
+//        DropShadow shadow = new DropShadow();
+//        shadow.setOffsetX(0);
+//        shadow.setOffsetY(10);
+//        shadow.setRadius(50);
+//        closeButton.setEffect(shadow);
+
+        closeButton.setSpacing(20);
+
+        return closeButton;
     }
 
     private static Image convertToFxImage(BufferedImage image) {
@@ -263,4 +314,18 @@ public class HomeScreen extends BorderPane {
 
         return new ImageView(wr).getImage();
     }
+
+    public void showCloseMenuIfProcessNotNull() {
+        if (graphicalMenus.process.get() != null && !centerMenu.getChildren().contains(closeMenuButton)) {
+            centerMenu.translateYProperty().unbind();
+            centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(1d / 12d));
+            centerMenu.getChildren().add(0, closeMenuButton);
+            closeMenuButton.getLabel().setText("Back To :\n" + graphicalMenus.process.getName());
+        } else if (graphicalMenus.process.get() == null) {
+            centerMenu.translateYProperty().unbind();
+            centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(4d / 12d));
+            centerMenu.getChildren().remove(closeMenuButton);
+        }
+    }
+
 }

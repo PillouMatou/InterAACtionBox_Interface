@@ -3,6 +3,7 @@ package main.process;
 import javafx.application.Platform;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.WifiXdotoolProcess;
+import main.utils.NamedProcess;
 
 import java.io.IOException;
 
@@ -16,8 +17,9 @@ public class WifiProcess implements AppProcess {
     }
 
     @Override
-    public Process start(GraphicalMenus graphicalMenus) {
+    public NamedProcess start(GraphicalMenus graphicalMenus) {
         try {
+            NamedProcess namedProcess = new NamedProcess();
             WifiXdotoolProcess gcxp = new WifiXdotoolProcess();
             gcxp.setUpProcessBuilder();
             gcxp.start();
@@ -29,15 +31,17 @@ public class WifiProcess implements AppProcess {
                         @Override
                         public void run() {
                             Platform.runLater((() -> {
+                                graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
                                 graphicalMenus.primaryStage.show();
                                 graphicalMenus.primaryStage.toFront();
                             }));
                         }
                     }
             );
-
             AppProcess.startWindowIdSearcher(graphicalMenus, "wifi");
-            return process;
+            namedProcess.set(process);
+            namedProcess.setName("Network Manager");
+            return namedProcess;
         } catch (IOException e) {
             e.printStackTrace();
         }

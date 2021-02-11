@@ -36,6 +36,7 @@ public class Main extends Application {
 
         primaryStage.setScene(scene);
 
+        graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
         StageUtils.displayUnclosable(primaryStage);
 
         scene.setOnMouseMoved((e) -> {

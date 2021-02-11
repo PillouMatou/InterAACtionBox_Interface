@@ -3,6 +3,7 @@ package main.process;
 import javafx.application.Platform;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.GazePlayXdotoolProcess;
+import main.utils.NamedProcess;
 import main.utils.UtilsOS;
 
 import java.io.IOException;
@@ -19,8 +20,9 @@ public class GazePlayProcess implements AppProcess {
     }
 
     @Override
-    public Process start(GraphicalMenus graphicalMenus) {
+    public NamedProcess start(GraphicalMenus graphicalMenus) {
         try {
+            NamedProcess namedProcess = new NamedProcess();
             GazePlayXdotoolProcess gcxp = new GazePlayXdotoolProcess();
             gcxp.setUpProcessBuilder();
             gcxp.start();
@@ -33,6 +35,7 @@ public class GazePlayProcess implements AppProcess {
                         @Override
                         public void run() {
                             Platform.runLater((() -> {
+                                graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
                                 graphicalMenus.primaryStage.show();
                                 graphicalMenus.primaryStage.toFront();
                             }));
@@ -40,7 +43,8 @@ public class GazePlayProcess implements AppProcess {
                     }
             );
 
-            return process;
+            namedProcess.set(process);
+            namedProcess.setName("GazePlay");
         } catch (IOException e) {
             e.printStackTrace();
         }

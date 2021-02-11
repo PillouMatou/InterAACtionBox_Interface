@@ -5,13 +5,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.UI.ProgressButton;
 import main.UI.menu.GraphicalMenus;
+import main.utils.NamedProcess;
 import main.utils.UtilsOS;
 
 import java.io.File;
 
 public interface AppProcess {
 
-    Process start(GraphicalMenus graphicalMenus);
+    NamedProcess start(GraphicalMenus graphicalMenus);
 
     void setUpProcessBuilder();
 
@@ -39,7 +40,11 @@ public interface AppProcess {
 
         setUpProcessBuilder();
         progressButton.assignIndicator((e) -> {
-            graphicalMenus.getQuickMenu().process = this.start(graphicalMenus);
+            if (graphicalMenus.process.get() != null) {
+                graphicalMenus.process.destroy();
+                graphicalMenus.process.set(null);
+            }
+            graphicalMenus.process = start(graphicalMenus);
         });
 
 
