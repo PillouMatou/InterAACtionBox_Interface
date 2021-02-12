@@ -28,9 +28,9 @@ public interface XdotoolProcessCreator {
         t.start();
     }
 
-    static Process getStartingProcess(ProcessBuilder processBuilder, GraphicalMenus graphicalMenus, String name){
+    static Process getStartingProcess(ProcessBuilder processBuilder, GraphicalMenus graphicalMenus, String name) {
         try {
-            File file = new File(name +"_windowId.txt");
+            File file = new File(name + "_windowId.txt");
             file.delete();
             XdotoolProcessCreator.startWindowIdSearcher(graphicalMenus, name);
             return processBuilder.inheritIO().start();

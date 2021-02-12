@@ -1,13 +1,10 @@
 package main.process;
 
-import javafx.application.Platform;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.GazePlayXdotoolProcessCreator;
-import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
 import main.utils.NamedProcess;
 import main.utils.UtilsOS;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -41,7 +38,7 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
 
     @Override
     public NamedProcess start(GraphicalMenus graphicalMenus) {
-        return AppNamedProcessCreator.createProcress(new GazePlayXdotoolProcessCreator(),processBuilder,graphicalMenus,"GazePlay");
+        return AppNamedProcessCreator.createProcress(new GazePlayXdotoolProcessCreator(), processBuilder, graphicalMenus, "GazePlay");
 
     }
 

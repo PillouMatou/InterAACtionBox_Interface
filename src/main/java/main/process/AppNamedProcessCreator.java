@@ -5,12 +5,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.UI.ProgressButton;
 import main.UI.menu.GraphicalMenus;
-import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
 import main.process.xdotoolProcess.XdotoolProcessCreator;
 import main.utils.NamedProcess;
 import main.utils.UtilsOS;
 
-import java.io.File;
 import java.io.IOException;
 
 public interface AppNamedProcessCreator {
@@ -57,8 +55,7 @@ public interface AppNamedProcessCreator {
     }
 
 
-
-    static NamedProcess createProcress(XdotoolProcessCreator xdotoolProcessCreator, ProcessBuilder processBuilder, GraphicalMenus graphicalMenus, String name){
+    static NamedProcess createProcress(XdotoolProcessCreator xdotoolProcessCreator, ProcessBuilder processBuilder, GraphicalMenus graphicalMenus, String name) {
         try {
 
             NamedProcess namedProcess = new NamedProcess();

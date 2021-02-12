@@ -1,14 +1,10 @@
 package main.process;
 
-import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 import main.UI.menu.GraphicalMenus;
-import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
 import main.process.xdotoolProcess.TobiiXdotoolProcessCreator;
 import main.utils.NamedProcess;
 import main.utils.UtilsOS;
-
-import java.io.IOException;
 
 @Slf4j
 public class TobiiManagerNamedProcessCreator implements AppNamedProcessCreator {
@@ -31,7 +27,7 @@ public class TobiiManagerNamedProcessCreator implements AppNamedProcessCreator {
 
     @Override
     public NamedProcess start(GraphicalMenus graphicalMenus) {
-        return AppNamedProcessCreator.createProcress(new TobiiXdotoolProcessCreator(),processBuilder,graphicalMenus,"Tobii Pro EyeTracker Manager");
+        return AppNamedProcessCreator.createProcress(new TobiiXdotoolProcessCreator(), processBuilder, graphicalMenus, "Tobii Pro EyeTracker Manager");
 
     }
 

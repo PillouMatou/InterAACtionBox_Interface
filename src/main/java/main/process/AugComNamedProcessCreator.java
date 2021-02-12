@@ -1,12 +1,8 @@
 package main.process;
 
-import javafx.application.Platform;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
 import main.utils.NamedProcess;
-import main.utils.UtilsOS;
-
-import java.io.IOException;
 
 public class AugComNamedProcessCreator implements AppNamedProcessCreator {
 
@@ -26,7 +22,7 @@ public class AugComNamedProcessCreator implements AppNamedProcessCreator {
 
     @Override
     public NamedProcess start(GraphicalMenus graphicalMenus) {
-        return AppNamedProcessCreator.createProcress(new GoogleChromeXdotoolProcessCreator(),processBuilder,graphicalMenus,"AugCom");
+        return AppNamedProcessCreator.createProcress(new GoogleChromeXdotoolProcessCreator(), processBuilder, graphicalMenus, "AugCom");
     }
 
 }

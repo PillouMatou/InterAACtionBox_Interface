@@ -1,12 +1,8 @@
 package main.process;
 
-import javafx.application.Platform;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
 import main.utils.NamedProcess;
-import main.utils.UtilsOS;
-
-import java.io.IOException;
 
 public class InteraactionSceneNamedProcessCreator implements AppNamedProcessCreator {
 
@@ -25,7 +21,7 @@ public class InteraactionSceneNamedProcessCreator implements AppNamedProcessCrea
 
     @Override
     public NamedProcess start(GraphicalMenus graphicalMenus) {
-        return AppNamedProcessCreator.createProcress(new GoogleChromeXdotoolProcessCreator(),processBuilder,graphicalMenus,"InteraactionScene");
+        return AppNamedProcessCreator.createProcress(new GoogleChromeXdotoolProcessCreator(), processBuilder, graphicalMenus, "InteraactionScene");
 
     }
 
