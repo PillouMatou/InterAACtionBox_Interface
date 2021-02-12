@@ -29,7 +29,7 @@ public class PositionPollerRunnable implements Runnable {
         while (!stopRequested) {
             try {
                 if (configuration.isGazeInteraction()) {
-                    configuration.analyse(MouseInfo.getPointerInfo().getLocation().getX(),MouseInfo.getPointerInfo().getLocation().getY());
+                    configuration.analyse(MouseInfo.getPointerInfo().getLocation().getX(), MouseInfo.getPointerInfo().getLocation().getY());
                     poll();
                 }
             } catch (final RuntimeException e) {

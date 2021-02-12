@@ -1,14 +1,9 @@
 package main;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.control.ProgressIndicator;
-import javafx.util.Duration;
 import lombok.Setter;
 
 import java.awt.*;
@@ -17,11 +12,7 @@ import java.util.LinkedList;
 public class Configuration {
 
     @Setter
-    HomeScreen homeScreen;
-    @Setter
-    OptionsPane optionsPane;
-    @Setter
-    Scene scene;
+    public Scene scene;
 
     public int numberOfLastPositionsToCheck = 200;
     public LinkedList<Point2D> lastPositions = new LinkedList<>();
@@ -33,52 +24,52 @@ public class Configuration {
     IntegerProperty selectionMode = new SimpleIntegerProperty(Configuration.GAZE_INTERACTION);
     boolean userIsMoving = false;
 
-    public Configuration(){
+    public Configuration() {
     }
 
-    public boolean isGazeInteraction(){
+    public boolean isGazeInteraction() {
         return selectionMode.intValue() == Configuration.GAZE_INTERACTION;
     }
 
-    public boolean waitForUserMove(){
+    public boolean waitForUserMove() {
         return !userIsMoving || lasPositionDidntMoved();
     }
 
-    public void analyse(double x, double y){
-        if(
-                (currentPoint!=null && currentPoint.size() >0
-                        && !isArround(x,currentPoint.getLast().getX()) && !isArround(y,currentPoint.getLast().getY()))
-        ){
+    public void analyse(double x, double y) {
+        if (
+                (currentPoint != null && currentPoint.size() > 0
+                        && !isArround(x, currentPoint.getLast().getX()) && !isArround(y, currentPoint.getLast().getY()))
+        ) {
             this.userIsMoving = true;
         }
     }
 
-    public boolean isArround(double coord0, double coord1 ){
-        return coord0 <= coord1+2 && coord0 >= coord1-2;
+    public boolean isArround(double coord0, double coord1) {
+        return coord0 <= coord1 + 2 && coord0 >= coord1 - 2;
     }
 
-    public void updateLastPositions(){
-        while(lastPositions.size()>=numberOfLastPositionsToCheck) {
+    public void updateLastPositions() {
+        while (lastPositions.size() >= numberOfLastPositionsToCheck) {
             lastPositions.pop();
         }
         lastPositions.add(new Point2D(MouseInfo.getPointerInfo().getLocation().getX(), MouseInfo.getPointerInfo().getLocation().getY()));
     }
 
-    public void setMode(int newMode){
+    public void setMode(int newMode) {
         selectionMode.setValue(newMode);
     }
 
-    public boolean lasPositionDidntMoved(){
-        if (lastPositions.size() == numberOfLastPositionsToCheck){
+    public boolean lasPositionDidntMoved() {
+        if (lastPositions.size() == numberOfLastPositionsToCheck) {
             Point2D pos = lastPositions.get(0);
-            for (int i = 0; i < numberOfLastPositionsToCheck; i++){
-                if(!lastPositions.get(i).equals(pos)){
+            for (int i = 0; i < numberOfLastPositionsToCheck; i++) {
+                if (!lastPositions.get(i).equals(pos)) {
                     return false;
                 }
             }
             lastPositions.clear();
             this.userIsMoving = false;
-            return  true;
+            return true;
         }
         return false;
     }
