@@ -97,7 +97,7 @@ public class HomeScreen extends BorderPane {
                     if (graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
                     }
-                    WifiProcess wifiProcess = new WifiProcess();
+                    WifiNamedProcessCreator wifiProcess = new WifiNamedProcessCreator();
                     wifiProcess.setUpProcessBuilder();
                     graphicalMenus.process = wifiProcess.start(graphicalMenus);
                 }
@@ -110,7 +110,7 @@ public class HomeScreen extends BorderPane {
                     if (graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
                     }
-                    TobiiManagerProcess tobiiManagerProcess = new TobiiManagerProcess();
+                    TobiiManagerNamedProcessCreator tobiiManagerProcess = new TobiiManagerNamedProcessCreator();
                     tobiiManagerProcess.setUpProcessBuilder();
                     graphicalMenus.process = tobiiManagerProcess.start(graphicalMenus);
                 }
@@ -168,10 +168,10 @@ public class HomeScreen extends BorderPane {
 
 
     private HBox createMenuBar(String gazePlayInstallationRepo) {
-        YoutubeProcess youtubeProcess = new YoutubeProcess();
-        AugComProcess augComProcess = new AugComProcess();
-        InteraactionSceneProcess interaactionSceneProcess = new InteraactionSceneProcess();
-        GazePlayProcess gazePlayProcess = new GazePlayProcess(gazePlayInstallationRepo);
+        YoutubeNamedProcessCreator youtubeProcess = new YoutubeNamedProcessCreator();
+        AugComNamedProcessCreator augComProcess = new AugComNamedProcessCreator();
+        InteraactionSceneNamedProcessCreator interaactionSceneProcess = new InteraactionSceneNamedProcessCreator();
+        GazePlayNamedProcessCreator gazePlayProcess = new GazePlayNamedProcessCreator(gazePlayInstallationRepo);
 
         ProgressButton youtubeProgressButton = youtubeProcess.createButton(new Image("images/yt.png"), graphicalMenus, "google-chrome");
         youtubeProgressButton.getLabel().setText("Youtube");

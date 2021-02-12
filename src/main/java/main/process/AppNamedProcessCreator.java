@@ -5,12 +5,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.UI.ProgressButton;
 import main.UI.menu.GraphicalMenus;
+import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
+import main.process.xdotoolProcess.XdotoolProcessCreator;
 import main.utils.NamedProcess;
 import main.utils.UtilsOS;
 
 import java.io.File;
+import java.io.IOException;
 
-public interface AppProcess {
+public interface AppNamedProcessCreator {
 
     NamedProcess start(GraphicalMenus graphicalMenus);
 
@@ -41,6 +44,7 @@ public interface AppProcess {
         setUpProcessBuilder();
         progressButton.assignIndicator((e) -> {
             if (graphicalMenus.process.get() != null) {
+                graphicalMenus.process.exitAskedByUser = true;
                 graphicalMenus.process.destroy();
                 graphicalMenus.process.set(null);
             }
@@ -53,19 +57,39 @@ public interface AppProcess {
     }
 
 
-    static void startWindowIdSearcher(GraphicalMenus graphicalMenus, String name) {
-        Thread t = new Thread(() -> {
-            File file = new File(name + "_windowId.txt");
-            while (!file.exists()) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException err) {
-                    err.printStackTrace();
-                }
+
+    static NamedProcess createProcress(XdotoolProcessCreator xdotoolProcessCreator, ProcessBuilder processBuilder, GraphicalMenus graphicalMenus, String name){
+        try {
+
+            NamedProcess namedProcess = new NamedProcess();
+            if (UtilsOS.isUnix()) {
+                xdotoolProcessCreator.setUpProcessBuilder();
+                xdotoolProcessCreator.start(graphicalMenus);
+            } else {
+                graphicalMenus.primaryStage.hide();
             }
-            Platform.runLater(graphicalMenus.primaryStage::hide);
-        });
-        t.setDaemon(true);
-        t.start();
+            Process process = processBuilder.inheritIO().start();
+
+            process.onExit().thenRun(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!namedProcess.exitAskedByUser) {
+                                Platform.runLater((() -> {
+                                    graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
+                                    graphicalMenus.primaryStage.show();
+                                    graphicalMenus.primaryStage.toFront();
+                                }));
+                            }
+                        }
+                    }
+            );
+            namedProcess.set(process);
+            namedProcess.setName(name);
+            return namedProcess;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

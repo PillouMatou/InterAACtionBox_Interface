@@ -206,7 +206,7 @@ public class QuickMenu extends Pane {
                             graphicalMenus.process.destroy();
                             graphicalMenus.process.set(null);
                         }
-                        AugComProcess augComProcess = new AugComProcess();
+                        AugComNamedProcessCreator augComProcess = new AugComNamedProcessCreator();
                         initAndStartProcess(augComProcess);
                     };
                     break;
@@ -222,7 +222,7 @@ public class QuickMenu extends Pane {
                             graphicalMenus.process.destroy();
                             graphicalMenus.process.set(null);
                         }
-                        InteraactionSceneProcess interaactionSceneProcess = new InteraactionSceneProcess();
+                        InteraactionSceneNamedProcessCreator interaactionSceneProcess = new InteraactionSceneNamedProcessCreator();
                         initAndStartProcess(interaactionSceneProcess);
                     };
                     break;
@@ -238,7 +238,7 @@ public class QuickMenu extends Pane {
                             graphicalMenus.process.destroy();
                             graphicalMenus.process.set(null);
                         }
-                        YoutubeProcess youtubeProcess = new YoutubeProcess();
+                        YoutubeNamedProcessCreator youtubeProcess = new YoutubeNamedProcessCreator();
                         initAndStartProcess(youtubeProcess);
                     };
                     break;
@@ -254,7 +254,7 @@ public class QuickMenu extends Pane {
                             graphicalMenus.process.destroy();
                             graphicalMenus.process.set(null);
                         }
-                        GazePlayProcess gazePlayProcess = new GazePlayProcess(gazePlayInstallationRepo);
+                        GazePlayNamedProcessCreator gazePlayProcess = new GazePlayNamedProcessCreator(gazePlayInstallationRepo);
                         initAndStartProcess(gazePlayProcess);
                     };
                     break;
@@ -285,7 +285,7 @@ public class QuickMenu extends Pane {
     }
 
 
-    public void initAndStartProcess(AppProcess process) {
+    public void initAndStartProcess(AppNamedProcessCreator process) {
         process.setUpProcessBuilder();
         this.graphicalMenus.process = process.start(graphicalMenus);
     }

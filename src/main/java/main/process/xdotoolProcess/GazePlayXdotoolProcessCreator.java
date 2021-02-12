@@ -1,15 +1,18 @@
 package main.process.xdotoolProcess;
 
 import lombok.extern.slf4j.Slf4j;
+import main.UI.menu.GraphicalMenus;
+import main.process.AppNamedProcessCreator;
 
 import java.io.File;
 import java.io.IOException;
 
 @Slf4j
-public class GazePlayXdotoolProcess {
+public class GazePlayXdotoolProcessCreator implements XdotoolProcessCreator {
 
     ProcessBuilder processBuilder;
 
+    @Override
     public void setUpProcessBuilder() {
         processBuilder = new ProcessBuilder(
                 "sh",
@@ -17,15 +20,9 @@ public class GazePlayXdotoolProcess {
         );
     }
 
-    public Process start() {
-        try {
-            File file = new File("google-chrome_windowId.txt");
-            file.delete();
-            return processBuilder.inheritIO().start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Override
+    public Process start(GraphicalMenus graphicalMenus) {
+        return XdotoolProcessCreator.getStartingProcess(processBuilder,graphicalMenus,"gazeplay");
     }
 
 }

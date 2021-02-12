@@ -9,6 +9,8 @@ public class NamedProcess {
     private String name;
     public Process process;
 
+    public boolean exitAskedByUser = false;
+
     public NamedProcess() {
         name = "";
         process = null;
