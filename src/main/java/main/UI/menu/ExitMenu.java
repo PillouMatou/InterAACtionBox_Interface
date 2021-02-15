@@ -15,6 +15,9 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import main.utils.UtilsOS;
+
+import java.io.IOException;
 
 public class ExitMenu extends BorderPane {
 
@@ -37,6 +40,11 @@ public class ExitMenu extends BorderPane {
                         graphicalMenus.process.destroy();
                         graphicalMenus.process.set(null);
                     }
+//                    try {
+//                        shutdown();
+//                    } catch (IOException ex) {
+//                        ex.printStackTrace();
+//                    }
                     Platform.exit();
                     System.exit(0);
                 }
@@ -87,5 +95,21 @@ public class ExitMenu extends BorderPane {
         optionButton.setGraphic(graphic);
         optionButton.setOnMouseClicked(eventhandler);
         return optionButton;
+    }
+
+    public static void shutdown() throws RuntimeException, IOException {
+        String shutdownCommand;
+
+        if (UtilsOS.isUnix()) {
+            shutdownCommand = "shutdown -h now";
+        } else if (UtilsOS.isWindows()) {
+            shutdownCommand = "shutdown.exe -s -t 0";
+        } else {
+            throw new RuntimeException("Unsupported operating system.");
+        }
+
+        Runtime.getRuntime().exec(shutdownCommand);
+        Platform.exit();
+        System.exit(0);
     }
 }

@@ -290,20 +290,4 @@ public class QuickMenu extends Pane {
         this.graphicalMenus.process = process.start(graphicalMenus);
     }
 
-    public static void shutdown() throws RuntimeException, IOException {
-        String shutdownCommand;
-
-        if (UtilsOS.isUnix()) {
-            shutdownCommand = "shutdown -h now";
-        } else if (UtilsOS.isWindows()) {
-            shutdownCommand = "shutdown.exe -s -t 0";
-        } else {
-            throw new RuntimeException("Unsupported operating system.");
-        }
-
-        Runtime.getRuntime().exec(shutdownCommand);
-        Platform.exit();
-        System.exit(0);
-    }
-
 }
