@@ -120,12 +120,7 @@ public class HomeScreen extends BorderPane {
                 "Exit",
                 "images/cross.png",
                 (e) -> {
-                    if (graphicalMenus.process.get() != null) {
-                        graphicalMenus.process.destroy();
-                        graphicalMenus.process.set(null);
-                    }
-                    Platform.exit();
-                    System.exit(0);
+                    this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus));
                 }
         );
 
@@ -145,7 +140,7 @@ public class HomeScreen extends BorderPane {
         startMouseListener();
     }
 
-    private Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
+    static Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
         Button optionButton = new Button(text);
         optionButton.setPrefHeight(50);
         optionButton.setMaxHeight(50);
