@@ -10,4 +10,5 @@ done
 
 echo "$var" >gazeplay_windowId.txt
 cat gazeplay_windowId.txt
+xdotool windowsize "$var" 100% 100%
 exit 0

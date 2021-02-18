@@ -26,7 +26,7 @@ public interface AppNamedProcessCreator {
         return "";
     }
 
-    default ProgressButton createButton(Image image, GraphicalMenus graphicalMenus, String windowNameToSearch) {
+    default ProgressButton createButton(Image image, GraphicalMenus graphicalMenus) {
         ProgressButton progressButton = new ProgressButton();
         progressButton.getButton().setRadius(100);
 
@@ -46,6 +46,7 @@ public interface AppNamedProcessCreator {
                 graphicalMenus.process.destroy();
                 graphicalMenus.process.set(null);
             }
+            graphicalMenus.getHomeScreen().removeMenu();
             graphicalMenus.process = start(graphicalMenus);
         });
 

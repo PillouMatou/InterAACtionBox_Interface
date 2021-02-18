@@ -57,7 +57,6 @@ public class QuickMenu extends Pane {
 
         closeMenuButton = createCloseMenuButton();
         getChildren().add(closeMenuButton);
-
         buttons = setButtons(graphicalMenus.primaryStage, graphicalMenus.getGazePlayInstallationRepo());
         createCircularButtons();
     }
@@ -86,10 +85,10 @@ public class QuickMenu extends Pane {
                         "-fx-text-fill: #faeaed"
         );
 
-        closeButton.setOnMouseClicked((e) -> {
+
+        closeButton.assignIndicator((e) -> {
             graphicalMenus.primaryStage.hide();
         });
-
 
         DropShadow shadow = new DropShadow();
         shadow.setOffsetX(0);

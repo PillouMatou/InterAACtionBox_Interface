@@ -17,7 +17,7 @@ public class AugComNamedProcessCreator implements AppNamedProcessCreator {
                 "--fullscreen",
                 "--no-sandbox",
                 "http://augcom.net/");
-        //"http://localhost:4200/");
+        // "http://localhost:8080/");
     }
 
     @Override

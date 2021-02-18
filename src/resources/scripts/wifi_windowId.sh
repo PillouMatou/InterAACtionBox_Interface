@@ -10,5 +10,5 @@ done
 
 echo "$var" >wifi_windowId.txt
 cat wifi_windowId.txt
-xdotool windowsize $var 100% 100%
+xdotool windowsize "$var" 100% 100%
 exit 0

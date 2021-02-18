@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,8 @@ public class ProgressButton extends StackPane {
 
         text.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         text.setTextFill(Color.web("#cd2653"));
+        text.setAlignment(Pos.CENTER);
+        text.setTextAlignment(TextAlignment.CENTER);
 
         imageAndText = new VBox(image, text);
         imageAndText.setMouseTransparent(true);

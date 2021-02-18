@@ -32,19 +32,32 @@ public class ExitMenu extends BorderPane {
         this.getChildren().add(r);
 
 
+        Button shutdownButton = createTopBarButton(
+                "Yes, shutdown the box",
+                "images/on-off-button.png",
+                (e) -> {
+                    if (graphicalMenus.process.get() != null) {
+                        graphicalMenus.process.destroy();
+                        graphicalMenus.process.set(null);
+                    }
+                    try {
+                        shutdown();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    Platform.exit();
+                    System.exit(0);
+                }
+        );
+
         Button exitButton = createTopBarButton(
-                "Yes, Exit",
+                "[For tests purpose] Exit the box only",
                 "images/cross.png",
                 (e) -> {
                     if (graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
                         graphicalMenus.process.set(null);
                     }
-//                    try {
-//                        shutdown();
-//                    } catch (IOException ex) {
-//                        ex.printStackTrace();
-//                    }
                     Platform.exit();
                     System.exit(0);
                 }
@@ -56,7 +69,7 @@ public class ExitMenu extends BorderPane {
                 (e) ->{ graphicalMenus.primaryStage.getScene().setRoot(graphicalMenus.getHomeScreen());}
         );
 
-        HBox hbox = new HBox(cancelButton,exitButton);
+        HBox hbox = new HBox(cancelButton,exitButton, shutdownButton);
         hbox.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(hbox, Pos.CENTER);
         hbox.spacingProperty().bind(this.widthProperty().divide(20));
