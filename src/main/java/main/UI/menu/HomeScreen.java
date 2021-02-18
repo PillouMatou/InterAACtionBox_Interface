@@ -42,13 +42,6 @@ public class HomeScreen extends BorderPane {
         super();
         this.graphicalMenus = graphicalMenus;
 
-        ImageView backgroundBlured = new ImageView(new Image("images/blured.jpg"));
-
-        backgroundBlured.setOpacity(1);
-
-        backgroundBlured.fitWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        backgroundBlured.fitHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
-
         Rectangle r = new Rectangle();
         r.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         r.heightProperty().bind(graphicalMenus.primaryStage.heightProperty());
@@ -76,7 +69,6 @@ public class HomeScreen extends BorderPane {
         StackPane titlePane = new StackPane();
         javafx.scene.shape.Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        // backgroundForTitle.setOpacity(0.3);
         backgroundForTitle.setFill(Color.web("#cd2653"));
 
         javafx.scene.control.Label title = new Label("InteraactionBox");
@@ -269,8 +261,6 @@ public class HomeScreen extends BorderPane {
         closeButton.getButton().radiusProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(1d / 12d));
         closeButton.getButton().setStroke(Color.web("#cd2653"));
         closeButton.getButton().setStrokeWidth(3);
-
-        this.setOpacity(0.2);
 
         closeButton.assignIndicator((e) -> {
             log.info("ON EST RENTRE LA PTIN");
