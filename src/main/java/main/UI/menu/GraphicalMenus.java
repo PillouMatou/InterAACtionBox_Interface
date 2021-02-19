@@ -22,8 +22,6 @@ public class GraphicalMenus {
     private final HomeScreen homeScreen;
     @Getter
     private final OptionsMenu optionsMenu;
-    @Getter
-    private final QuickMenu quickMenu;
 
     public NamedProcess process = new NamedProcess();
 
@@ -31,7 +29,6 @@ public class GraphicalMenus {
         this.primaryStage = primaryStage;
         this.gazePlayInstallationRepo = gazePlayInstallationRepo;
         this.optionsMenu = new OptionsMenu(this);
-        this.quickMenu = new QuickMenu(this);
         this.homeScreen = new HomeScreen(this);
     }
 }

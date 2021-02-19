@@ -42,13 +42,6 @@ public class HomeScreen extends BorderPane {
         super();
         this.graphicalMenus = graphicalMenus;
 
-        ImageView backgroundBlured = new ImageView(new Image("images/blured.jpg"));
-
-        backgroundBlured.setOpacity(1);
-
-        backgroundBlured.fitWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        backgroundBlured.fitHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
-
         Rectangle r = new Rectangle();
         r.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         r.heightProperty().bind(graphicalMenus.primaryStage.heightProperty());
@@ -76,7 +69,6 @@ public class HomeScreen extends BorderPane {
         StackPane titlePane = new StackPane();
         javafx.scene.shape.Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        // backgroundForTitle.setOpacity(0.3);
         backgroundForTitle.setFill(Color.web("#cd2653"));
 
         javafx.scene.control.Label title = new Label("InteraactionBox");
@@ -92,7 +84,7 @@ public class HomeScreen extends BorderPane {
 
         Button wifiButton = createTopBarButton(
                 "Wi-Fi",
-                "images/cross.png",
+                "images/wi-fi_white.png",
                 (e) -> {
                     if (graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
@@ -105,7 +97,7 @@ public class HomeScreen extends BorderPane {
 
         Button tobiiButton = createTopBarButton(
                 "Tobii Manager",
-                "images/cross.png",
+                "images/eye-tracking_white.png",
                 (e) -> {
                     if (graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
@@ -118,7 +110,7 @@ public class HomeScreen extends BorderPane {
 
         Button exitButton = createTopBarButton(
                 "Exit",
-                "images/cross.png",
+                "images/on-off-button_white.png",
                 (e) -> {
                     this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus));
                 }
@@ -167,34 +159,41 @@ public class HomeScreen extends BorderPane {
         AugComNamedProcessCreator augComProcess = new AugComNamedProcessCreator();
         InteraactionSceneNamedProcessCreator interaactionSceneProcess = new InteraactionSceneNamedProcessCreator();
         GazePlayNamedProcessCreator gazePlayProcess = new GazePlayNamedProcessCreator(gazePlayInstallationRepo);
+        SpotifyNamedProcessCreator spotifyProcess = new SpotifyNamedProcessCreator();
 
-        ProgressButton youtubeProgressButton = youtubeProcess.createButton(new Image("images/yt.png"), graphicalMenus, "google-chrome");
-        youtubeProgressButton.getLabel().setText("Youtube");
-        ProgressButton augComProcessButton = augComProcess.createButton(new Image("images/angular.png"), graphicalMenus, "google-chrome");
+        ProgressButton youtubeProcessButton = youtubeProcess.createButton(new Image("images/yt.png"), graphicalMenus);
+        youtubeProcessButton.getLabel().setText("Youtube");
+        ProgressButton augComProcessButton = augComProcess.createButton(new Image("images/angular.png"), graphicalMenus);
         augComProcessButton.getLabel().setText("AugCom");
-        ProgressButton interaactionSceneProcessButton = interaactionSceneProcess.createButton(new Image("images/angular.png"), graphicalMenus, "google-chrome");
+        ProgressButton interaactionSceneProcessButton = interaactionSceneProcess.createButton(new Image("images/angular.png"), graphicalMenus);
         interaactionSceneProcessButton.getLabel().setText("InteraactionScene");
-        ProgressButton gazePlayProcessButton = gazePlayProcess.createButton(new Image("images/gazeplayicon.png"), graphicalMenus, "gazeplay");
+        ProgressButton gazePlayProcessButton = gazePlayProcess.createButton(new Image("images/gazeplayicon.png"), graphicalMenus);
         gazePlayProcessButton.getLabel().setText("GazePlay");
-        youtubeProgressButton.getButton().setStroke(Color.web("#cd2653"));
-        youtubeProgressButton.getButton().setStrokeWidth(3);
+        ProgressButton spotifyProcessButton = spotifyProcess.createButton(new Image("images/spotify.png"), graphicalMenus);
+        spotifyProcessButton.getLabel().setText("Spotify");
+        youtubeProcessButton.getButton().setStroke(Color.web("#cd2653"));
+        youtubeProcessButton.getButton().setStrokeWidth(3);
         augComProcessButton.getButton().setStroke(Color.web("#cd2653"));
         augComProcessButton.getButton().setStrokeWidth(3);
         interaactionSceneProcessButton.getButton().setStroke(Color.web("#cd2653"));
         interaactionSceneProcessButton.getButton().setStrokeWidth(3);
         gazePlayProcessButton.getButton().setStroke(Color.web("#cd2653"));
         gazePlayProcessButton.getButton().setStrokeWidth(3);
+        spotifyProcessButton.getButton().setStroke(Color.web("#cd2653"));
+        spotifyProcessButton.getButton().setStrokeWidth(3);
 
         HBox menuBar = new HBox(
-                youtubeProgressButton,
+                youtubeProcessButton,
                 augComProcessButton,
                 interaactionSceneProcessButton,
-                gazePlayProcessButton
+                gazePlayProcessButton,
+                spotifyProcessButton
         );
-        graphicalMenus.getGazeDeviceManager().addEventFilter(youtubeProgressButton.getButton());
+        graphicalMenus.getGazeDeviceManager().addEventFilter(youtubeProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(augComProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(interaactionSceneProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(gazePlayProcessButton.getButton());
+        graphicalMenus.getGazeDeviceManager().addEventFilter(spotifyProcessButton.getButton());
 
         menuBar.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(menuBar, Pos.CENTER);
@@ -243,8 +242,8 @@ public class HomeScreen extends BorderPane {
                 BufferedImage bufi = robot.createScreenCapture(new java.awt.Rectangle(0, 0, (int) this.graphicalMenus.primaryStage.getWidth(), (int) this.graphicalMenus.primaryStage.getHeight()));
                 Platform.runLater(() -> {
                     ImageView img = new ImageView(convertToFxImage(bufi));
-                    img.fitWidthProperty().bind(closeMenuButton.widthProperty().divide(1.5));
-                    img.fitHeightProperty().bind(closeMenuButton.heightProperty().divide(1.5));
+                    img.fitWidthProperty().bind(closeMenuButton.getButton().radiusProperty().multiply(1.2));
+                    img.fitHeightProperty().bind(closeMenuButton.getButton().radiusProperty().multiply(1.2));
                     img.setPreserveRatio(true);
                     closeMenuButton.setImage(img);
                 });
@@ -258,39 +257,18 @@ public class HomeScreen extends BorderPane {
 
     public ProgressButton createCloseMenuButton() {
         ProgressButton closeButton = new ProgressButton();
-        closeButton.prefWidthProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
-        closeButton.maxWidthProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
-        closeButton.minWidthProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
-        closeButton.minHeightProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
-        closeButton.minHeightProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
-        closeButton.minHeightProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(3d / 12d));
 
-        Circle shape = new Circle();
-        shape.radiusProperty().bind(closeButton.heightProperty().divide(2));
+        closeButton.getButton().radiusProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(1d / 12d));
+        closeButton.getButton().setStroke(Color.web("#cd2653"));
+        closeButton.getButton().setStrokeWidth(3);
 
-        closeButton.setShape(shape);
-
-        closeButton.setStyle(
-                "-fx-border-color: #cd2653; " +
-                        "-fx-border-width: 3; " +
-                        "-fx-background-color: #faeaed; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed"
-        );
-
-        closeButton.setOnMouseClicked((e) -> {
+        closeButton.assignIndicator((e) -> {
+            log.info("ON EST RENTRE LA PTIN");
             graphicalMenus.primaryStage.hide();
         });
 
-//
-//        DropShadow shadow = new DropShadow();
-//        shadow.setOffsetX(0);
-//        shadow.setOffsetY(10);
-//        shadow.setRadius(50);
-//        closeButton.setEffect(shadow);
-
-        closeButton.setSpacing(20);
+        closeButton.start();
+        graphicalMenus.getGazeDeviceManager().addEventFilter(closeButton.getButton());
 
         return closeButton;
     }
@@ -319,6 +297,12 @@ public class HomeScreen extends BorderPane {
         } else if (graphicalMenus.process.get() == null) {
             centerMenu.translateYProperty().unbind();
             centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(4d / 12d));
+            removeMenu();
+        }
+    }
+
+    public void removeMenu(){
+        if(centerMenu.getChildren().contains(closeMenuButton)) {
             centerMenu.getChildren().remove(closeMenuButton);
         }
     }

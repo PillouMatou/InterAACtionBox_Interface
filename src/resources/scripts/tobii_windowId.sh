@@ -10,5 +10,5 @@ done
 
 echo "$var" >tobii_windowId.txt
 cat tobii_windowId.txt
-xdotool windowsize $var 100% 100%
+xdotool windowsize "$var" 100% 100%
 exit 0
