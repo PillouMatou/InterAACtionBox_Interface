@@ -13,8 +13,6 @@ public class InteraactionSceneNamedProcessCreator implements AppNamedProcessCrea
         processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
                 "--kiosk",
                 "--window-position=0,0",
-                "--disable-gpu",
-                "--no-sandbox",
                 "--fullscreen",
                 "http://interaactionScene.net/");
         // "http://localhost:8081/");

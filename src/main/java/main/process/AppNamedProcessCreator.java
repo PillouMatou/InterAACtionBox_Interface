@@ -46,7 +46,6 @@ public interface AppNamedProcessCreator {
                 graphicalMenus.process.destroy();
                 graphicalMenus.process.set(null);
             }
-            graphicalMenus.getHomeScreen().removeMenu();
             graphicalMenus.process = start(graphicalMenus);
         });
 
@@ -65,6 +64,7 @@ public interface AppNamedProcessCreator {
                 xdotoolProcessCreator.start(graphicalMenus);
             } else {
                 graphicalMenus.primaryStage.hide();
+                graphicalMenus.getHomeScreen().removeMenu();
             }
             Process process = processBuilder.inheritIO().start();
 

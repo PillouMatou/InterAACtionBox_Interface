@@ -13,8 +13,6 @@ public class YoutubeNamedProcessCreator implements AppNamedProcessCreator {
         processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
                 "--kiosk",
                 "--window-position=0,0",
-                "--disable-gpu",
-                "--no-sandbox",
                 "--fullscreen",
                 "https://www.youtube.com");
     }

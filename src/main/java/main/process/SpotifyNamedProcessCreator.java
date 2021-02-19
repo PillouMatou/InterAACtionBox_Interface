@@ -15,9 +15,7 @@ public class SpotifyNamedProcessCreator implements AppNamedProcessCreator {
             processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
                     "--kiosk",
                     "--window-position=0,0",
-                    "--disable-gpu",
                     "--fullscreen",
-                    "--no-sandbox",
                     "https://www.spotify.com/fr/");
         } else {
             processBuilder = new ProcessBuilder("spotify");

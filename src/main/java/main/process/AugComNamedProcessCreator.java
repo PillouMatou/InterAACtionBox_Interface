@@ -13,9 +13,7 @@ public class AugComNamedProcessCreator implements AppNamedProcessCreator {
         processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
                 "--kiosk",
                 "--window-position=0,0",
-                "--disable-gpu",
                 "--fullscreen",
-                "--no-sandbox",
                 "http://augcom.net/");
         // "http://localhost:8080/");
     }

@@ -22,7 +22,12 @@ public interface XdotoolProcessCreator {
                     err.printStackTrace();
                 }
             }
-            Platform.runLater(graphicalMenus.primaryStage::hide);
+            Platform.runLater(
+                    () -> {
+                        graphicalMenus.primaryStage.hide();
+                        graphicalMenus.getHomeScreen().removeMenu();
+                    }
+            );
         });
         t.setDaemon(true);
         t.start();
