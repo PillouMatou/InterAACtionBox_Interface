@@ -3,6 +3,7 @@ package main.process;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
 import main.utils.NamedProcess;
+import main.utils.UtilsOS;
 
 public class AugComNamedProcessCreator implements AppNamedProcessCreator {
 
@@ -10,12 +11,19 @@ public class AugComNamedProcessCreator implements AppNamedProcessCreator {
 
     @Override
     public void setUpProcessBuilder() {
-        processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
-                "--kiosk",
-                "--window-position=0,0",
-                "--fullscreen",
-                "http://augcom.net/");
-        // "http://localhost:8080/");
+        if(UtilsOS.isWindows()) {
+            processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
+                    "--kiosk",
+                    "--window-position=0,0",
+                    "--fullscreen",
+                    "http://augcom.net/");
+        } else {
+            processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
+                    "--kiosk",
+                    "--window-position=0,0",
+                    "--fullscreen",
+                    "http://localhost:8080/");
+        }
     }
 
     @Override
