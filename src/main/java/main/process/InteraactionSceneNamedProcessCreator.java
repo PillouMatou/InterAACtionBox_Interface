@@ -3,6 +3,7 @@ package main.process;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
 import main.utils.NamedProcess;
+import main.utils.UtilsOS;
 
 public class InteraactionSceneNamedProcessCreator implements AppNamedProcessCreator {
 
@@ -10,12 +11,19 @@ public class InteraactionSceneNamedProcessCreator implements AppNamedProcessCrea
 
     @Override
     public void setUpProcessBuilder() {
-        processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
-                "--kiosk",
-                "--window-position=0,0",
-                "--fullscreen",
-                "http://interaactionScene.net/");
-        // "http://localhost:8081/");
+        if(UtilsOS.isWindows()) {
+            processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
+                    "--kiosk",
+                    "--window-position=0,0",
+                    "--fullscreen",
+                    "http://interaactionScene.net/");
+        } else {
+            processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
+                    "--kiosk",
+                    "--window-position=0,0",
+                    "--fullscreen",
+                    "http://localhost:8081/");
+        }
     }
 
     @Override

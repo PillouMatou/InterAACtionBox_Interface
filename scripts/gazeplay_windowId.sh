@@ -1,9 +1,9 @@
 #!/bin/bash
 rm -f gazeplay_windowId.txt
-var=$(xdotool search --onlyvisible --class google-chrome)
+var=$(xdotool search --onlyvisible --class gazeplay)
 while [ -z "$var" ]; do
 
-  var=$(xdotool search --onlyvisible --class google-chrome)
+  var=$(xdotool search --onlyvisible --class gazeplay)
   sleep 0.2
 
 done
