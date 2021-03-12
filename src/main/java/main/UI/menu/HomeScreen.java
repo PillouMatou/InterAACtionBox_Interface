@@ -119,7 +119,7 @@ public class HomeScreen extends BorderPane {
         BorderPane titleBox = new BorderPane();
         titleBox.setLeft(optionButton);
         titleBox.setCenter(title);
-        titleBox.setRight(new HBox(tobiiButton, wifiButton, exitButton));
+        titleBox.setRight(new HBox(exitButton,tobiiButton, wifiButton));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);

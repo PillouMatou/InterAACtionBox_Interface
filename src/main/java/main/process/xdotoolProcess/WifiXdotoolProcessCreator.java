@@ -12,7 +12,7 @@ public class WifiXdotoolProcessCreator implements XdotoolProcessCreator {
     public void setUpProcessBuilder() {
         processBuilder = new ProcessBuilder(
                 "sh",
-                "src/resources/scripts/wifi_windowId.sh"
+                "./scripts/wifi_windowId.sh"
         );
     }
 

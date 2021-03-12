@@ -12,7 +12,7 @@ public class TobiiXdotoolProcessCreator implements XdotoolProcessCreator {
     public void setUpProcessBuilder() {
         processBuilder = new ProcessBuilder(
                 "sh",
-                "src/resources/scripts/tobii_windowId.sh"
+                "./scripts/tobii_windowId.sh"
         );
     }
 

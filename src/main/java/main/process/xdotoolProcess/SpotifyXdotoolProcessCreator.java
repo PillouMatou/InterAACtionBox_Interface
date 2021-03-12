@@ -12,7 +12,7 @@ public class SpotifyXdotoolProcessCreator implements XdotoolProcessCreator {
     public void setUpProcessBuilder() {
         processBuilder = new ProcessBuilder(
                 "sh",
-                "src/resources/scripts/spotify_windowId.sh"
+                "./scripts/spotify_windowId.sh"
         );
     }
 
