@@ -2,6 +2,7 @@ package main.UI.menu;
 
 import javafx.stage.Stage;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import main.Configuration;
 import main.gaze.devicemanager.AbstractGazeDeviceManager;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
@@ -31,5 +32,6 @@ public class GraphicalMenus {
         this.optionsMenu = new OptionsMenu(this);
         this.homeScreen = new HomeScreen(this);
     }
+
 }
 
