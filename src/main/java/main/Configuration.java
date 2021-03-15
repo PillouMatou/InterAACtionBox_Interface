@@ -21,7 +21,7 @@ public class Configuration {
 
     public final static int MOUSE_INTERACTION = 0;
     public final static int GAZE_INTERACTION = 1;
-    IntegerProperty selectionMode = new SimpleIntegerProperty(Configuration.GAZE_INTERACTION);
+    IntegerProperty selectionMode = new SimpleIntegerProperty(Configuration.MOUSE_INTERACTION);
     boolean userIsMoving = false;
 
     public Configuration() {

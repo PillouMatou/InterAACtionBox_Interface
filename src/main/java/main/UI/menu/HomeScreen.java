@@ -125,7 +125,7 @@ public class HomeScreen extends BorderPane {
         title.setAlignment(Pos.CENTER);
         titlePane.getChildren().addAll(backgroundForTitle, titleBox);
 
-        BorderPane.setAlignment(titlePane, Pos.CENTER);
+        BorderPane.setAlignment(titlePane, Pos.CENTER_LEFT);
         this.setTop(titlePane);
 
         ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
@@ -197,7 +197,7 @@ public class HomeScreen extends BorderPane {
 
         menuBar.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(menuBar, Pos.CENTER);
-        menuBar.spacingProperty().bind(this.widthProperty().divide(2 * (menuBar.getChildren().size() + 1)));
+        menuBar.spacingProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(4 * (menuBar.getChildren().size() + 1)));
         return menuBar;
     }
 

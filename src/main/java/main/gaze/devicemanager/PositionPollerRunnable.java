@@ -67,7 +67,6 @@ public class PositionPollerRunnable implements Runnable {
         } else {
             configuration.updateLastPositions();
         }
-        //  Platform.runLater(() -> tobiiGazeDeviceManager.onGazeUpdate(point, "main/gaze"));
     }
 
 }
