@@ -77,6 +77,8 @@ public interface AppNamedProcessCreator {
                                     graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
                                     graphicalMenus.primaryStage.show();
                                     graphicalMenus.primaryStage.toFront();
+                                    graphicalMenus.process.set(null);
+                                    graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
                                 }));
                             }
                         }

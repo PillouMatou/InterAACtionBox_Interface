@@ -26,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import main.UI.ProgressButton;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
+import main.utils.UtilsOS;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -119,7 +120,7 @@ public class HomeScreen extends BorderPane {
         BorderPane titleBox = new BorderPane();
         titleBox.setLeft(optionButton);
         titleBox.setCenter(title);
-        titleBox.setRight(new HBox(exitButton,tobiiButton, wifiButton));
+        titleBox.setRight(new HBox(tobiiButton, wifiButton,exitButton));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
@@ -221,7 +222,7 @@ public class HomeScreen extends BorderPane {
         Point pointerLocation = pointer.getLocation();
         int x = (int) pointerLocation.getX();
         int y = (int) pointerLocation.getY();
-        if (x > 500 && x < Screen.getPrimary().getBounds().getWidth() - 500 && y <= 10) {
+        if (x > 500 && x < Screen.getPrimary().getBounds().getWidth() - 500 && y <= 10 && (!UtilsOS.isUnix() || (UtilsOS.isUnix() && !graphicalMenus.primaryStage.isShowing()))) {
             Platform.runLater(() -> {
                 this.takeSnapShot();
                 graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();

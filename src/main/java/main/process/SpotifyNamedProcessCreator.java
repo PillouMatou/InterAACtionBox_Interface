@@ -2,6 +2,7 @@ package main.process;
 
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
+import main.process.xdotoolProcess.SpotifyXdotoolProcessCreator;
 import main.utils.NamedProcess;
 import main.utils.UtilsOS;
 
@@ -27,7 +28,7 @@ public class SpotifyNamedProcessCreator implements AppNamedProcessCreator {
         if (UtilsOS.isWindows()) {
             return AppNamedProcessCreator.createProcress(new GoogleChromeXdotoolProcessCreator(), processBuilder, graphicalMenus, "AugCom");
         } else {
-            return AppNamedProcessCreator.createProcress(new GoogleChromeXdotoolProcessCreator(), processBuilder, graphicalMenus, "Spotify");
+            return AppNamedProcessCreator.createProcress(new SpotifyXdotoolProcessCreator(), processBuilder, graphicalMenus, "Spotify");
 
         }
     }
