@@ -17,7 +17,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -120,7 +119,7 @@ public class HomeScreen extends BorderPane {
         BorderPane titleBox = new BorderPane();
         titleBox.setLeft(optionButton);
         titleBox.setCenter(title);
-        titleBox.setRight(new HBox(tobiiButton, wifiButton,exitButton));
+        titleBox.setRight(new HBox(tobiiButton, wifiButton, exitButton));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
@@ -297,10 +296,8 @@ public class HomeScreen extends BorderPane {
         }
     }
 
-    public void removeMenu(){
-        if(centerMenu.getChildren().contains(closeMenuButton)) {
-            centerMenu.getChildren().remove(closeMenuButton);
-        }
+    public void removeMenu() {
+        centerMenu.getChildren().remove(closeMenuButton);
     }
 
 }

@@ -21,7 +21,7 @@ import java.io.IOException;
 
 public class ExitMenu extends BorderPane {
 
-    public ExitMenu (GraphicalMenus graphicalMenus){
+    public ExitMenu(GraphicalMenus graphicalMenus) {
         Rectangle r = new Rectangle();
         r.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         r.heightProperty().bind(graphicalMenus.primaryStage.heightProperty());
@@ -66,10 +66,12 @@ public class ExitMenu extends BorderPane {
         Button cancelButton = createTopBarButton(
                 "Cancel",
                 "images/cross.png",
-                (e) ->{ graphicalMenus.primaryStage.getScene().setRoot(graphicalMenus.getHomeScreen());}
+                (e) -> {
+                    graphicalMenus.primaryStage.getScene().setRoot(graphicalMenus.getHomeScreen());
+                }
         );
 
-        HBox hbox = new HBox(cancelButton,exitButton, shutdownButton);
+        HBox hbox = new HBox(cancelButton, exitButton, shutdownButton);
         hbox.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(hbox, Pos.CENTER);
         hbox.spacingProperty().bind(this.widthProperty().divide(20));

@@ -53,8 +53,7 @@ public class Main extends Application {
                 () {
             @Override
             public void handle(KeyEvent t) {
-                if(t.getCode()== KeyCode.E)
-                {
+                if (t.getCode() == KeyCode.E) {
                     Platform.exit();
                     System.exit(0);
                 }

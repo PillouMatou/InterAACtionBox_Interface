@@ -12,7 +12,7 @@ public class SpotifyNamedProcessCreator implements AppNamedProcessCreator {
 
     @Override
     public void setUpProcessBuilder() {
-        if(UtilsOS.isWindows()) {
+        if (UtilsOS.isWindows()) {
             processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
                     "--kiosk",
                     "--window-position=0,0",
