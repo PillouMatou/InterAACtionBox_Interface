@@ -49,7 +49,6 @@ public interface AppNamedProcessCreator {
             graphicalMenus.process = start(graphicalMenus);
         });
 
-
         progressButton.start();
         return progressButton;
     }
@@ -57,7 +56,7 @@ public interface AppNamedProcessCreator {
 
     static NamedProcess createProcress(XdotoolProcessCreator xdotoolProcessCreator, ProcessBuilder processBuilder, GraphicalMenus graphicalMenus, String name) {
         try {
-
+            System.out.println("1");
             NamedProcess namedProcess = new NamedProcess();
             if (UtilsOS.isUnix()) {
                 xdotoolProcessCreator.setUpProcessBuilder();
@@ -66,6 +65,7 @@ public interface AppNamedProcessCreator {
                 graphicalMenus.primaryStage.hide();
                 graphicalMenus.getHomeScreen().removeMenu();
             }
+            System.out.println("2");
             Process process = processBuilder.inheritIO().start();
 
             process.onExit().thenRun(
@@ -84,6 +84,8 @@ public interface AppNamedProcessCreator {
                         }
                     }
             );
+
+            System.out.println("3");
             namedProcess.set(process);
             namedProcess.setName(name);
             return namedProcess;

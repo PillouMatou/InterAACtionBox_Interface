@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import main.UI.ProgressButton;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
+import main.process.xdotoolProcess.ActivateMainWindowProcess;
 import main.utils.UtilsOS;
 
 import java.awt.*;
@@ -87,11 +88,15 @@ public class HomeScreen extends BorderPane {
                 "images/wi-fi_white.png",
                 (e) -> {
                     if (graphicalMenus.process.get() != null) {
+                        graphicalMenus.process.exitAskedByUser = true;
                         graphicalMenus.process.destroy();
+                        graphicalMenus.process.set(null);
                     }
+                    log.info("clicked");
                     WifiNamedProcessCreator wifiProcess = new WifiNamedProcessCreator();
                     wifiProcess.setUpProcessBuilder();
                     graphicalMenus.process = wifiProcess.start(graphicalMenus);
+                    showCloseMenuIfProcessNotNull();
                 }
         );
 
@@ -100,11 +105,14 @@ public class HomeScreen extends BorderPane {
                 "images/eye-tracking_white.png",
                 (e) -> {
                     if (graphicalMenus.process.get() != null) {
+                        graphicalMenus.process.exitAskedByUser = true;
                         graphicalMenus.process.destroy();
+                        graphicalMenus.process.set(null);
                     }
                     TobiiManagerNamedProcessCreator tobiiManagerProcess = new TobiiManagerNamedProcessCreator();
                     tobiiManagerProcess.setUpProcessBuilder();
                     graphicalMenus.process = tobiiManagerProcess.start(graphicalMenus);
+                    showCloseMenuIfProcessNotNull();
                 }
         );
 
@@ -149,7 +157,7 @@ public class HomeScreen extends BorderPane {
         graphic.setPreserveRatio(true);
         graphic.setFitHeight(30);
         optionButton.setGraphic(graphic);
-        optionButton.setOnMouseClicked(eventhandler);
+        optionButton.setOnAction(eventhandler);
         return optionButton;
     }
 
@@ -226,6 +234,7 @@ public class HomeScreen extends BorderPane {
                 this.takeSnapShot();
                 graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
                 graphicalMenus.primaryStage.show();
+                ActivateMainWindowProcess.start();
             });
         }
     }
@@ -258,7 +267,6 @@ public class HomeScreen extends BorderPane {
         closeButton.getButton().setStrokeWidth(3);
 
         closeButton.assignIndicator((e) -> {
-            log.info("ON EST RENTRE LA PTIN");
             graphicalMenus.primaryStage.hide();
         });
 

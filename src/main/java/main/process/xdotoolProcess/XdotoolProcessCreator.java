@@ -22,6 +22,7 @@ public interface XdotoolProcessCreator {
                     err.printStackTrace();
                 }
             }
+            file.delete();
             Platform.runLater(
                     () -> {
                         graphicalMenus.primaryStage.hide();

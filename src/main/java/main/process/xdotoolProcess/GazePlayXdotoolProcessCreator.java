@@ -12,7 +12,7 @@ public class GazePlayXdotoolProcessCreator implements XdotoolProcessCreator {
     public void setUpProcessBuilder() {
         processBuilder = new ProcessBuilder(
                 "sh",
-                "./scripts/google-chrome_windowId.sh"
+                "./scripts/gazeplay_windowId.sh"
         );
     }
 
