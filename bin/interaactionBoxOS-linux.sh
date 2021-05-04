@@ -30,31 +30,9 @@ export PATH=${JAVA_HOME}/bin:${PATH}
   
 echo "PATH = ${PATH}"
 
+gazePlaySave="~/gazeplay-linux-x64-1.8.1-AFSR"
+
 FILE=${SCRIPT_DIR}/configuration.conf
-if [ -f "$FILE" ]; then
-    echo "exists"
-    gazePlaySave=$(head -n 1 "${FILE}")
-    if [ -d "$gazePlaySave" ]; then
-      
-      export JAVA_CMD="${WORKING_DIR}/../lib/jre/bin/java -cp \"$CLASSPATH\" ${JAVA_OPTS} main.Main $gazePlaySave"
-
-      echo "Executing command line: $JAVA_CMD"
-
-      ${JAVA_CMD}
-      
-      exit
-    fi
-fi
-
-gazePlaySave=""
-
-while [ ! -d "$gazePlaySave" ] 
-do
-read -p "Entrez le chemin menant au dossier d'installation de GazePlay: " gazePlaySave
-if [ ! -d "$gazePlaySave" ]; then
- echo "Erreur: \"$gazePlaySave\" n'est pas un dossier valide."
-fi
-done
 
 echo "$gazePlaySave" > configuration.conf
   
