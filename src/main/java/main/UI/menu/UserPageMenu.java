@@ -18,9 +18,9 @@ import javafx.scene.text.TextAlignment;
 import main.Configuration;
 import main.UI.DoubleClickedButton;
 
-public class OptionsMenu extends BorderPane {
+public class UserPageMenu extends BorderPane {
 
-    public OptionsMenu(GraphicalMenus graphicalMenus) {
+    public UserPageMenu(GraphicalMenus graphicalMenus){
         super();
 
         Rectangle r = new Rectangle();

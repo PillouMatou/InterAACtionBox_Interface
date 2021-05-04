@@ -1,5 +1,8 @@
 package main.UI.menu;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -15,11 +18,15 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
+import main.UI.DoubleClickedButton;
 import main.utils.UtilsOS;
 
 import java.io.IOException;
 
 public class ExitMenu extends BorderPane {
+
+    private Timeline loop = new Timeline();;
 
     public ExitMenu(GraphicalMenus graphicalMenus) {
         Rectangle r = new Rectangle();
@@ -91,8 +98,8 @@ public class ExitMenu extends BorderPane {
 
     }
 
-    static Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
-        Button optionButton = new Button(text);
+    DoubleClickedButton createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
+        DoubleClickedButton optionButton = new DoubleClickedButton(text);
         optionButton.setPrefHeight(50);
         optionButton.setMaxHeight(50);
         optionButton.setStyle(
@@ -108,7 +115,21 @@ public class ExitMenu extends BorderPane {
         graphic.setPreserveRatio(true);
         graphic.setFitHeight(30);
         optionButton.setGraphic(graphic);
-        optionButton.setOnMouseClicked(eventhandler);
+
+        optionButton.setOnMouseClicked((e)->{
+            this.loop.stop();
+            eventhandler.handle(null);});
+        optionButton.setOnMouseExited((e)->{
+            if( loop != null && loop.getStatus() == Animation.Status.RUNNING){
+                eventhandler.handle(null);
+            } else {
+                this.loop = new Timeline(new KeyFrame(Duration.millis(500), arg -> {
+                    loop.stop();
+                }));
+                this.loop.play();
+            }
+        });
+
         return optionButton;
     }
 

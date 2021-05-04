@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.WifiXdotoolProcessCreator;
 import main.utils.NamedProcess;
+import main.utils.UtilsOS;
 
 @Slf4j
 public class WifiNamedProcessCreator implements AppNamedProcessCreator {
@@ -17,8 +18,11 @@ public class WifiNamedProcessCreator implements AppNamedProcessCreator {
 
     @Override
     public NamedProcess start(GraphicalMenus graphicalMenus) {
-        return AppNamedProcessCreator.createProcress(new WifiXdotoolProcessCreator(), processBuilder, graphicalMenus, "Network Manager");
-
+        if(UtilsOS.isUnix()) {
+            return AppNamedProcessCreator.createProcress(new WifiXdotoolProcessCreator(), processBuilder, graphicalMenus, "Network Manager");
+        } else {
+            return new NamedProcess();
+        }
     }
 
 }

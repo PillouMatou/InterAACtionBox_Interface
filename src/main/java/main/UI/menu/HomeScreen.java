@@ -22,6 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import lombok.extern.slf4j.Slf4j;
+import main.UI.DoubleClickedButton;
 import main.UI.ProgressButton;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
@@ -92,13 +93,14 @@ public class HomeScreen extends BorderPane {
                         graphicalMenus.process.destroy();
                         graphicalMenus.process.set(null);
                     }
-                    log.info("clicked");
                     WifiNamedProcessCreator wifiProcess = new WifiNamedProcessCreator();
                     wifiProcess.setUpProcessBuilder();
                     graphicalMenus.process = wifiProcess.start(graphicalMenus);
                     showCloseMenuIfProcessNotNull();
                 }
         );
+
+
 
         Button tobiiButton = createTopBarButton(
                 "Tobii Manager",
@@ -140,24 +142,25 @@ public class HomeScreen extends BorderPane {
         startMouseListener();
     }
 
-    static Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
-        Button optionButton = new Button(text);
+    Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
+        DoubleClickedButton optionButton = new DoubleClickedButton(text);
         optionButton.setPrefHeight(50);
         optionButton.setMaxHeight(50);
         optionButton.setStyle(
                 "-fx-border-color: transparent; " +
-                        "-fx-border-width: 0; " +
-                        "-fx-background-radius: 0; " +
-                        "-fx-background-color: transparent; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed"
+                "-fx-border-width: 0; " +
+                "-fx-background-radius: 0; " +
+                "-fx-background-color: transparent; " +
+                "-fx-font-weight: bold; " +
+                "-fx-font-family: Helvetica; " +
+                "-fx-text-fill: #faeaed"
         );
         ImageView graphic = new ImageView(imagePath);
         graphic.setPreserveRatio(true);
         graphic.setFitHeight(30);
         optionButton.setGraphic(graphic);
-        optionButton.setOnAction(eventhandler);
+
+        optionButton.assignHandler(eventhandler);
         return optionButton;
     }
 
@@ -197,6 +200,7 @@ public class HomeScreen extends BorderPane {
                 gazePlayProcessButton,
                 spotifyProcessButton
         );
+
         graphicalMenus.getGazeDeviceManager().addEventFilter(youtubeProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(augComProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(interaactionSceneProcessButton.getButton());
@@ -229,7 +233,11 @@ public class HomeScreen extends BorderPane {
         Point pointerLocation = pointer.getLocation();
         int x = (int) pointerLocation.getX();
         int y = (int) pointerLocation.getY();
-        if (x > 500 && x < Screen.getPrimary().getBounds().getWidth() - 500 && y <= 10 && (!UtilsOS.isUnix() || (UtilsOS.isUnix() && !graphicalMenus.primaryStage.isShowing()))) {
+        if (x > 500 &&
+                x < Screen.getPrimary().getBounds().getWidth() - 500 &&
+                y <= 10 &&
+                (!UtilsOS.isUnix() || (UtilsOS.isUnix() && !graphicalMenus.primaryStage.isShowing()))
+        ) {
             Platform.runLater(() -> {
                 this.takeSnapShot();
                 graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
@@ -292,12 +300,12 @@ public class HomeScreen extends BorderPane {
     }
 
     public void showCloseMenuIfProcessNotNull() {
-        if (graphicalMenus.process.get() != null && !centerMenu.getChildren().contains(closeMenuButton)) {
+        if (graphicalMenus.process != null && graphicalMenus.process.get() != null && !centerMenu.getChildren().contains(closeMenuButton)) {
             centerMenu.translateYProperty().unbind();
             centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(1d / 12d));
             centerMenu.getChildren().add(0, closeMenuButton);
             closeMenuButton.getLabel().setText("Back To :\n" + graphicalMenus.process.getName());
-        } else if (graphicalMenus.process.get() == null) {
+        } else if (graphicalMenus.process == null || graphicalMenus.process.get() == null) {
             centerMenu.translateYProperty().unbind();
             centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(4d / 12d));
             removeMenu();
