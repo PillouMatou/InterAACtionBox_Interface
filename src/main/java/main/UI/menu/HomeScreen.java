@@ -186,7 +186,8 @@ public class HomeScreen extends BorderPane {
                 augComProcessButton,
                 interaactionSceneProcessButton,
                 gazePlayProcessButton,
-                spotifyProcessButton
+                spotifyProcessButton,
+                gazeMediaPlayerProcessButton
         );
 
         graphicalMenus.getGazeDeviceManager().addEventFilter(youtubeProcessButton.getButton());
@@ -194,6 +195,7 @@ public class HomeScreen extends BorderPane {
         graphicalMenus.getGazeDeviceManager().addEventFilter(interaactionSceneProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(gazePlayProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(spotifyProcessButton.getButton());
+        graphicalMenus.getGazeDeviceManager().addEventFilter(gazeMediaPlayerProcessButton.getButton());
 
         menuBar.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(menuBar, Pos.CENTER);

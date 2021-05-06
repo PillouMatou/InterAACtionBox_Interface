@@ -11,19 +11,11 @@ public class GazeMediaPlayerNamedProcessCreator implements AppNamedProcessCreato
 
     @Override
     public void setUpProcessBuilder() {
-        if(UtilsOS.isWindows()) {
-            processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
-                    "--kiosk",
-                    "--window-position=0,0",
-                    "--fullscreen",
-                    "https://www.spotify.com/fr/");
-        } else {
-            processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
-                    "--kiosk",
-                    "--window-position=0,0",
-                    "--fullscreen",
-                    "http://localhost:8082/");
-        }
+        processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
+                "--kiosk",
+                "--window-position=0,0",
+                "--fullscreen",
+                "http://localhost:8082/");
     }
 
     @Override
