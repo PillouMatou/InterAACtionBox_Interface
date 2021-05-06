@@ -153,6 +153,7 @@ public class HomeScreen extends BorderPane {
         InteraactionSceneNamedProcessCreator interaactionSceneProcess = new InteraactionSceneNamedProcessCreator();
         GazePlayNamedProcessCreator gazePlayProcess = new GazePlayNamedProcessCreator(gazePlayInstallationRepo);
         SpotifyNamedProcessCreator spotifyProcess = new SpotifyNamedProcessCreator();
+        GazeMediaPlayerNamedProcessCreator gazeMediaPlayerProcess = new GazeMediaPlayerNamedProcessCreator();
 
         ProgressButton youtubeProcessButton = youtubeProcess.createButton(new Image("images/yt.png"), graphicalMenus);
         youtubeProcessButton.getLabel().setText("Youtube");
@@ -164,6 +165,9 @@ public class HomeScreen extends BorderPane {
         gazePlayProcessButton.getLabel().setText("GazePlay");
         ProgressButton spotifyProcessButton = spotifyProcess.createButton(new Image("images/spotify.png"), graphicalMenus);
         spotifyProcessButton.getLabel().setText("Spotify");
+        ProgressButton gazeMediaPlayerProcessButton = gazeMediaPlayerProcess.createButton(new Image("images/gazeMediaPlayer.png"), graphicalMenus);
+        gazeMediaPlayerProcessButton.getLabel().setText("GazeMediaPLayer");
+
         youtubeProcessButton.getButton().setStroke(Color.web("#cd2653"));
         youtubeProcessButton.getButton().setStrokeWidth(3);
         augComProcessButton.getButton().setStroke(Color.web("#cd2653"));
@@ -174,6 +178,8 @@ public class HomeScreen extends BorderPane {
         gazePlayProcessButton.getButton().setStrokeWidth(3);
         spotifyProcessButton.getButton().setStroke(Color.web("#cd2653"));
         spotifyProcessButton.getButton().setStrokeWidth(3);
+        gazeMediaPlayerProcessButton.getButton().setStroke(Color.web("#cd2653"));
+        gazeMediaPlayerProcessButton.getButton().setStrokeWidth(3);
 
         HBox menuBar = new HBox(
                 youtubeProcessButton,

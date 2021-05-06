@@ -15,7 +15,7 @@ public class StageUtils {
         primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
 
-        primaryStage.setFullScreenExitHint("");
+        /*primaryStage.setFullScreenExitHint("");
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
         primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
@@ -45,7 +45,7 @@ public class StageUtils {
         });
 
         Platform.setImplicitExit(false);
-        primaryStage.setOnCloseRequest(Event::consume);
+        primaryStage.setOnCloseRequest(Event::consume);*/
     }
 
     public static void displayUnclosable(Stage primaryStage) {
