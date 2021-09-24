@@ -167,14 +167,14 @@ public class HomeScreen extends BorderPane {
         GazePlayNamedProcessCreator gazePlayProcess = new GazePlayNamedProcessCreator(gazePlayInstallationRepo);
         InterAACtionPlayerNamedProcessCreator interAACtionPlayerProcess = new InterAACtionPlayerNamedProcessCreator();
 
-        ProgressButton augComProcessButton = augComProcess.createButton(new Image("images/angular.png"), graphicalMenus);
+        ProgressButton augComProcessButton = augComProcess.createButton(new Image("images/Logos_AugCom.png"), graphicalMenus);
         augComProcessButton.getLabel().setText("AugCom");
-        ProgressButton interaactionSceneProcessButton = interaactionSceneProcess.createButton(new Image("images/angular.png"), graphicalMenus);
-        interaactionSceneProcessButton.getLabel().setText("InteraactionScene");
+        ProgressButton interaactionSceneProcessButton = interaactionSceneProcess.createButton(new Image("images/VisuelSceneDisplay.png"), graphicalMenus);
+        interaactionSceneProcessButton.getLabel().setText("InterAACtionScene");
         ProgressButton gazePlayProcessButton = gazePlayProcess.createButton(new Image("images/gazeplayicon.png"), graphicalMenus);
         gazePlayProcessButton.getLabel().setText("GazePlay");
         ProgressButton interAACtionPlayerProcessButton = interAACtionPlayerProcess.createButton(new Image("images/gazeMediaPlayer.png"), graphicalMenus);
-        interAACtionPlayerProcessButton.getLabel().setText("GazeMediaPLayer");
+        interAACtionPlayerProcessButton.getLabel().setText("InterAACtionPLayer");
 
         augComProcessButton.getButton().setStroke(Color.web("#cd2653"));
         augComProcessButton.getButton().setStrokeWidth(3);
