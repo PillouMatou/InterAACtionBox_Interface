@@ -34,7 +34,7 @@ export PATH=${JAVA_HOME}/bin:${PATH}
   
 echo "PATH = ${PATH}"
 
-gazePlaySave="../../gazeplay-linux-x64-1.8.1-AFSR"
+gazePlaySave="../../gazeplay-linux-x64-1.9.1-AFSR"
 
 FILE=${SCRIPT_DIR}/configuration.conf
 
