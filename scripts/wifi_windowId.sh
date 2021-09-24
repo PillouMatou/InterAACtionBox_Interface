@@ -1,10 +1,10 @@
 #!/bin/bash
 rm -f wifi_windowId.txt
-var=$(xdotool search --onlyvisible --class nm-connection-editor)
+var=$(xdotool search --onlyvisible --class gnome-control-center)
 while [ -z "$var" ]
 do
 
-  var=$(xdotool search --onlyvisible --class nm-connection-editor)
+  var=$(xdotool search --onlyvisible --class gnome-control-center)
   sleep 0.2
 
 done

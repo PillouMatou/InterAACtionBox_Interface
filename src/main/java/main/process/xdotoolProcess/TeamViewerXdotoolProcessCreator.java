@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import main.UI.menu.GraphicalMenus;
 
 @Slf4j
-public class WifiXdotoolProcessCreator implements XdotoolProcessCreator {
+public class TeamViewerXdotoolProcessCreator implements XdotoolProcessCreator {
 
     ProcessBuilder processBuilder;
 
@@ -12,13 +12,13 @@ public class WifiXdotoolProcessCreator implements XdotoolProcessCreator {
     public void setUpProcessBuilder() {
         processBuilder = new ProcessBuilder(
                 "sh",
-                "./scripts/wifi_windowId.sh"
+                "./scripts/teamviewer_windowId.sh"
         );
     }
 
     @Override
     public Process start(GraphicalMenus graphicalMenus) {
-        return XdotoolProcessCreator.getStartingProcess(processBuilder, graphicalMenus, "wifi");
+        return XdotoolProcessCreator.getStartingProcess(processBuilder, graphicalMenus, "teamviewer");
     }
 
 }

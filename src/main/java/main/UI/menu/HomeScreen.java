@@ -84,24 +84,6 @@ public class HomeScreen extends BorderPane {
                 (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu())
         );
 
-        Button wifiButton = createTopBarButton(
-                "Wi-Fi",
-                "images/wi-fi_white.png",
-                (e) -> {
-                    if (graphicalMenus.process.get() != null) {
-                        graphicalMenus.process.exitAskedByUser = true;
-                        graphicalMenus.process.destroy();
-                        graphicalMenus.process.set(null);
-                    }
-                    WifiNamedProcessCreator wifiProcess = new WifiNamedProcessCreator();
-                    wifiProcess.setUpProcessBuilder();
-                    graphicalMenus.process = wifiProcess.start(graphicalMenus);
-                    showCloseMenuIfProcessNotNull();
-                }
-        );
-
-
-
         Button tobiiButton = createTopBarButton(
                 "Tobii Manager",
                 "images/eye-tracking_white.png",
@@ -129,7 +111,7 @@ public class HomeScreen extends BorderPane {
         BorderPane titleBox = new BorderPane();
         titleBox.setLeft(optionButton);
         titleBox.setCenter(title);
-        titleBox.setRight(new HBox(tobiiButton, wifiButton, exitButton));
+        titleBox.setRight(new HBox(tobiiButton, exitButton));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
