@@ -20,7 +20,7 @@ import main.UI.DoubleClickedButton;
 
 public class UserPageMenu extends BorderPane {
 
-    public UserPageMenu(GraphicalMenus graphicalMenus){
+    public UserPageMenu(GraphicalMenus graphicalMenus) {
         super();
 
         Rectangle r = new Rectangle();
@@ -62,7 +62,7 @@ public class UserPageMenu extends BorderPane {
         graphic.setFitHeight(30);
         back.setGraphic(graphic);
 
-        back.assignHandler((e)->graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()));
+        back.assignHandler((e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()));
 
         HBox titleBox = new HBox(back, title);
         title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));

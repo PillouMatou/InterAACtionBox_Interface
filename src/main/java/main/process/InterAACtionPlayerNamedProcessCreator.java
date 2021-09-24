@@ -4,7 +4,7 @@ import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
 import main.utils.NamedProcess;
 
-public class YoutubeNamedProcessCreator implements AppNamedProcessCreator {
+public class InterAACtionPlayerNamedProcessCreator implements AppNamedProcessCreator {
 
     ProcessBuilder processBuilder;
 
@@ -14,12 +14,11 @@ public class YoutubeNamedProcessCreator implements AppNamedProcessCreator {
                 "--kiosk",
                 "--window-position=0,0",
                 "--fullscreen",
-                "https://www.youtube.com");
+                "http://localhost:8082/");
     }
 
     @Override
     public NamedProcess start(GraphicalMenus graphicalMenus) {
-        return AppNamedProcessCreator.createProcress(new GoogleChromeXdotoolProcessCreator(), processBuilder, graphicalMenus, "YouTube");
-
+        return AppNamedProcessCreator.createProcress(new GoogleChromeXdotoolProcessCreator(), processBuilder, graphicalMenus, "GazeMediaPlayer");
     }
 }

@@ -11,16 +11,13 @@ import java.util.LinkedList;
 
 public class Configuration {
 
-    @Setter
-    public Scene scene;
-
-    public int numberOfLastPositionsToCheck = 200;
-    public LinkedList<Point2D> lastPositions = new LinkedList<>();
-
-    public LinkedList<Point2D> currentPoint = new LinkedList<>();
-
     public final static int MOUSE_INTERACTION = 0;
     public final static int GAZE_INTERACTION = 1;
+    @Setter
+    public Scene scene;
+    public int numberOfLastPositionsToCheck = 200;
+    public LinkedList<Point2D> lastPositions = new LinkedList<>();
+    public LinkedList<Point2D> currentPoint = new LinkedList<>();
     IntegerProperty selectionMode = new SimpleIntegerProperty(Configuration.MOUSE_INTERACTION);
     boolean userIsMoving = false;
 

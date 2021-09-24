@@ -8,10 +8,6 @@ import java.io.IOException;
 
 public interface XdotoolProcessCreator {
 
-    void setUpProcessBuilder();
-
-    Process start(GraphicalMenus graphicalMenus);
-
     static void startWindowIdSearcher(GraphicalMenus graphicalMenus, String name) {
         Thread t = new Thread(() -> {
             File file = new File(name + "_windowId.txt");
@@ -45,5 +41,9 @@ public interface XdotoolProcessCreator {
         }
         return null;
     }
+
+    void setUpProcessBuilder();
+
+    Process start(GraphicalMenus graphicalMenus);
 
 }

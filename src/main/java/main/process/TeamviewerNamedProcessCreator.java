@@ -3,7 +3,6 @@ package main.process;
 import lombok.extern.slf4j.Slf4j;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.TeamViewerXdotoolProcessCreator;
-import main.process.xdotoolProcess.TobiiXdotoolProcessCreator;
 import main.utils.NamedProcess;
 import main.utils.UtilsOS;
 
@@ -25,7 +24,7 @@ public class TeamviewerNamedProcessCreator implements AppNamedProcessCreator {
     public NamedProcess start(GraphicalMenus graphicalMenus) {
         if (UtilsOS.isWindows()) {
             return null;
-           } else {
+        } else {
             return AppNamedProcessCreator.createProcress(new TeamViewerXdotoolProcessCreator(), processBuilder, graphicalMenus, "Team Viewer");
         }
     }

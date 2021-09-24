@@ -16,7 +16,7 @@ public class AugComNamedProcessCreator implements AppNamedProcessCreator {
                     "--kiosk",
                     "--window-position=0,0",
                     "--fullscreen",
-                    "http://augcom.net/");
+                    "https://lig-augcom.imag.fr/stable/");
         } else {
             processBuilder = new ProcessBuilder(AppNamedProcessCreator.getBrowser(),
                     "--kiosk",

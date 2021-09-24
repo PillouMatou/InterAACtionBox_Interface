@@ -19,8 +19,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import main.Configuration;
 import main.UI.DoubleClickedButton;
-import main.process.TeamviewerNamedProcessCreator;
 import main.process.GnomeControlCenterNamedProcessCreator;
+import main.process.TeamviewerNamedProcessCreator;
 
 public class OptionsMenu extends BorderPane {
 
@@ -66,7 +66,7 @@ public class OptionsMenu extends BorderPane {
         graphic.setFitHeight(30);
         back.setGraphic(graphic);
 
-        back.assignHandler((e)->graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()));
+        back.assignHandler((e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()));
 
         HBox titleBox = new HBox(back, title);
         title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));
@@ -107,10 +107,10 @@ public class OptionsMenu extends BorderPane {
             settings.add(useEyeTrackerCheckBox, 1, 0);
         }
 
-        createGnomeControlCenterButton(graphicalMenus,settings,"Gestionnaire Wifi:","images/wi-fi_white.png","wifi", 1);
-        createGnomeControlCenterButton(graphicalMenus,settings,"Gestionnaire Bluetooth:","images/bluetooth.png","bluetooth", 2);
-        createGnomeControlCenterButton(graphicalMenus,settings,"Param\u00e8tres D'Affichage:","images/notebook.png","display", 3);
-        createGnomeControlCenterButton(graphicalMenus,settings,"Param\u00e8tres de Batterie:","images/battery.png","power", 4);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 1);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 2);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 3);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 4);
 
         {
 

@@ -4,12 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class NamedProcess {
+    public Process process;
+    public boolean exitAskedByUser = false;
     @Setter
     @Getter
     private String name;
-    public Process process;
-
-    public boolean exitAskedByUser = false;
 
     public NamedProcess() {
         name = "";

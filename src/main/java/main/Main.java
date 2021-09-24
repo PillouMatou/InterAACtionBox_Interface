@@ -17,6 +17,10 @@ import java.util.List;
 
 public class Main extends Application {
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     public String getGazePlayInstallationRepo() {
         Parameters parameters = getParameters();
         List<String> rawArguments = parameters.getRaw();
@@ -62,10 +66,6 @@ public class Main extends Application {
         });
 
 
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
 }

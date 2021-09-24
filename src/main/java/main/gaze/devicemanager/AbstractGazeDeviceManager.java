@@ -16,18 +16,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Slf4j
 public abstract class AbstractGazeDeviceManager implements GazeDeviceManager {
 
-    private boolean isInReplayMode = false;
-
     private final List<GazeMotionListener> gazeMotionListeners = new CopyOnWriteArrayList<>();
-
     @Getter
     private final Map<IdentityKey<Node>, GazeInfos> shapesEventFilter = Collections.synchronizedMap(new HashMap<>());
-
     @Getter
     private final Map<IdentityKey<Node>, GazeInfos> shapesEventHandler = Collections.synchronizedMap(new HashMap<>());
-
     private final List<Node> toRemove = new LinkedList<>();
     private final List<Node> toAdd = new LinkedList<>();
+    private boolean isInReplayMode = false;
 
     public AbstractGazeDeviceManager() {
 

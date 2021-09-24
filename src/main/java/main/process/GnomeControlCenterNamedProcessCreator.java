@@ -12,7 +12,7 @@ public class GnomeControlCenterNamedProcessCreator implements AppNamedProcessCre
     ProcessBuilder processBuilder;
     String panelToOpen = "";
 
-    public GnomeControlCenterNamedProcessCreator(String panelToOpen){
+    public GnomeControlCenterNamedProcessCreator(String panelToOpen) {
         this.panelToOpen = panelToOpen;
     }
 
@@ -23,7 +23,7 @@ public class GnomeControlCenterNamedProcessCreator implements AppNamedProcessCre
 
     @Override
     public NamedProcess start(GraphicalMenus graphicalMenus) {
-        if(UtilsOS.isUnix()) {
+        if (UtilsOS.isUnix()) {
             return AppNamedProcessCreator.createProcress(new GnomeControlCenterXdotoolProcessCreator(), processBuilder, graphicalMenus, "Gnome Control Center");
         } else {
             return new NamedProcess();

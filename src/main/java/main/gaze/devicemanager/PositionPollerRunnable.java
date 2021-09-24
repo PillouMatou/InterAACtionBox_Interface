@@ -13,12 +13,10 @@ import java.awt.*;
 @Slf4j
 public class PositionPollerRunnable implements Runnable {
 
+    private final Configuration configuration;
     Robot robot = new Robot();
-
     @Setter
     private transient boolean stopRequested = false;
-
-    private final Configuration configuration;
 
     public PositionPollerRunnable(Configuration configuration) throws AWTException {
         this.configuration = configuration;

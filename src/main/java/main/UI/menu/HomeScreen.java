@@ -124,18 +124,33 @@ public class HomeScreen extends BorderPane {
         startMouseListener();
     }
 
+    private static Image convertToFxImage(BufferedImage image) {
+        WritableImage wr = null;
+        if (image != null) {
+            wr = new WritableImage(image.getWidth(), image.getHeight());
+            PixelWriter pw = wr.getPixelWriter();
+            for (int x = 0; x < image.getWidth(); x++) {
+                for (int y = 0; y < image.getHeight(); y++) {
+                    pw.setArgb(x, y, image.getRGB(x, y));
+                }
+            }
+        }
+
+        return new ImageView(wr).getImage();
+    }
+
     Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
         DoubleClickedButton optionButton = new DoubleClickedButton(text);
         optionButton.setPrefHeight(50);
         optionButton.setMaxHeight(50);
         optionButton.setStyle(
                 "-fx-border-color: transparent; " +
-                "-fx-border-width: 0; " +
-                "-fx-background-radius: 0; " +
-                "-fx-background-color: transparent; " +
-                "-fx-font-weight: bold; " +
-                "-fx-font-family: Helvetica; " +
-                "-fx-text-fill: #faeaed"
+                        "-fx-border-width: 0; " +
+                        "-fx-background-radius: 0; " +
+                        "-fx-background-color: transparent; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-font-family: Helvetica; " +
+                        "-fx-text-fill: #faeaed"
         );
         ImageView graphic = new ImageView(imagePath);
         graphic.setPreserveRatio(true);
@@ -146,56 +161,41 @@ public class HomeScreen extends BorderPane {
         return optionButton;
     }
 
-
     private HBox createMenuBar(String gazePlayInstallationRepo) {
-        YoutubeNamedProcessCreator youtubeProcess = new YoutubeNamedProcessCreator();
         AugComNamedProcessCreator augComProcess = new AugComNamedProcessCreator();
-        InteraactionSceneNamedProcessCreator interaactionSceneProcess = new InteraactionSceneNamedProcessCreator();
+        InterAACtionSceneNamedProcessCreator interaactionSceneProcess = new InterAACtionSceneNamedProcessCreator();
         GazePlayNamedProcessCreator gazePlayProcess = new GazePlayNamedProcessCreator(gazePlayInstallationRepo);
-        SpotifyNamedProcessCreator spotifyProcess = new SpotifyNamedProcessCreator();
-        GazeMediaPlayerNamedProcessCreator gazeMediaPlayerProcess = new GazeMediaPlayerNamedProcessCreator();
+        InterAACtionPlayerNamedProcessCreator interAACtionPlayerProcess = new InterAACtionPlayerNamedProcessCreator();
 
-        ProgressButton youtubeProcessButton = youtubeProcess.createButton(new Image("images/yt.png"), graphicalMenus);
-        youtubeProcessButton.getLabel().setText("Youtube");
         ProgressButton augComProcessButton = augComProcess.createButton(new Image("images/angular.png"), graphicalMenus);
         augComProcessButton.getLabel().setText("AugCom");
         ProgressButton interaactionSceneProcessButton = interaactionSceneProcess.createButton(new Image("images/angular.png"), graphicalMenus);
         interaactionSceneProcessButton.getLabel().setText("InteraactionScene");
         ProgressButton gazePlayProcessButton = gazePlayProcess.createButton(new Image("images/gazeplayicon.png"), graphicalMenus);
         gazePlayProcessButton.getLabel().setText("GazePlay");
-        ProgressButton spotifyProcessButton = spotifyProcess.createButton(new Image("images/spotify.png"), graphicalMenus);
-        spotifyProcessButton.getLabel().setText("Spotify");
-        ProgressButton gazeMediaPlayerProcessButton = gazeMediaPlayerProcess.createButton(new Image("images/gazeMediaPlayer.png"), graphicalMenus);
-        gazeMediaPlayerProcessButton.getLabel().setText("GazeMediaPLayer");
+        ProgressButton interAACtionPlayerProcessButton = interAACtionPlayerProcess.createButton(new Image("images/gazeMediaPlayer.png"), graphicalMenus);
+        interAACtionPlayerProcessButton.getLabel().setText("GazeMediaPLayer");
 
-        youtubeProcessButton.getButton().setStroke(Color.web("#cd2653"));
-        youtubeProcessButton.getButton().setStrokeWidth(3);
         augComProcessButton.getButton().setStroke(Color.web("#cd2653"));
         augComProcessButton.getButton().setStrokeWidth(3);
         interaactionSceneProcessButton.getButton().setStroke(Color.web("#cd2653"));
         interaactionSceneProcessButton.getButton().setStrokeWidth(3);
         gazePlayProcessButton.getButton().setStroke(Color.web("#cd2653"));
         gazePlayProcessButton.getButton().setStrokeWidth(3);
-        spotifyProcessButton.getButton().setStroke(Color.web("#cd2653"));
-        spotifyProcessButton.getButton().setStrokeWidth(3);
-        gazeMediaPlayerProcessButton.getButton().setStroke(Color.web("#cd2653"));
-        gazeMediaPlayerProcessButton.getButton().setStrokeWidth(3);
+        interAACtionPlayerProcessButton.getButton().setStroke(Color.web("#cd2653"));
+        interAACtionPlayerProcessButton.getButton().setStrokeWidth(3);
 
         HBox menuBar = new HBox(
-                youtubeProcessButton,
                 augComProcessButton,
                 interaactionSceneProcessButton,
                 gazePlayProcessButton,
-                spotifyProcessButton,
-                gazeMediaPlayerProcessButton
+                interAACtionPlayerProcessButton
         );
 
-        graphicalMenus.getGazeDeviceManager().addEventFilter(youtubeProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(augComProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(interaactionSceneProcessButton.getButton());
         graphicalMenus.getGazeDeviceManager().addEventFilter(gazePlayProcessButton.getButton());
-        graphicalMenus.getGazeDeviceManager().addEventFilter(spotifyProcessButton.getButton());
-        graphicalMenus.getGazeDeviceManager().addEventFilter(gazeMediaPlayerProcessButton.getButton());
+        graphicalMenus.getGazeDeviceManager().addEventFilter(interAACtionPlayerProcessButton.getButton());
 
         menuBar.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(menuBar, Pos.CENTER);
@@ -223,15 +223,20 @@ public class HomeScreen extends BorderPane {
         Point pointerLocation = pointer.getLocation();
         int x = (int) pointerLocation.getX();
         int y = (int) pointerLocation.getY();
+        log.info("{} : {}, {}",x,y, UtilsOS.isUnix());
         if (x > 500 &&
                 x < Screen.getPrimary().getBounds().getWidth() - 500 &&
-                y <= 10 &&
+                y <= 50 &&
                 (!UtilsOS.isUnix() || (UtilsOS.isUnix() && !graphicalMenus.primaryStage.isShowing()))
         ) {
+            log.info("start platform");
             Platform.runLater(() -> {
                 this.takeSnapShot();
+                log.info("snapshot");
                 graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
+                graphicalMenus.primaryStage.requestFocus();
                 graphicalMenus.primaryStage.show();
+                graphicalMenus.primaryStage.requestFocus();
                 ActivateMainWindowProcess.start();
             });
         }
@@ -272,21 +277,6 @@ public class HomeScreen extends BorderPane {
         graphicalMenus.getGazeDeviceManager().addEventFilter(closeButton.getButton());
 
         return closeButton;
-    }
-
-    private static Image convertToFxImage(BufferedImage image) {
-        WritableImage wr = null;
-        if (image != null) {
-            wr = new WritableImage(image.getWidth(), image.getHeight());
-            PixelWriter pw = wr.getPixelWriter();
-            for (int x = 0; x < image.getWidth(); x++) {
-                for (int y = 0; y < image.getHeight(); y++) {
-                    pw.setArgb(x, y, image.getRGB(x, y));
-                }
-            }
-        }
-
-        return new ImageView(wr).getImage();
     }
 
     public void showCloseMenuIfProcessNotNull() {

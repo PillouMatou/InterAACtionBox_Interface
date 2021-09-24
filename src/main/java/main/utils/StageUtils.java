@@ -1,13 +1,6 @@
 package main.utils;
 
-import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-
-import java.awt.*;
 
 public class StageUtils {
 

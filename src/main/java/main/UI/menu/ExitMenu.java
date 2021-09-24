@@ -26,7 +26,7 @@ import java.io.IOException;
 
 public class ExitMenu extends BorderPane {
 
-    private Timeline loop = new Timeline();;
+    private Timeline loop = new Timeline();
 
     public ExitMenu(GraphicalMenus graphicalMenus) {
         Rectangle r = new Rectangle();
@@ -98,6 +98,22 @@ public class ExitMenu extends BorderPane {
 
     }
 
+    public static void shutdown() throws RuntimeException, IOException {
+        String shutdownCommand;
+
+        if (UtilsOS.isUnix()) {
+            shutdownCommand = "shutdown -h now";
+        } else if (UtilsOS.isWindows()) {
+            shutdownCommand = "shutdown.exe -s -t 0";
+        } else {
+            throw new RuntimeException("Unsupported operating system.");
+        }
+
+        Runtime.getRuntime().exec(shutdownCommand);
+        Platform.exit();
+        System.exit(0);
+    }
+
     DoubleClickedButton createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
         DoubleClickedButton optionButton = new DoubleClickedButton(text);
         optionButton.setPrefHeight(50);
@@ -116,11 +132,12 @@ public class ExitMenu extends BorderPane {
         graphic.setFitHeight(30);
         optionButton.setGraphic(graphic);
 
-        optionButton.setOnMouseClicked((e)->{
+        optionButton.setOnMouseClicked((e) -> {
             this.loop.stop();
-            eventhandler.handle(null);});
-        optionButton.setOnMouseExited((e)->{
-            if( loop != null && loop.getStatus() == Animation.Status.RUNNING){
+            eventhandler.handle(null);
+        });
+        optionButton.setOnMouseExited((e) -> {
+            if (loop != null && loop.getStatus() == Animation.Status.RUNNING) {
                 eventhandler.handle(null);
             } else {
                 this.loop = new Timeline(new KeyFrame(Duration.millis(500), arg -> {
@@ -131,21 +148,5 @@ public class ExitMenu extends BorderPane {
         });
 
         return optionButton;
-    }
-
-    public static void shutdown() throws RuntimeException, IOException {
-        String shutdownCommand;
-
-        if (UtilsOS.isUnix()) {
-            shutdownCommand = "shutdown -h now";
-        } else if (UtilsOS.isWindows()) {
-            shutdownCommand = "shutdown.exe -s -t 0";
-        } else {
-            throw new RuntimeException("Unsupported operating system.");
-        }
-
-        Runtime.getRuntime().exec(shutdownCommand);
-        Platform.exit();
-        System.exit(0);
     }
 }
