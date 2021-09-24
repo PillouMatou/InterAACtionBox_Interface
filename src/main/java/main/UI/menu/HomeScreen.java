@@ -88,7 +88,7 @@ public class HomeScreen extends BorderPane {
                 "Tobii Manager",
                 "images/eye-tracking_white.png",
                 (e) -> {
-                    if (graphicalMenus.process.get() != null) {
+                    if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                         graphicalMenus.process.exitAskedByUser = true;
                         graphicalMenus.process.destroy();
                         graphicalMenus.process.set(null);

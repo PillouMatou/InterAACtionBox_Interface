@@ -68,17 +68,17 @@ public interface AppNamedProcessCreator {
         progressButton.getButton().setRadius(100);
 
         ImageView logo = new ImageView(image);
-        logo.setFitWidth(progressButton.getButton().getRadius() * 0.7);
-        logo.setFitHeight(progressButton.getButton().getRadius() * 0.7);
-        logo.fitWidthProperty().bind(progressButton.getButton().radiusProperty().multiply(0.7));
-        logo.fitHeightProperty().bind(progressButton.getButton().radiusProperty().multiply(0.7));
+        logo.setFitWidth(progressButton.getButton().getRadius() * 0.95);
+        logo.setFitHeight(progressButton.getButton().getRadius() * 0.95);
+        logo.fitWidthProperty().bind(progressButton.getButton().radiusProperty().multiply(0.95));
+        logo.fitHeightProperty().bind(progressButton.getButton().radiusProperty().multiply(0.95));
         logo.setPreserveRatio(true);
 
         progressButton.setImage(logo);
 
         setUpProcessBuilder();
         progressButton.assignIndicator((e) -> {
-            if (graphicalMenus.process.get() != null) {
+            if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                 graphicalMenus.process.exitAskedByUser = true;
                 graphicalMenus.process.destroy();
                 graphicalMenus.process.set(null);

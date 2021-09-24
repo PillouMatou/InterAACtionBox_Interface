@@ -124,7 +124,7 @@ public class OptionsMenu extends BorderPane {
                     "Ouvrir>",
                     "images/teamviewer.png",
                     (e) -> {
-                        if (graphicalMenus.process.get() != null) {
+                        if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                             graphicalMenus.process.exitAskedByUser = true;
                             graphicalMenus.process.destroy();
                             graphicalMenus.process.set(null);
@@ -156,7 +156,7 @@ public class OptionsMenu extends BorderPane {
                 "Ouvrir>",
                 imageName,
                 (e) -> {
-                    if (graphicalMenus.process.get() != null) {
+                    if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                         graphicalMenus.process.exitAskedByUser = true;
                         graphicalMenus.process.destroy();
                         graphicalMenus.process.set(null);

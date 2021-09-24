@@ -43,7 +43,7 @@ public class ExitMenu extends BorderPane {
                 "Yes, shutdown the box",
                 "images/on-off-button.png",
                 (e) -> {
-                    if (graphicalMenus.process.get() != null) {
+                    if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
                         graphicalMenus.process.set(null);
                     }
@@ -61,7 +61,7 @@ public class ExitMenu extends BorderPane {
                 "[For tests purpose] Exit the box only",
                 "images/cross.png",
                 (e) -> {
-                    if (graphicalMenus.process.get() != null) {
+                    if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
                         graphicalMenus.process.set(null);
                     }
