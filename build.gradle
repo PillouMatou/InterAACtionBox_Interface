@@ -112,7 +112,7 @@ distributions {
         contents {
             with distributions.main.contents
             from("build/reports")
-            from("build/bin/interaactionBoxOS-linux.sh") {
+            from("bin") {
                 into 'bin'
             }
             from("build/jre/linux-x64") {
@@ -120,6 +120,9 @@ distributions {
             }
             from("build/tobiiDrivers") {
                 into 'tobiiDrivers'
+            }
+            from("scripts") {
+                into 'bin/scripts'
             }
         }
     }

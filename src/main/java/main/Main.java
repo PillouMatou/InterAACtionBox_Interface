@@ -1,46 +1,71 @@
 package main;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.UI.menu.GraphicalMenus;
+import main.utils.StageUtils;
 
 import java.util.List;
-import java.util.Map;
 
 public class Main extends Application {
 
-    public String getGazePlayInstallationRepo(){
-        Parameters parameters = getParameters ();
-        List<String> rawArguments = parameters.getRaw ();
-        if(rawArguments.size() > 0){
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    public String getGazePlayInstallationRepo() {
+        Parameters parameters = getParameters();
+        List<String> rawArguments = parameters.getRaw();
+        if (rawArguments.size() > 0) {
             return rawArguments.get(0);
         } else {
             return "C:/Program Files (x86)/GazePlay";
         }
     }
 
-
     @Override
     public void start(Stage primaryStage) {
+
         primaryStage.initStyle(StageStyle.TRANSPARENT);
-        primaryStage.setTitle("Hello World");
-        Scene scene = new Scene(new HomeScreen(primaryStage, getGazePlayInstallationRepo()), Color.TRANSPARENT);
+        primaryStage.setTitle("InteraactionBox");
+
+        GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage, getGazePlayInstallationRepo());
+        Scene scene = new Scene(graphicalMenus.getHomeScreen(), Color.TRANSPARENT);
+        graphicalMenus.getConfiguration().setScene(scene);
         primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());
         primaryStage.setHeight(Screen.getPrimary().getBounds().getHeight());
 
         primaryStage.setScene(scene);
 
+        graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
         StageUtils.displayUnclosable(primaryStage);
 
-        primaryStage.setOpacity(0.2);
-    }
+        scene.setOnMouseMoved((e) -> {
+            if (graphicalMenus.getConfiguration().isGazeInteraction()) {
+                graphicalMenus.getConfiguration().analyse(e.getScreenX(), e.getScreenY());
+            }
+        });
 
-    public static void main(String[] args) {
-        launch(args);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>
+                () {
+            @Override
+            public void handle(KeyEvent t) {
+                if (t.getCode() == KeyCode.E) {
+                    Platform.exit();
+                    System.exit(0);
+                }
+            }
+        });
+
+
     }
 
 }

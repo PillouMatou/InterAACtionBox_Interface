@@ -21,12 +21,12 @@ public class SecondScreenFactory {
         log.debug("screen1.getBounds() = " + screen1.getBounds());
         log.debug("screen2.getBounds() = " + screen2.getBounds());
 
-        final Stage stage2 = new Stage();
-        stage2.setScene(new Scene(new Label("primary")));
-        stage2.setX(screen2.getVisualBounds().getMinX());
-        stage2.setY(screen2.getVisualBounds().getMinY());
-        stage2.setWidth(screen1.getBounds().getWidth());
-        stage2.setHeight(screen1.getBounds().getHeight());
+        final Stage secondStage = new Stage();
+        secondStage.setScene(new Scene(new Label("primary")));
+        secondStage.setX(screen2.getVisualBounds().getMinX());
+        secondStage.setY(screen2.getVisualBounds().getMinY());
+        secondStage.setWidth(screen1.getBounds().getWidth());
+        secondStage.setHeight(screen1.getBounds().getHeight());
 
         final Group root = new Group();
         final Scene scene = new Scene(
@@ -38,10 +38,10 @@ public class SecondScreenFactory {
 
         final Lighting[][] lightingArray = SecondScreen.makeLighting(root, screen2.getBounds());
 
-        stage2.setScene(scene);
+        secondStage.setScene(scene);
 
-        stage2.show();
+        secondStage.show();
 
-        return new SecondScreen(stage2, lightingArray);
+        return new SecondScreen(secondStage, lightingArray);
     }
 }
