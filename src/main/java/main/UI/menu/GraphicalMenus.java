@@ -20,6 +20,8 @@ public class GraphicalMenus {
     private final HomeScreen homeScreen;
     @Getter
     private final OptionsMenu optionsMenu;
+    @Getter
+    private final UpdateMenu updateMenu;
 
     public NamedProcess process = new NamedProcess();
 
@@ -27,6 +29,7 @@ public class GraphicalMenus {
         this.primaryStage = primaryStage;
         this.gazePlayInstallationRepo = gazePlayInstallationRepo;
         this.optionsMenu = new OptionsMenu(this);
+        this.updateMenu = new UpdateMenu(this);
         this.homeScreen = new HomeScreen(this);
     }
 

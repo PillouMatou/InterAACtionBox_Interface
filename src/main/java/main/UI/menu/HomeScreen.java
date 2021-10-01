@@ -1,5 +1,8 @@
 package main.UI.menu;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -9,10 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -21,16 +21,27 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
+import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import main.UI.DoubleClickedButton;
 import main.UI.ProgressButton;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
 import main.process.xdotoolProcess.ActivateMainWindowProcess;
+import main.utils.JsonReader;
 import main.utils.UtilsOS;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.Time;
 
 @Slf4j
 public class HomeScreen extends BorderPane {
@@ -84,6 +95,17 @@ public class HomeScreen extends BorderPane {
                 (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu())
         );
 
+        Button updateButton = createTopBarButton(
+               "Votre syst\u00e8me est \u00e0 jour",
+                "images/refresh.png",
+                (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu())
+        );
+        try {
+            checkUpdate(updateButton);
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+
         Button tobiiButton = createTopBarButton(
                 "Tobii Manager",
                 "images/eye-tracking_white.png",
@@ -109,7 +131,7 @@ public class HomeScreen extends BorderPane {
         );
 
         BorderPane titleBox = new BorderPane();
-        titleBox.setLeft(optionButton);
+        titleBox.setLeft(new HBox(optionButton,updateButton));
         titleBox.setCenter(title);
         titleBox.setRight(new HBox(tobiiButton, exitButton));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
@@ -122,6 +144,48 @@ public class HomeScreen extends BorderPane {
 
         ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
         startMouseListener();
+    }
+
+    private void updateAvailable(Button updateButton){
+        updateButton.setText("Mise \u00e0 jour disponible !");
+        Timeline t = new Timeline();
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
+        t.setCycleCount(20);
+        t.setAutoReverse(true);
+        t.play();
+    }
+
+    private void checkUpdate(Button updateButton) throws IOException, JSONException {
+        JSONObject gazePlayJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/GazePlay-AFSR/releases/latest");
+        File gazePlayDirectory = new File("~/"+gazePlayJSON.get("name"));
+
+        JSONObject interaactionSceneJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/InteraactionScene-AFSR/releases/latest");
+        File interaactionSceneDirectory = new File("~/"+interaactionSceneJSON.get("name"));
+
+        JSONObject augComJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/AugCom-AFSR/releases/latest");
+        File augComDirectory = new File("~/"+augComJSON.get("name"));
+
+//        JSONObject interaactionPlayerJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/GazePlay-AFSR/releases/latest");
+//        File interaactionPlayerDirectory = new File("~/"+gazePlayJSON.get("name"));
+
+        boolean newMajAvailable = false;
+
+        if(!gazePlayDirectory.exists() || !gazePlayDirectory.isDirectory()){
+            log.info("Mise à jour GazePlay disponible");
+            newMajAvailable = true;
+        }
+        if(!interaactionSceneDirectory.exists() || !interaactionSceneDirectory.isDirectory()){
+            log.info("Mise à jour interAACtionScene disponible");
+            newMajAvailable = true;
+        }
+        if(!augComDirectory.exists() || !augComDirectory.isDirectory()){
+            log.info("Mise à jour AugCom disponible");
+            newMajAvailable = true;
+        }
+
+        if(newMajAvailable){
+            updateAvailable(updateButton);
+        }
     }
 
     private static Image convertToFxImage(BufferedImage image) {
@@ -167,41 +231,36 @@ public class HomeScreen extends BorderPane {
         GazePlayNamedProcessCreator gazePlayProcess = new GazePlayNamedProcessCreator(gazePlayInstallationRepo);
         InterAACtionPlayerNamedProcessCreator interAACtionPlayerProcess = new InterAACtionPlayerNamedProcessCreator();
 
-        ProgressButton augComProcessButton = augComProcess.createButton(new Image("images/Logos_AugCom.png"), graphicalMenus);
-        augComProcessButton.getLabel().setText("AugCom");
-        ProgressButton interaactionSceneProcessButton = interaactionSceneProcess.createButton(new Image("images/VisuelSceneDisplay.png"), graphicalMenus);
-        interaactionSceneProcessButton.getLabel().setText("InterAACtionScene");
-        ProgressButton gazePlayProcessButton = gazePlayProcess.createButton(new Image("images/gazeplayicon.png"), graphicalMenus);
-        gazePlayProcessButton.getLabel().setText("GazePlay");
-        ProgressButton interAACtionPlayerProcessButton = interAACtionPlayerProcess.createButton(new Image("images/gazeMediaPlayer.png"), graphicalMenus);
-        interAACtionPlayerProcessButton.getLabel().setText("InterAACtionPLayer");
-
-        augComProcessButton.getButton().setStroke(Color.web("#cd2653"));
-        augComProcessButton.getButton().setStrokeWidth(3);
-        interaactionSceneProcessButton.getButton().setStroke(Color.web("#cd2653"));
-        interaactionSceneProcessButton.getButton().setStrokeWidth(3);
-        gazePlayProcessButton.getButton().setStroke(Color.web("#cd2653"));
-        gazePlayProcessButton.getButton().setStrokeWidth(3);
-        interAACtionPlayerProcessButton.getButton().setStroke(Color.web("#cd2653"));
-        interAACtionPlayerProcessButton.getButton().setStrokeWidth(3);
+    //    Image image = new Image("images/refresh.png");
+        BorderPane augComLaunchButton = createAppButtonLauncher(augComProcess,"Augcom","images/Logos_AugCom.png");
+        BorderPane interaactionSceneLaunchButton = createAppButtonLauncher(interaactionSceneProcess,"InterAACtionScene","images/VisuelSceneDisplay.png");
+        BorderPane gazePlayLaunchButton = createAppButtonLauncher(gazePlayProcess,"GazePlay","images/gazeplayicon.png");
+        BorderPane interaactionPlayerLaunchButton = createAppButtonLauncher(interAACtionPlayerProcess,"InterAACtionPlayer","images/gazeMediaPlayer.png");
 
         HBox menuBar = new HBox(
-                augComProcessButton,
-                interaactionSceneProcessButton,
-                gazePlayProcessButton,
-                interAACtionPlayerProcessButton
+                augComLaunchButton,
+                interaactionSceneLaunchButton,
+                gazePlayLaunchButton,
+                interaactionPlayerLaunchButton
         );
-
-        graphicalMenus.getGazeDeviceManager().addEventFilter(augComProcessButton.getButton());
-        graphicalMenus.getGazeDeviceManager().addEventFilter(interaactionSceneProcessButton.getButton());
-        graphicalMenus.getGazeDeviceManager().addEventFilter(gazePlayProcessButton.getButton());
-        graphicalMenus.getGazeDeviceManager().addEventFilter(interAACtionPlayerProcessButton.getButton());
 
         menuBar.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(menuBar, Pos.CENTER);
         menuBar.spacingProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(4 * (menuBar.getChildren().size() + 1)));
         return menuBar;
     }
+
+    private BorderPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL){
+        ProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus);
+        processButton.getLabel().setText(name);
+        processButton.getButton().setStroke(Color.web("#cd2653"));
+        processButton.getButton().setStrokeWidth(3);
+        BorderPane borderPaneLauncher = new BorderPane();
+        borderPaneLauncher.setCenter(processButton);
+        graphicalMenus.getGazeDeviceManager().addEventFilter(processButton.getButton());
+        return borderPaneLauncher;
+    }
+
 
     private void startMouseListener() {
         Thread t = new Thread(() -> {
