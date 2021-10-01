@@ -6,6 +6,7 @@ import main.Configuration;
 import main.gaze.devicemanager.AbstractGazeDeviceManager;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.utils.NamedProcess;
+import main.utils.UpdateManager;
 
 public class GraphicalMenus {
 
@@ -27,10 +28,11 @@ public class GraphicalMenus {
 
     public GraphicalMenus(Stage primaryStage, String gazePlayInstallationRepo) {
         this.primaryStage = primaryStage;
+        UpdateManager updateManager = new UpdateManager();
         this.gazePlayInstallationRepo = gazePlayInstallationRepo;
         this.optionsMenu = new OptionsMenu(this);
-        this.updateMenu = new UpdateMenu(this);
-        this.homeScreen = new HomeScreen(this);
+        this.homeScreen = new HomeScreen(this, updateManager);
+        this.updateMenu = new UpdateMenu(this, updateManager);
     }
 
 }

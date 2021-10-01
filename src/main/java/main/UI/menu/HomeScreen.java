@@ -29,6 +29,7 @@ import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
 import main.process.xdotoolProcess.ActivateMainWindowProcess;
 import main.utils.JsonReader;
+import main.utils.UpdateManager;
 import main.utils.UtilsOS;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,11 +50,12 @@ public class HomeScreen extends BorderPane {
     private final GraphicalMenus graphicalMenus;
     private final ProgressButton closeMenuButton;
     private final VBox centerMenu;
+    private UpdateManager updateManager;
 
-
-    public HomeScreen(GraphicalMenus graphicalMenus) {
+    public HomeScreen(GraphicalMenus graphicalMenus, UpdateManager updateManager) {
         super();
         this.graphicalMenus = graphicalMenus;
+        this.updateManager = updateManager;
 
         Rectangle r = new Rectangle();
         r.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
@@ -100,11 +102,8 @@ public class HomeScreen extends BorderPane {
                 "images/refresh.png",
                 (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu())
         );
-        try {
-            checkUpdate(updateButton);
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
+        checkUpdate(updateButton);
+
 
         Button tobiiButton = createTopBarButton(
                 "Tobii Manager",
@@ -155,35 +154,9 @@ public class HomeScreen extends BorderPane {
         t.play();
     }
 
-    private void checkUpdate(Button updateButton) throws IOException, JSONException {
-        JSONObject gazePlayJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/GazePlay-AFSR/releases/latest");
-        File gazePlayDirectory = new File("~/"+gazePlayJSON.get("name"));
-
-        JSONObject interaactionSceneJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/InteraactionScene-AFSR/releases/latest");
-        File interaactionSceneDirectory = new File("~/"+interaactionSceneJSON.get("name"));
-
-        JSONObject augComJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/AugCom-AFSR/releases/latest");
-        File augComDirectory = new File("~/"+augComJSON.get("name"));
-
-//        JSONObject interaactionPlayerJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/GazePlay-AFSR/releases/latest");
-//        File interaactionPlayerDirectory = new File("~/"+gazePlayJSON.get("name"));
-
-        boolean newMajAvailable = false;
-
-        if(!gazePlayDirectory.exists() || !gazePlayDirectory.isDirectory()){
-            log.info("Mise à jour GazePlay disponible");
-            newMajAvailable = true;
-        }
-        if(!interaactionSceneDirectory.exists() || !interaactionSceneDirectory.isDirectory()){
-            log.info("Mise à jour interAACtionScene disponible");
-            newMajAvailable = true;
-        }
-        if(!augComDirectory.exists() || !augComDirectory.isDirectory()){
-            log.info("Mise à jour AugCom disponible");
-            newMajAvailable = true;
-        }
-
-        if(newMajAvailable){
+    private void checkUpdate(Button updateButton) {
+        updateManager.checkUpdates();
+        if(updateManager.needsUpdate()){
             updateAvailable(updateButton);
         }
     }
