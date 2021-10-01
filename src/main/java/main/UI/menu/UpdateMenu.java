@@ -1,15 +1,14 @@
 package main.UI.menu;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -17,15 +16,24 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import main.Configuration;
+import javafx.util.Duration;
 import main.UI.DoubleClickedButton;
-import main.process.GnomeControlCenterNamedProcessCreator;
-import main.process.TeamviewerNamedProcessCreator;
+import main.utils.JsonReader;
+import main.utils.UpdateManager;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
 
 public class UpdateMenu extends BorderPane {
 
-    public UpdateMenu(GraphicalMenus graphicalMenus) {
+    UpdateManager updateManager;
+
+    public UpdateMenu(GraphicalMenus graphicalMenus, UpdateManager updateManager) {
         super();
+
+        this.updateManager = updateManager;
 
         Rectangle r = new Rectangle();
         r.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
@@ -79,93 +87,81 @@ public class UpdateMenu extends BorderPane {
         this.setTop(titlePane);
 
 
+        VBox menu = new VBox();
+        menu.setAlignment(Pos.CENTER);
+
+        HBox downloadEverythin = new HBox();
+        downloadEverythin.setAlignment(Pos.CENTER);
+        downloadEverythin.setSpacing(20);
+
+        Label displayedLabel = new Label("Mettre à jour tous les logiciels");
+        displayedLabel.setStyle("-fx-font-weight: bold; " +
+                "-fx-font-family: Helvetica; " +
+                "-fx-text-fill: #cd2653");
+        displayedLabel.setFont(new Font(30));
+        menu.setSpacing(100);
+
+        Button downloadButton = new Button("Installer");
+
+        downloadEverythin.getChildren().addAll(displayedLabel,downloadButton);
+
         GridPane settings = new GridPane();
         settings.setHgap(20);
 
-        {
-            Label useEyeTracker = new Label("D\u00e9sactiver Eye Tracker:");
-
-            useEyeTracker.setFont(new Font(20));
-            useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
-            useEyeTracker.setTextFill(Color.web("#cd2653"));
-
-            CheckBox useEyeTrackerCheckBox = new CheckBox("Activ\u00e9");
-            useEyeTrackerCheckBox.selectedProperty().addListener((obj, oldval, newval) -> {
-                if (newval) {
-                    useEyeTrackerCheckBox.setText("D\u00e9sactiv\u00e9");
-                    graphicalMenus.getConfiguration().setMode(Configuration.MOUSE_INTERACTION);
-                } else {
-                    useEyeTrackerCheckBox.setText("Activ\u00e9");
-                    graphicalMenus.getConfiguration().setMode(Configuration.GAZE_INTERACTION);
-                }
-            });
-
-            useEyeTrackerCheckBox.setSelected(true);
-            useEyeTrackerCheckBox.setTextFill(Color.web("#faeaed"));
-
-            settings.add(useEyeTracker, 0, 0);
-            settings.add(useEyeTrackerCheckBox, 1, 0);
-        }
-
-        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 1);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 2);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 3);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 4);
-
-        {
-
-            Label teamviewerLabel = new Label("Lancer TeamViewer:");
-
-            teamviewerLabel.setFont(new Font(20));
-            teamviewerLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
-            teamviewerLabel.setTextFill(Color.web("#cd2653"));
-
-            Button teamViewerButton = createTopBarButton(
-                    "Ouvrir>",
-                    "images/teamviewer.png",
-                    (e) -> {
-                        if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
-                            graphicalMenus.process.exitAskedByUser = true;
-                            graphicalMenus.process.destroy();
-                            graphicalMenus.process.set(null);
-                        }
-                        TeamviewerNamedProcessCreator teamviewerNamedProcessCreator = new TeamviewerNamedProcessCreator();
-                        teamviewerNamedProcessCreator.setUpProcessBuilder();
-                        graphicalMenus.process = teamviewerNamedProcessCreator.start(graphicalMenus);
-                    }
-            );
-
-            teamViewerButton.setTextFill(Color.web("#faeaed"));
-
-            settings.add(teamviewerLabel, 0, 5);
-            settings.add(teamViewerButton, 1, 5);
-        }
+        createGnomeControlCenterButton(graphicalMenus, settings, "Système:", 1);
+        createGnomeControlCenterButton(graphicalMenus, settings, "AugCom:", 2);
+        createGnomeControlCenterButton(graphicalMenus, settings, "InterAACtionScene:", 3);
+        createGnomeControlCenterButton(graphicalMenus, settings, "GazePlay:", 4);
+        createGnomeControlCenterButton(graphicalMenus, settings, "InterAACtionPlayer:", 5);
 
         settings.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(settings, Pos.CENTER);
-        this.setCenter(settings);
+
+        menu.setAlignment(Pos.CENTER);
+        menu.getChildren().addAll(downloadEverythin,settings);
+
+        this.setCenter(menu);
     }
 
-    void createGnomeControlCenterButton(GraphicalMenus graphicalMenus, GridPane settings, String label, String imageName, String panelToOpen, int row) {
+    void createGnomeControlCenterButton(GraphicalMenus graphicalMenus, GridPane settings, String label, int row) {
         Label displayedLabel = new Label(label);
         displayedLabel.setFont(new Font(20));
         displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         displayedLabel.setTextFill(Color.web("#cd2653"));
 
+        boolean needUpdate = false;
+        String newVersion = "";
+
+        if (label.equals("AugCom:")) {
+            needUpdate = updateManager.augComNeedsUpdate;
+            newVersion = updateManager.augComVersion;
+        } else if (label.equals("InterAACtionScene:")) {
+            needUpdate = updateManager.interaactionSceneNeedsUpdate;
+            newVersion = updateManager.interaactionSceneVersion;
+        } else if (label.equals("InterAACtionPlayer:")) {
+            needUpdate = updateManager.interaactionPlayerNeedsUpdate;
+            newVersion = updateManager.interaactionPlayerVersion;
+        } else if (label.equals("GazePlay:")) {
+            needUpdate = updateManager.gazePlayNeedsUpdate;
+            newVersion = updateManager.gazePlayVersion;
+        } else if (label.equals("Système:")) {
+            needUpdate = updateManager.systemNeedsUpdate;
+            newVersion = updateManager.systemVersion;
+        }
+
         Button button = createTopBarButton(
-                "Ouvrir>",
-                imageName,
+                needUpdate ? "Mise \u00e0 jour disponible ! Téléchargez " + newVersion : "Le logiciel est \u00e0 jour",
                 (e) -> {
-                    if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
-                        graphicalMenus.process.exitAskedByUser = true;
-                        graphicalMenus.process.destroy();
-                        graphicalMenus.process.set(null);
-                    }
-                    GnomeControlCenterNamedProcessCreator process = new GnomeControlCenterNamedProcessCreator(panelToOpen);
-                    process.setUpProcessBuilder();
-                    graphicalMenus.process = process.start(graphicalMenus);
-                }
+                },
+                needUpdate ? "images/refresh.png" : "images/tick-mark.png"
         );
+        if(needUpdate){
+            Timeline t = new Timeline();
+            t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(button.opacityProperty(), 0.2)));
+            t.setCycleCount(20);
+            t.setAutoReverse(true);
+            t.play();
+        }
 
         button.setTextFill(Color.web("#faeaed"));
 
@@ -173,7 +169,48 @@ public class UpdateMenu extends BorderPane {
         settings.add(button, 1, row);
     }
 
-    Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
+    private boolean checkAugComUpdate() {
+        System.out.println("AUGCOM CHECK");
+        try {
+            JSONObject augComJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/AugCom-AFSR/releases/latest");
+            File augComDirectory = new File("~/" + augComJSON.get("name"));
+            return !augComDirectory.exists() || !augComDirectory.isDirectory();
+        } catch (IOException | JSONException e) {
+            return false;
+        }
+    }
+
+    private boolean checkInteraactionSceneUpdate() {
+        System.out.println("SCENE CHECK");
+        try {
+            JSONObject interaactionSceneJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/InteraactionScene-AFSR/releases/latest");
+            File interaactionSceneDirectory = new File("~/" + interaactionSceneJSON.get("name"));
+            return !interaactionSceneDirectory.exists() || !interaactionSceneDirectory.isDirectory();
+        } catch (IOException | JSONException e) {
+            return false;
+        }
+
+    }
+
+    private boolean checkAInteraactionPlayerUpdate() {
+        System.out.println("PLAYER CHECK");
+        //        JSONObject interaactionPlayerJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/InteraactionPlayer-AFSR/releases/latest");
+//        File interaactionPlayerDirectory = new File("~/"+interaactionPlayerJSON.get("name"));
+        return false;
+    }
+
+    private boolean checkgazePlayUpdate() {
+        System.out.println("GAZEPLAY CHECK");
+        try {
+            JSONObject gazePlayJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/GazePlay-AFSR/releases/latest");
+            File gazePlayDirectory = new File("~/" + gazePlayJSON.get("name"));
+            return !gazePlayDirectory.exists() || !gazePlayDirectory.isDirectory();
+        } catch (IOException | JSONException e) {
+            return false;
+        }
+    }
+
+    Button createTopBarButton(String text, EventHandler eventhandler, String imagePath) {
         DoubleClickedButton optionButton = new DoubleClickedButton(text);
         optionButton.setPrefHeight(50);
         optionButton.setMaxHeight(50);
@@ -188,9 +225,8 @@ public class UpdateMenu extends BorderPane {
         );
         ImageView graphic = new ImageView(imagePath);
         graphic.setPreserveRatio(true);
-        graphic.setFitHeight(30);
+        graphic.setFitHeight(20);
         optionButton.setGraphic(graphic);
-
         optionButton.assignHandler(eventhandler);
         return optionButton;
     }
