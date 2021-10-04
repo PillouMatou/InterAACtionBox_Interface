@@ -259,14 +259,10 @@ public class HomeScreen extends BorderPane {
 
             Platform.runLater(() -> {
                 this.takeSnapShot();
-                System.out.println("snapshot");
                 graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
                 graphicalMenus.primaryStage.requestFocus();
-                System.out.println("before show");
                 Platform.setImplicitExit(false);
-                System.out.println("show");
                 graphicalMenus.primaryStage.show();
-                System.out.println("after show");
                 graphicalMenus.primaryStage.requestFocus();
                 ActivateMainWindowProcess.start();
             });
