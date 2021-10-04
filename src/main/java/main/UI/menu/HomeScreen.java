@@ -253,9 +253,8 @@ public class HomeScreen extends BorderPane {
         if (x > 500 &&
                 x < Screen.getPrimary().getBounds().getWidth() - 500 &&
                 y <= 50 &&
-                (!UtilsOS.isUnix() || (UtilsOS.isUnix() && !graphicalMenus.primaryStage.isShowing()))
+                (!UtilsOS.isUnix() && !graphicalMenus.primaryStage.isShowing() || (UtilsOS.isUnix() && !graphicalMenus.primaryStage.isShowing()))
         ) {
-            log.info("start platform");
 
             Platform.runLater(() -> {
                 this.takeSnapShot();
