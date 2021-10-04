@@ -8,6 +8,7 @@ public class ActivateMainWindowProcess {
 
     public static void start() {
         if (UtilsOS.isWindows()) {
+            //Do Nothing
         } else {
             try {
                 ProcessBuilder processBuilderRaise = new ProcessBuilder("xdotool", "search", "--onlyvisible", "--classname", "--sync", "--main.Main", "windowraise");

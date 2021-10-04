@@ -12,7 +12,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -28,21 +31,11 @@ import main.UI.ProgressButton;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
 import main.process.xdotoolProcess.ActivateMainWindowProcess;
-import main.utils.JsonReader;
 import main.utils.UpdateManager;
 import main.utils.UtilsOS;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.Time;
 
 @Slf4j
 public class HomeScreen extends BorderPane {
@@ -98,7 +91,7 @@ public class HomeScreen extends BorderPane {
         );
 
         Button updateButton = createTopBarButton(
-               "Votre syst\u00e8me est \u00e0 jour",
+                "Votre syst\u00e8me est \u00e0 jour",
                 "images/refresh.png",
                 (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu())
         );
@@ -130,7 +123,7 @@ public class HomeScreen extends BorderPane {
         );
 
         BorderPane titleBox = new BorderPane();
-        titleBox.setLeft(new HBox(optionButton,updateButton));
+        titleBox.setLeft(new HBox(optionButton, updateButton));
         titleBox.setCenter(title);
         titleBox.setRight(new HBox(tobiiButton, exitButton));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
@@ -142,23 +135,8 @@ public class HomeScreen extends BorderPane {
         this.setTop(titlePane);
 
         ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
+
         startMouseListener();
-    }
-
-    private void updateAvailable(Button updateButton){
-        updateButton.setText("Mise \u00e0 jour disponible !");
-        Timeline t = new Timeline();
-        t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
-        t.setCycleCount(20);
-        t.setAutoReverse(true);
-        t.play();
-    }
-
-    private void checkUpdate(Button updateButton) {
-        updateManager.checkUpdates();
-        if(updateManager.needsUpdate()){
-            updateAvailable(updateButton);
-        }
     }
 
     private static Image convertToFxImage(BufferedImage image) {
@@ -174,6 +152,22 @@ public class HomeScreen extends BorderPane {
         }
 
         return new ImageView(wr).getImage();
+    }
+
+    private void updateAvailable(Button updateButton) {
+        updateButton.setText("Mise \u00e0 jour disponible !");
+        Timeline t = new Timeline();
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
+        t.setCycleCount(20);
+        t.setAutoReverse(true);
+        t.play();
+    }
+
+    private void checkUpdate(Button updateButton) {
+        updateManager.checkUpdates();
+        if (updateManager.needsUpdate()) {
+            updateAvailable(updateButton);
+        }
     }
 
     Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
@@ -204,11 +198,11 @@ public class HomeScreen extends BorderPane {
         GazePlayNamedProcessCreator gazePlayProcess = new GazePlayNamedProcessCreator(gazePlayInstallationRepo);
         InterAACtionPlayerNamedProcessCreator interAACtionPlayerProcess = new InterAACtionPlayerNamedProcessCreator();
 
-    //    Image image = new Image("images/refresh.png");
-        BorderPane augComLaunchButton = createAppButtonLauncher(augComProcess,"Augcom","images/Logos_AugCom.png");
-        BorderPane interaactionSceneLaunchButton = createAppButtonLauncher(interaactionSceneProcess,"InterAACtionScene","images/VisuelSceneDisplay.png");
-        BorderPane gazePlayLaunchButton = createAppButtonLauncher(gazePlayProcess,"GazePlay","images/gazeplayicon.png");
-        BorderPane interaactionPlayerLaunchButton = createAppButtonLauncher(interAACtionPlayerProcess,"InterAACtionPlayer","images/gazeMediaPlayer.png");
+        //    Image image = new Image("images/refresh.png");
+        BorderPane augComLaunchButton = createAppButtonLauncher(augComProcess, "Augcom", "images/Logos_AugCom.png");
+        BorderPane interaactionSceneLaunchButton = createAppButtonLauncher(interaactionSceneProcess, "InterAACtionScene", "images/VisuelSceneDisplay.png");
+        BorderPane gazePlayLaunchButton = createAppButtonLauncher(gazePlayProcess, "GazePlay", "images/gazeplayicon.png");
+        BorderPane interaactionPlayerLaunchButton = createAppButtonLauncher(interAACtionPlayerProcess, "InterAACtionPlayer", "images/gazeMediaPlayer.png");
 
         HBox menuBar = new HBox(
                 augComLaunchButton,
@@ -223,7 +217,7 @@ public class HomeScreen extends BorderPane {
         return menuBar;
     }
 
-    private BorderPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL){
+    private BorderPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL) {
         ProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus);
         processButton.getLabel().setText(name);
         processButton.getButton().setStroke(Color.web("#cd2653"));
@@ -255,27 +249,28 @@ public class HomeScreen extends BorderPane {
         Point pointerLocation = pointer.getLocation();
         int x = (int) pointerLocation.getX();
         int y = (int) pointerLocation.getY();
-        log.info("{} : {}, {}",x,y, UtilsOS.isUnix());
+        log.info("{} : {}, {}", x, y, UtilsOS.isUnix());
         if (x > 500 &&
                 x < Screen.getPrimary().getBounds().getWidth() - 500 &&
                 y <= 50 &&
                 (!UtilsOS.isUnix() || (UtilsOS.isUnix() && !graphicalMenus.primaryStage.isShowing()))
         ) {
             log.info("start platform");
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
             Platform.runLater(() -> {
                 this.takeSnapShot();
-                log.info("snapshot");
+                System.out.println("snapshot");
                 graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
                 graphicalMenus.primaryStage.requestFocus();
+                System.out.println("before show");
+                Platform.setImplicitExit(false);
+                System.out.println("show");
                 graphicalMenus.primaryStage.show();
+                System.out.println("after show");
                 graphicalMenus.primaryStage.requestFocus();
                 ActivateMainWindowProcess.start();
             });
+
         }
     }
 
