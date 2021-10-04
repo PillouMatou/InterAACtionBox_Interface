@@ -262,6 +262,11 @@ public class HomeScreen extends BorderPane {
                 (!UtilsOS.isUnix() || (UtilsOS.isUnix() && !graphicalMenus.primaryStage.isShowing()))
         ) {
             log.info("start platform");
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Platform.runLater(() -> {
                 this.takeSnapShot();
                 log.info("snapshot");

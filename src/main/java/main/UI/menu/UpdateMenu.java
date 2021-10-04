@@ -17,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import lombok.extern.slf4j.Slf4j;
 import main.UI.DoubleClickedButton;
 import main.utils.JsonReader;
 import main.utils.UpdateManager;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 
+@Slf4j
 public class UpdateMenu extends BorderPane {
 
     UpdateManager updateManager;
@@ -102,6 +104,18 @@ public class UpdateMenu extends BorderPane {
         menu.setSpacing(100);
 
         Button downloadButton = new Button("Installer");
+
+        downloadButton.setOnMouseClicked((event) -> {
+            log.info("Launching install script");
+            ProcessBuilder processBuilder = new ProcessBuilder(
+                    "sh",
+                    "../../Update/updateAll.sh");
+            try {
+                processBuilder.inheritIO().start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         downloadEverythin.getChildren().addAll(displayedLabel,downloadButton);
 
