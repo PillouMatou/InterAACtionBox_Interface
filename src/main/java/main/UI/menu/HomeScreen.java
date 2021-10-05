@@ -178,22 +178,6 @@ public class HomeScreen extends BorderPane {
         return new ImageView(wr).getImage();
     }
 
-    private void updateAvailable(Button updateButton) {
-        updateButton.setText("Mise \u00e0 jour disponible !");
-        Timeline t = new Timeline();
-        t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
-        t.setCycleCount(20);
-        t.setAutoReverse(true);
-        t.play();
-    }
-
-    private void checkUpdate(Button updateButton) {
-        updateManager.checkUpdates();
-        if (updateManager.needsUpdate()) {
-            updateAvailable(updateButton);
-        }
-    }
-
     Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
         DoubleClickedButton optionButton = new DoubleClickedButton(text);
         optionButton.setPrefHeight(50);

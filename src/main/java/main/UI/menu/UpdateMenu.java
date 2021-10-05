@@ -26,6 +26,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 @Slf4j
 public class UpdateMenu extends BorderPane {
@@ -106,15 +108,7 @@ public class UpdateMenu extends BorderPane {
         Button downloadButton = new Button("Installer");
 
         downloadButton.setOnMouseClicked((event) -> {
-            log.info("Launching install script");
-            ProcessBuilder processBuilder = new ProcessBuilder(
-                    "sh",
-                    "../../Update/updateAll.sh");
-            try {
-                processBuilder.inheritIO().start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+           startUpdate();
         });
 
         downloadEverythin.getChildren().addAll(displayedLabel,downloadButton);
@@ -135,6 +129,43 @@ public class UpdateMenu extends BorderPane {
         menu.getChildren().addAll(downloadEverythin,settings);
 
         this.setCenter(menu);
+    }
+
+    void startUpdate(){
+        List<ProcessBuilder> processList = new LinkedList<>();
+        if(updateManager.interaactionSceneNeedsUpdate){
+            processList.add(new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh"));
+        }
+
+        if(updateManager.interaactionPlayerNeedsUpdate){
+            processList.add(new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh"));
+        }
+
+        if(updateManager.gazePlayNeedsUpdate){
+            processList.add(new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh"));
+        }
+
+        if(updateManager.augComNeedsUpdate){
+            processList.add(new ProcessBuilder("sh", "../../Update/augcomUpdate.sh"));
+        }
+
+        letsRunTheProcessList(processList);
+
+    }
+
+    Runnable letsRunTheProcessList(List<ProcessBuilder> processList){
+        if(! processList.isEmpty()) {
+            ProcessBuilder processBuilder = processList.remove(0);
+            return () -> {
+                try {
+                    processBuilder.inheritIO().start().onExit().thenRun(letsRunTheProcessList(processList));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            };
+        }
+
+        return () -> {};
     }
 
     void createGnomeControlCenterButton(GraphicalMenus graphicalMenus, GridPane settings, String label, int row) {
