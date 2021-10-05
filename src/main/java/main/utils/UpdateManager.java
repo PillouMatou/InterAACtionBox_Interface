@@ -1,6 +1,5 @@
 package main.utils;
 
-import javafx.scene.control.Button;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,7 +61,7 @@ public class UpdateManager {
         }
     }
 
-    public boolean needsUpdate(){
+    public boolean needsUpdate() {
         return this.augComNeedsUpdate ||
                 this.gazePlayNeedsUpdate ||
                 this.interaactionPlayerNeedsUpdate ||
