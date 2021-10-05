@@ -19,12 +19,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import main.UI.DoubleClickedButton;
-import main.utils.JsonReader;
 import main.utils.UpdateManager;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -108,10 +104,10 @@ public class UpdateMenu extends BorderPane {
         Button downloadButton = new Button("Installer");
 
         downloadButton.setOnMouseClicked((event) -> {
-           startUpdate();
+            startUpdate();
         });
 
-        downloadEverythin.getChildren().addAll(displayedLabel,downloadButton);
+        downloadEverythin.getChildren().addAll(displayedLabel, downloadButton);
 
         GridPane settings = new GridPane();
         settings.setHgap(20);
@@ -126,26 +122,26 @@ public class UpdateMenu extends BorderPane {
         BorderPane.setAlignment(settings, Pos.CENTER);
 
         menu.setAlignment(Pos.CENTER);
-        menu.getChildren().addAll(downloadEverythin,settings);
+        menu.getChildren().addAll(downloadEverythin, settings);
 
         this.setCenter(menu);
     }
 
-    void startUpdate(){
+    void startUpdate() {
         List<ProcessBuilder> processList = new LinkedList<>();
-        if(updateManager.interaactionSceneNeedsUpdate){
+        if (updateManager.interaactionSceneNeedsUpdate) {
             processList.add(new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh"));
         }
 
-        if(updateManager.interaactionPlayerNeedsUpdate){
+        if (updateManager.interaactionPlayerNeedsUpdate) {
             processList.add(new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh"));
         }
 
-        if(updateManager.gazePlayNeedsUpdate){
+        if (updateManager.gazePlayNeedsUpdate) {
             processList.add(new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh"));
         }
 
-        if(updateManager.augComNeedsUpdate){
+        if (updateManager.augComNeedsUpdate) {
             processList.add(new ProcessBuilder("sh", "../../Update/augcomUpdate.sh"));
         }
 
@@ -153,8 +149,8 @@ public class UpdateMenu extends BorderPane {
 
     }
 
-    Runnable letsRunTheProcessList(List<ProcessBuilder> processList){
-        if(! processList.isEmpty()) {
+    Runnable letsRunTheProcessList(List<ProcessBuilder> processList) {
+        if (!processList.isEmpty()) {
             ProcessBuilder processBuilder = processList.remove(0);
             return () -> {
                 try {
@@ -165,7 +161,8 @@ public class UpdateMenu extends BorderPane {
             };
         }
 
-        return () -> {};
+        return () -> {
+        };
     }
 
     void createGnomeControlCenterButton(GraphicalMenus graphicalMenus, GridPane settings, String label, int row) {
@@ -207,7 +204,7 @@ public class UpdateMenu extends BorderPane {
                 },
                 needUpdate ? "images/refresh.png" : "images/tick-mark.png"
         );
-        if(needUpdate){
+        if (needUpdate) {
             Timeline t = new Timeline();
             t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(button.opacityProperty(), 0.2)));
             t.setCycleCount(20);
