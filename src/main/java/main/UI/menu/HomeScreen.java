@@ -12,10 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -32,10 +29,21 @@ import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
 import main.process.xdotoolProcess.ActivateMainWindowProcess;
 import main.utils.UpdateManager;
+import main.utils.JsonReader;
+import main.utils.UpdateManager;
 import main.utils.UtilsOS;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.Time;
 
 @Slf4j
 public class HomeScreen extends BorderPane {
@@ -137,6 +145,22 @@ public class HomeScreen extends BorderPane {
         ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
 
         startMouseListener();
+    }
+
+    private void updateAvailable(Button updateButton){
+        updateButton.setText("Mise \u00e0 jour disponible !");
+        Timeline t = new Timeline();
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
+        t.setCycleCount(20);
+        t.setAutoReverse(true);
+        t.play();
+    }
+
+    private void checkUpdate(Button updateButton) {
+        updateManager.checkUpdates();
+        if(updateManager.needsUpdate()){
+            updateAvailable(updateButton);
+        }
     }
 
     private static Image convertToFxImage(BufferedImage image) {
