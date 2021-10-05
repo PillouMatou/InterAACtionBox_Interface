@@ -36,6 +36,9 @@ import main.utils.UtilsOS;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 
 @Slf4j
 public class HomeScreen extends BorderPane {
@@ -95,6 +98,7 @@ public class HomeScreen extends BorderPane {
                 "images/refresh.png",
                 (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu())
         );
+
         checkUpdate(updateButton);
 
 
@@ -167,6 +171,21 @@ public class HomeScreen extends BorderPane {
         updateManager.checkUpdates();
         if (updateManager.needsUpdate()) {
             updateAvailable(updateButton);
+        } else if (!isConnectedToInternet()) {
+            updateButton.setOpacity(0.5);
+            updateButton.setText("Connection Introuvable");
+            updateButton.setDisable(true);
+        }
+    }
+
+    boolean isConnectedToInternet() {
+        try {
+            URL url = new URL("http://www.google.com");
+            URLConnection connection = url.openConnection();
+            connection.connect();
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 

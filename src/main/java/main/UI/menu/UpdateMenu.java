@@ -29,6 +29,8 @@ import java.util.List;
 public class UpdateMenu extends BorderPane {
 
     UpdateManager updateManager;
+    Button downloadButton;
+    Label displayedLabel;
 
     public UpdateMenu(GraphicalMenus graphicalMenus, UpdateManager updateManager) {
         super();
@@ -94,20 +96,25 @@ public class UpdateMenu extends BorderPane {
         downloadEverythin.setAlignment(Pos.CENTER);
         downloadEverythin.setSpacing(20);
 
-        Label displayedLabel = new Label("Mettre à jour tous les logiciels");
+        displayedLabel = new Label("Mettre à jour tous les logiciels");
         displayedLabel.setStyle("-fx-font-weight: bold; " +
                 "-fx-font-family: Helvetica; " +
                 "-fx-text-fill: #cd2653");
         displayedLabel.setFont(new Font(30));
         menu.setSpacing(100);
 
-        Button downloadButton = new Button("Installer");
+        downloadButton = new Button("Installer");
 
         downloadButton.setOnMouseClicked((event) -> {
             startUpdate();
         });
 
         downloadEverythin.getChildren().addAll(displayedLabel, downloadButton);
+
+        if (!updateManager.needsUpdate()) {
+            displayedLabel.setText("Votre système est à jour");
+            downloadEverythin.getChildren().remove(downloadButton);
+        }
 
         GridPane settings = new GridPane();
         settings.setHgap(20);
