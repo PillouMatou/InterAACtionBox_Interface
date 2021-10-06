@@ -44,10 +44,14 @@ public class UpdateManager {
     }
 
     private void checkAInteraactionPlayerUpdate() {
-        System.out.println("PLAYER CHECK");
-        //        JSONObject interaactionPlayerJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/InteraactionPlayer-AFSR/releases/latest");
-//        File interaactionPlayerDirectory = new File("~/"+interaactionPlayerJSON.get("name"));
-        interaactionPlayerNeedsUpdate = false;
+        try {
+            JSONObject interaactionPlayerJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/InteraactionPlayer-AFSR/releases/latest");
+            File interaactionPlayerDirectory = new File("~/" + interaactionPlayerJSON.get("name"));
+            interaactionSceneVersion = "" + interaactionPlayerJSON.get("name");
+            interaactionSceneNeedsUpdate = !interaactionPlayerDirectory.exists() || !interaactionPlayerDirectory.isDirectory();
+        } catch (IOException | JSONException e) {
+            // Do nothing
+        }
     }
 
     private void checkgazePlayUpdate() {
