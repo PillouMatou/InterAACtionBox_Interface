@@ -21,6 +21,7 @@ import main.Configuration;
 import main.UI.DoubleClickedButton;
 import main.process.GnomeControlCenterNamedProcessCreator;
 import main.process.TeamviewerNamedProcessCreator;
+import main.utils.StageUtils;
 
 public class OptionsMenu extends BorderPane {
 
@@ -124,11 +125,7 @@ public class OptionsMenu extends BorderPane {
                     "Ouvrir>",
                     "images/teamviewer.png",
                     (e) -> {
-                        if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
-                            graphicalMenus.process.exitAskedByUser = true;
-                            graphicalMenus.process.destroy();
-                            graphicalMenus.process.set(null);
-                        }
+                        StageUtils.killRunningProcess(graphicalMenus);
                         TeamviewerNamedProcessCreator teamviewerNamedProcessCreator = new TeamviewerNamedProcessCreator();
                         teamviewerNamedProcessCreator.setUpProcessBuilder();
                         graphicalMenus.process = teamviewerNamedProcessCreator.start(graphicalMenus);
@@ -156,11 +153,7 @@ public class OptionsMenu extends BorderPane {
                 "Ouvrir>",
                 imageName,
                 (e) -> {
-                    if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
-                        graphicalMenus.process.exitAskedByUser = true;
-                        graphicalMenus.process.destroy();
-                        graphicalMenus.process.set(null);
-                    }
+                    StageUtils.killRunningProcess(graphicalMenus);
                     GnomeControlCenterNamedProcessCreator process = new GnomeControlCenterNamedProcessCreator(panelToOpen);
                     process.setUpProcessBuilder();
                     graphicalMenus.process = process.start(graphicalMenus);

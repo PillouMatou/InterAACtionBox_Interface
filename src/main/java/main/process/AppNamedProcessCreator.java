@@ -7,6 +7,7 @@ import main.UI.ProgressButton;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.XdotoolProcessCreator;
 import main.utils.NamedProcess;
+import main.utils.StageUtils;
 import main.utils.UtilsOS;
 
 import java.io.IOException;
@@ -40,11 +41,11 @@ public interface AppNamedProcessCreator {
                         public void run() {
                             if (!namedProcess.exitAskedByUser) {
                                 Platform.runLater((() -> {
-                                    graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
+                                    graphicalMenus.getHomeScreen().showCloseProcessButtonIfProcessNotNull();
                                     graphicalMenus.primaryStage.show();
                                     graphicalMenus.primaryStage.toFront();
                                     graphicalMenus.process.set(null);
-                                    graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
+                                    graphicalMenus.getHomeScreen().showCloseProcessButtonIfProcessNotNull();
                                 }));
                             }
                         }
@@ -78,11 +79,7 @@ public interface AppNamedProcessCreator {
 
         setUpProcessBuilder();
         progressButton.assignIndicator((e) -> {
-            if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
-                graphicalMenus.process.exitAskedByUser = true;
-                graphicalMenus.process.destroy();
-                graphicalMenus.process.set(null);
-            }
+            StageUtils.killRunningProcess(graphicalMenus);
             graphicalMenus.process = start(graphicalMenus);
         });
 
