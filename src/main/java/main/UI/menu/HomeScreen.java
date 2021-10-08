@@ -108,7 +108,7 @@ public class HomeScreen extends BorderPane {
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setFill(Color.web("#cd2653"));
 
-        Label title = new Label("InteraactionBox");
+        Label title = new Label("InteraactionBox-AFSR");
         title.setFont(new Font(30));
         title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         title.setTextFill(Color.web("#faeaed"));

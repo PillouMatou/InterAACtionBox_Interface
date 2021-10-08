@@ -35,7 +35,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         primaryStage.initStyle(StageStyle.TRANSPARENT);
-        primaryStage.setTitle("InteraactionBox");
+        primaryStage.setTitle("InteraactionBox-AFSR");
 
         GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage, getGazePlayInstallationRepo());
         Scene scene = new Scene(graphicalMenus.getHomeScreen(), Color.TRANSPARENT);
