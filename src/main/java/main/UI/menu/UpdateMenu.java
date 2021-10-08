@@ -3,10 +3,13 @@ package main.UI.menu;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -19,9 +22,12 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import main.UI.DoubleClickedButton;
+import main.UI.UpdateService;
 import main.utils.UpdateManager;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,6 +36,7 @@ public class UpdateMenu extends BorderPane {
 
     UpdateManager updateManager;
     Button downloadButton;
+    ProgressBar[] progressBars = new ProgressBar[6];
     Label displayedLabel;
 
     public UpdateMenu(GraphicalMenus graphicalMenus, UpdateManager updateManager) {
@@ -101,17 +108,18 @@ public class UpdateMenu extends BorderPane {
                 "-fx-font-family: Helvetica; " +
                 "-fx-text-fill: #cd2653");
         displayedLabel.setFont(new Font(30));
-        menu.setSpacing(100);
+        menu.setSpacing(30);
 
-        downloadButton = new Button("Installer");
+        downloadButton = new Button("Installer tous");
 
         downloadButton.setOnMouseClicked((event) -> {
-            startUpdate();
+            downloadButton.setVisible(false);
+            startUpdateAll();
         });
 
         downloadEverythin.getChildren().addAll(displayedLabel, downloadButton);
 
-        if (!updateManager.needsUpdate()) {
+        if (!updateManager.anyUpdateNeeded.get()) {
             displayedLabel.setText("Votre système est à jour");
             downloadEverythin.getChildren().remove(downloadButton);
         }
@@ -129,26 +137,161 @@ public class UpdateMenu extends BorderPane {
         BorderPane.setAlignment(settings, Pos.CENTER);
 
         menu.setAlignment(Pos.CENTER);
-        menu.getChildren().addAll(downloadEverythin, settings);
+        progressBars[0]=new ProgressBar();
+        for(ProgressBar progressBar:progressBars) {
+            progressBar.setProgress(0);
+        }
+        progressBars[0].prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(3));
+        progressBars[0].setVisible(false);
+        progressBars[0].progressProperty().addListener((obj, oldval, newval)-> {
+            if(!progressBars[0].isVisible() && newval.doubleValue() > 0) {
+                progressBars[0].setVisible(true);
+            }
+        });
+        menu.getChildren().addAll(downloadEverythin, progressBars[0], settings);
 
         this.setCenter(menu);
     }
 
-    void startUpdate() {
+
+    void startUpdateAll(){
+        Thread t = new Thread() {
+            public void run() {
+                for(ProgressBar progressBar:progressBars) {
+                    progressBar.setProgress(0);
+                }
+                double systemCoeff = updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get() ? 1 : 0;
+                double augcomCoeff = updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get() ? 1 : 0;
+                double interaactionSceneCoef = updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get() ? 1 : 0;
+                double gazeplayCoeff = updateManager.updateServices[UpdateService.GAZEPLAY].getUpdateProperty().get() ? 1 : 0;
+                double interaactionPlayerCoeff = updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get() ? 1 : 0;
+
+                double coeff = 1 / (systemCoeff+augcomCoeff+interaactionSceneCoef+gazeplayCoeff+interaactionPlayerCoeff);
+
+                while(progressBars[0].getProgress() < 1){
+                    progressBars[0].setProgress(
+                            progressBars[1].getProgress()*coeff+
+                            progressBars[2].getProgress()*coeff+
+                            progressBars[3].getProgress()*coeff+
+                            progressBars[4].getProgress()*coeff+
+                            progressBars[5].getProgress()*coeff
+                    );
+                }
+            }
+        };
+        t.start();
+
+
+        Thread t2 = new Thread() {
+            public void run() {
+                if( updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get()) {
+                    startUpdateSystem();
+                }
+                if(updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
+                    startUpdateAugCom();
+                }
+                if(updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get()) {
+                    startUpdateInterAACtonScene();
+                }
+                if(updateManager.updateServices[UpdateService.GAZEPLAY].getUpdateProperty().get()) {
+                    startUpdateGazePlay();
+                }
+                if(updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get()) {
+                    startUpdateInterAACtionPlayer();
+                }
+            }
+        };
+        t2.start();
+    }
+    void startUpdateSystem(){
+                try {
+                    ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
+                    pb.redirectErrorStream(true);
+                    Process p = pb.start();
+                    progressThing(p, 1);
+                } catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+
+    }
+    void startUpdateAugCom(){
+                try {
+                    ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
+                    //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/augcomUpdate.sh");
+                    pb.redirectErrorStream(true);
+                    Process p = pb.start();
+                    progressThing(p, 2);
+                } catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+    }
+    void startUpdateInterAACtonScene(){
+                try {
+                    ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
+                    //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh");
+                    pb.redirectErrorStream(true);
+                    Process p = pb.start();
+                    progressThing(p, 3);
+                } catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+    }
+    void startUpdateGazePlay(){
+                try {
+                    ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
+                    //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh");
+                    pb.redirectErrorStream(true);
+                    Process p = pb.start();
+                    progressThing(p, 4);
+                } catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+    }
+    void startUpdateInterAACtionPlayer(){
+                try {
+                    ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
+                    //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh");
+                    pb.redirectErrorStream(true);
+                    Process p = pb.start();
+                    progressThing(p, 5);
+                } catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+    }
+
+    void progressThing(Process p, int index) throws IOException {
+        String s;
+        BufferedReader stdout = new BufferedReader(
+                new InputStreamReader(p.getInputStream()));
+        double i = 0;
+        while ((s = stdout.readLine()) != null && progressBars[index].getProgress()<1) {
+            i = i + 0.001*index;
+            String t = "AugCom.tar.gze       "+ ((int)i) +"% [======>               ]   9.65M  5.6MB/s";
+            int indexPercent = t.indexOf('%');
+            int progress = Integer.parseInt(t.substring(indexPercent-3, indexPercent).replace(" ", ""));
+            progressBars[index].setProgress(progress / 100.);
+        }
+        p.getInputStream().close();
+        p.getOutputStream().close();
+        p.getErrorStream().close();
+        p.destroy();
+    }
+
+    void startUpdate2() {
         List<ProcessBuilder> processList = new LinkedList<>();
-        if (updateManager.interaactionSceneNeedsUpdate) {
+        if (updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get()) {
             processList.add(new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh"));
         }
 
-        if (updateManager.interaactionPlayerNeedsUpdate) {
+        if (updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get()) {
             processList.add(new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh"));
         }
 
-        if (updateManager.gazePlayNeedsUpdate) {
+        if (updateManager.updateServices[UpdateService.GAZEPLAY].getUpdateProperty().get()) {
             processList.add(new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh"));
         }
 
-        if (updateManager.augComNeedsUpdate) {
+        if (updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
             processList.add(new ProcessBuilder("sh", "../../Update/augcomUpdate.sh"));
         }
 
@@ -178,51 +321,72 @@ public class UpdateMenu extends BorderPane {
         displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         displayedLabel.setTextFill(Color.web("#cd2653"));
 
+        Button button = createTopBarButton(
+                "Le logiciel est \u00e0 jour",
+                (e) -> {
+                },
+                "images/tick-mark.png"
+        );
+
+
+        button.setTextFill(Color.web("#faeaed"));
+
+        progressBars[row]= new ProgressBar();
+
+        settings.add(displayedLabel, 0, row);
+        settings.add(button, 1, row);
+
+        checkMainUpdate(settings, label, row, button);
+    }
+
+    void checkMainUpdate( GridPane settings, String label, int row, Button button){
+
         boolean needUpdate = false;
         String newVersion = "";
 
         switch (label) {
             // Warning ! Don't forget to add ":" at the end of the string
             case "AugCom:":
-                needUpdate = updateManager.augComNeedsUpdate;
-                newVersion = updateManager.augComVersion;
+                needUpdate = updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get();
+                newVersion = updateManager.updateServices[UpdateService.AUGCOM].getVersion();
                 break;
             case "InterAACtionScene:":
-                needUpdate = updateManager.interaactionSceneNeedsUpdate;
-                newVersion = updateManager.interaactionSceneVersion;
+                needUpdate = updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get();
+                newVersion = updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getVersion();
                 break;
             case "InterAACtionPlayer:":
-                needUpdate = updateManager.interaactionPlayerNeedsUpdate;
-                newVersion = updateManager.interaactionPlayerVersion;
+                needUpdate = updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get();
+                newVersion = updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getVersion();
                 break;
             case "GazePlay:":
-                needUpdate = updateManager.gazePlayNeedsUpdate;
-                newVersion = updateManager.gazePlayVersion;
+                needUpdate = updateManager.updateServices[UpdateService.GAZEPLAY].getUpdateProperty().get();
+                newVersion = updateManager.updateServices[UpdateService.GAZEPLAY].getVersion();
                 break;
             case "Système:":
-                needUpdate = updateManager.systemNeedsUpdate;
-                newVersion = updateManager.systemVersion;
+                needUpdate = updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get();
+                newVersion = updateManager.updateServices[UpdateService.SYSTEME].getVersion();
                 break;
         }
-
-        Button button = createTopBarButton(
-                needUpdate ? "Mise \u00e0 jour disponible ! Téléchargez " + newVersion : "Le logiciel est \u00e0 jour",
-                (e) -> {
-                },
-                needUpdate ? "images/refresh.png" : "images/tick-mark.png"
-        );
         if (needUpdate) {
             Timeline t = new Timeline();
             t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(button.opacityProperty(), 0.2)));
             t.setCycleCount(20);
             t.setAutoReverse(true);
             t.play();
+
+            progressBars[row].progressProperty().addListener((observ,oldval, newval)->{
+                if(!settings.getChildren().contains(progressBars[row]) && newval.doubleValue() > 0){
+                    Platform.runLater(()->{
+                        settings.add(progressBars[row],2, row);
+                    });
+                }
+            });
         }
 
-        button.setTextFill(Color.web("#faeaed"));
+        button.setText(needUpdate ? "Mise \u00e0 jour disponible ! Téléchargez " + newVersion : "Le logiciel est \u00e0 jour");
 
-        settings.add(displayedLabel, 0, row);
-        settings.add(button, 1, row);
+        ((ImageView)button.getGraphic()).setImage(new Image(needUpdate ? "images/refresh.png" : "images/tick-mark.png"));
+
     }
 
     Button createTopBarButton(String text, EventHandler eventhandler, String imagePath) {

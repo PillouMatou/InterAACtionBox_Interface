@@ -1,5 +1,9 @@
 package main.utils;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import main.UI.UpdateService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,76 +12,30 @@ import java.io.IOException;
 
 public class UpdateManager {
 
-    public boolean augComNeedsUpdate = false;
-    public boolean gazePlayNeedsUpdate = false;
-    public boolean interaactionSceneNeedsUpdate = false;
-    public boolean interaactionPlayerNeedsUpdate = false;
-    public boolean systemNeedsUpdate = false;
+    public BooleanProperty anyUpdateNeeded = new SimpleBooleanProperty(false);
 
-    public String augComVersion = "";
-    public String gazePlayVersion = "";
-    public String interaactionSceneVersion = "";
-    public String interaactionPlayerVersion = "";
-    public String systemVersion = "";
+    public UpdateService[] updateServices = {
+            new UpdateService("Système",""),
+            new UpdateService("AugCom", "https://api.github.com/repos/AFSR/AugCom-AFSR/releases/latest"),
+            new UpdateService("InterAACtionScene", "https://api.github.com/repos/AFSR/InteraactionScene-AFSR/releases/latest"),
+            new UpdateService("GazePlay", "https://api.github.com/repos/AFSR/GazePlay-AFSR/releases/latest"),
+            new UpdateService("InterAACtionPlayer", "https://api.github.com/repos/AFSR/InteraactionPlayer-AFSR/releases/latest"),
 
-    private void checkAugComUpdate() {
-        try {
-            JSONObject augComJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/AugCom-AFSR/releases/latest");
-            File augComDirectory = new File("~/" + augComJSON.get("name"));
-            augComVersion = "" + augComJSON.get("name");
-            augComNeedsUpdate = !augComDirectory.exists() || !augComDirectory.isDirectory();
-        } catch (IOException | JSONException e) {
-            // Do nothing
-        }
-    }
+    };
 
-    private void checkInteraactionSceneUpdate() {
-        try {
-            JSONObject interaactionSceneJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/InteraactionScene-AFSR/releases/latest");
-            File interaactionSceneDirectory = new File("~/" + interaactionSceneJSON.get("name"));
-            interaactionSceneVersion = "" + interaactionSceneJSON.get("name");
-            interaactionSceneNeedsUpdate = !interaactionSceneDirectory.exists() || !interaactionSceneDirectory.isDirectory();
-        } catch (IOException | JSONException e) {
-            // Do nothing
-        }
-
-    }
-
-    private void checkAInteraactionPlayerUpdate() {
-        try {
-            JSONObject interaactionPlayerJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/InteraactionPlayer-AFSR/releases/latest");
-            File interaactionPlayerDirectory = new File("~/" + interaactionPlayerJSON.get("name"));
-            interaactionSceneVersion = "" + interaactionPlayerJSON.get("name");
-            interaactionSceneNeedsUpdate = !interaactionPlayerDirectory.exists() || !interaactionPlayerDirectory.isDirectory();
-        } catch (IOException | JSONException e) {
-            // Do nothing
-        }
-    }
-
-    private void checkgazePlayUpdate() {
-        try {
-            JSONObject gazePlayJSON = JsonReader.readJsonFromUrl("https://api.github.com/repos/AFSR/GazePlay-AFSR/releases/latest");
-            File gazePlayDirectory = new File("~/" + gazePlayJSON.get("name"));
-            gazePlayVersion = "" + gazePlayJSON.get("name");
-            gazePlayNeedsUpdate = !gazePlayDirectory.exists() || !gazePlayDirectory.isDirectory();
-        } catch (IOException | JSONException e) {
-            // Do nothing
-        }
-    }
-
-    public boolean needsUpdate() {
-        return this.augComNeedsUpdate ||
-                this.gazePlayNeedsUpdate ||
-                this.interaactionPlayerNeedsUpdate ||
-                this.interaactionSceneNeedsUpdate ||
-                this.systemNeedsUpdate;
+    public UpdateManager(){
+        anyUpdateNeeded.bind(
+                updateServices[UpdateService.SYSTEME].getUpdateProperty().and(
+                updateServices[UpdateService.AUGCOM].getUpdateProperty()).and(
+                updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty()).and(
+                updateServices[UpdateService.GAZEPLAY].getUpdateProperty()).and(
+                updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty()
+                ));
     }
 
     public void checkUpdates() {
-        this.checkAInteraactionPlayerUpdate();
-        this.checkAugComUpdate();
-        this.checkgazePlayUpdate();
-        this.checkInteraactionSceneUpdate();
+        for(UpdateService updateService : updateServices)
+            updateService.checkUpdate();
     }
 
 }
