@@ -229,8 +229,7 @@ public class UpdateMenu extends BorderPane {
 
     void startUpdateAugCom() {
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
-            //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/augcomUpdate.sh");
+            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/augcomUpdate.sh");
             pb.redirectErrorStream(true);
             Process p = pb.start();
             progressThing(p, 2);
@@ -241,8 +240,7 @@ public class UpdateMenu extends BorderPane {
 
     void startUpdateInterAACtonScene() {
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
-            //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh");
+            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh");
             pb.redirectErrorStream(true);
             Process p = pb.start();
             progressThing(p, 3);
@@ -253,8 +251,7 @@ public class UpdateMenu extends BorderPane {
 
     void startUpdateGazePlay() {
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
-            //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh");
+            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh");
             pb.redirectErrorStream(true);
             Process p = pb.start();
             progressThing(p, 4);
@@ -265,8 +262,7 @@ public class UpdateMenu extends BorderPane {
 
     void startUpdateInterAACtionPlayer() {
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
-            //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh");
+            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh");
             pb.redirectErrorStream(true);
             Process p = pb.start();
             progressThing(p, 5);
@@ -279,13 +275,12 @@ public class UpdateMenu extends BorderPane {
         String s;
         BufferedReader stdout = new BufferedReader(
                 new InputStreamReader(p.getInputStream()));
-        double i = 0;
         while ((s = stdout.readLine()) != null && progressBars[index].getProgress() < 1) {
-            i = i + 0.001 * index;
-            String t = "AugCom.tar.gze       " + ((int) i) + "% [======>               ]   9.65M  5.6MB/s";
-            int indexPercent = t.indexOf('%');
-            int progress = Integer.parseInt(t.substring(indexPercent - 3, indexPercent).replace(" ", ""));
-            progressBars[index].setProgress(progress / 100.);
+            int indexPercent = s.indexOf('%');
+            if(indexPercent!=-1) {
+                int progress = Integer.parseInt(s.substring(indexPercent - 3, indexPercent).replace(" ", ""));
+                progressBars[index].setProgress(progress / 100.);
+            }
         }
         p.getInputStream().close();
         p.getOutputStream().close();
