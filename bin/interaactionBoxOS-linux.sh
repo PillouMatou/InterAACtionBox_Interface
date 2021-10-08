@@ -48,7 +48,7 @@ fi
 
 gazePlaySave=""
 
-#while [ ! -d "$gazePlaySave" ] 
+#while [ ! -d "$gazePlaySave" ]
 #do
 #read -p "Entrez le chemin menant au dossier d'installation de GazePlay: " gazePlaySave
 #if [ ! -d "$gazePlaySave" ]; then
