@@ -1,6 +1,7 @@
 package main.utils;
 
 import javafx.stage.Stage;
+import main.UI.menu.GraphicalMenus;
 
 public class StageUtils {
 
@@ -67,5 +68,13 @@ public class StageUtils {
 //    }
 //
     /*------------------------------------------------------------------------------------------------*/
+
+    public static void killRunningProcess(GraphicalMenus graphicalMenus) {
+        if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
+            graphicalMenus.process.exitAskedByUser = true;
+            graphicalMenus.process.destroy();
+            graphicalMenus.process.set(null);
+        }
+    }
 
 }
