@@ -10,29 +10,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
-import main.UI.DoubleClickedButton;
 import main.UI.ProgressButton;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
 import main.process.xdotoolProcess.ActivateMainWindowProcess;
-import main.utils.UpdateManager;
-import main.utils.UtilsOS;
+import main.utils.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -50,14 +43,7 @@ public class HomeScreen extends BorderPane {
         this.graphicalMenus = graphicalMenus;
         this.updateManager = updateManager;
 
-        Rectangle r = new Rectangle();
-        r.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        r.heightProperty().bind(graphicalMenus.primaryStage.heightProperty());
-        Stop[] stops = new Stop[]{new Stop(0, Color.web("#faeaed")), new Stop(1, Color.web("#cd2653"))};
-        LinearGradient lg1 = new LinearGradient(0, 1, 1.5, 0, true, CycleMethod.NO_CYCLE, stops);
-        r.setFill(lg1);
-
-        this.getChildren().add(r);
+        this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 
         centerMenu = new VBox();
 
@@ -65,24 +51,6 @@ public class HomeScreen extends BorderPane {
         BorderPane.setAlignment(centerMenu, Pos.CENTER);
         centerMenu.spacingProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(6));
         centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(5));
-
-        HBox menuBar = createMenuBar(graphicalMenus.getGazePlayInstallationRepo());
-
-        closeMenuButton = createCloseMenuButton();
-        centerMenu.getChildren().addAll(closeMenuButton, menuBar);
-        this.setCenter(centerMenu);
-
-        showCloseMenuIfProcessNotNull();
-
-        StackPane titlePane = new StackPane();
-        javafx.scene.shape.Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
-        backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        backgroundForTitle.setFill(Color.web("#cd2653"));
-
-        javafx.scene.control.Label title = new Label("InteraactionBox");
-        title.setFont(new Font(30));
-        title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
-        title.setTextFill(Color.web("#faeaed"));
 
         Button optionButton = createTopBarButton(
                 "Options",
@@ -95,22 +63,26 @@ public class HomeScreen extends BorderPane {
                 "images/refresh.png",
                 (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu())
         );
-        checkUpdate(updateButton);
 
+        checkUpdatesAndAdjustButton(updateButton);
+
+        HBox menuBar = createMenuBar(graphicalMenus.getGazePlayInstallationRepo());
+
+        closeMenuButton = createCloseMenuButton();
+        centerMenu.getChildren().addAll(closeMenuButton, menuBar);
+        this.setCenter(centerMenu);
+
+        showCloseProcessButtonIfProcessNotNull();
 
         Button tobiiButton = createTopBarButton(
                 "Tobii Manager",
                 "images/eye-tracking_white.png",
                 (e) -> {
-                    if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
-                        graphicalMenus.process.exitAskedByUser = true;
-                        graphicalMenus.process.destroy();
-                        graphicalMenus.process.set(null);
-                    }
+                    StageUtils.killRunningProcess(graphicalMenus);
                     TobiiManagerNamedProcessCreator tobiiManagerProcess = new TobiiManagerNamedProcessCreator();
                     tobiiManagerProcess.setUpProcessBuilder();
                     graphicalMenus.process = tobiiManagerProcess.start(graphicalMenus);
-                    showCloseMenuIfProcessNotNull();
+                    showCloseProcessButtonIfProcessNotNull();
                 }
         );
 
@@ -122,93 +94,76 @@ public class HomeScreen extends BorderPane {
                 }
         );
 
-        BorderPane titleBox = new BorderPane();
-        titleBox.setLeft(new HBox(optionButton, updateButton));
-        titleBox.setCenter(title);
-        titleBox.setRight(new HBox(tobiiButton, exitButton));
-        titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        title.setTextAlignment(TextAlignment.CENTER);
-        title.setAlignment(Pos.CENTER);
-        titlePane.getChildren().addAll(backgroundForTitle, titleBox);
-
-        BorderPane.setAlignment(titlePane, Pos.CENTER_LEFT);
-        this.setTop(titlePane);
+        StackPane optionBar = createOptionBar(optionButton, updateButton, tobiiButton, exitButton);
+        this.setTop(optionBar);
 
         ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
 
         startMouseListener();
     }
 
-    private static Image convertToFxImage(BufferedImage image) {
-        WritableImage wr = null;
-        if (image != null) {
-            wr = new WritableImage(image.getWidth(), image.getHeight());
-            PixelWriter pw = wr.getPixelWriter();
-            for (int x = 0; x < image.getWidth(); x++) {
-                for (int y = 0; y < image.getHeight(); y++) {
-                    pw.setArgb(x, y, image.getRGB(x, y));
+    private StackPane createOptionBar(Button optionButton, Button updateButton, Button tobiiButton, Button exitButton) {
+        StackPane titlePane = new StackPane();
+        Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
+        backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+        backgroundForTitle.setFill(Color.web("#cd2653"));
+
+        Label title = new Label("InteraactionBox");
+        title.setFont(new Font(30));
+        title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
+        title.setTextFill(Color.web("#faeaed"));
+
+        BorderPane titleBox = new BorderPane();
+        titleBox.setCenter(title);
+        titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.setAlignment(Pos.CENTER);
+        titlePane.getChildren().addAll(backgroundForTitle, titleBox);
+
+
+        titleBox.setLeft(new HBox(optionButton, updateButton));
+        titleBox.setRight(new HBox(tobiiButton, exitButton));
+
+        BorderPane.setAlignment(titlePane, Pos.CENTER_LEFT);
+
+        return titlePane;
+    }
+
+    private void checkUpdatesAndAdjustButton(Button updateButton) {
+        updateManager.anyUpdateNeeded.addListener((obs, oldval, newval) -> {
+            if (UtilsOS.isConnectedToInternet()) {
+                if (newval) {
+                    updateButton.setOpacity(1);
+                    updateButton.setText("Mise \u00e0 jour disponible !");
+                    updateButton.setDisable(false);
+                    Timeline t = new Timeline();
+                    t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
+                    t.setCycleCount(20);
+                    t.setAutoReverse(true);
+                    t.play();
+                } else {
+                    updateButton.setOpacity(1);
+                    updateButton.setText("Votre syst\u00e8me est \u00e0 jour");
+                    updateButton.setDisable(false);
                 }
+            } else {
+                updateButton.setOpacity(0.5);
+                updateButton.setText("Connection Introuvable");
+                updateButton.setDisable(true);
             }
-        }
-
-        return new ImageView(wr).getImage();
-    }
-
-    private void updateAvailable(Button updateButton) {
-        updateButton.setText("Mise \u00e0 jour disponible !");
-        Timeline t = new Timeline();
-        t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
-        t.setCycleCount(20);
-        t.setAutoReverse(true);
-        t.play();
-    }
-
-    private void checkUpdate(Button updateButton) {
-        updateManager.checkUpdates();
-        if (updateManager.needsUpdate()) {
-            updateAvailable(updateButton);
-        }
+        });
     }
 
     Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
-        DoubleClickedButton optionButton = new DoubleClickedButton(text);
-        optionButton.setPrefHeight(50);
-        optionButton.setMaxHeight(50);
-        optionButton.setStyle(
-                "-fx-border-color: transparent; " +
-                        "-fx-border-width: 0; " +
-                        "-fx-background-radius: 0; " +
-                        "-fx-background-color: transparent; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed"
-        );
-        ImageView graphic = new ImageView(imagePath);
-        graphic.setPreserveRatio(true);
-        graphic.setFitHeight(30);
-        optionButton.setGraphic(graphic);
-
-        optionButton.assignHandler(eventhandler);
-        return optionButton;
+        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, 30);
     }
 
     private HBox createMenuBar(String gazePlayInstallationRepo) {
-        AugComNamedProcessCreator augComProcess = new AugComNamedProcessCreator();
-        InterAACtionSceneNamedProcessCreator interaactionSceneProcess = new InterAACtionSceneNamedProcessCreator();
-        GazePlayNamedProcessCreator gazePlayProcess = new GazePlayNamedProcessCreator(gazePlayInstallationRepo);
-        InterAACtionPlayerNamedProcessCreator interAACtionPlayerProcess = new InterAACtionPlayerNamedProcessCreator();
-
-        //    Image image = new Image("images/refresh.png");
-        BorderPane augComLaunchButton = createAppButtonLauncher(augComProcess, "Augcom", "images/Logos_AugCom.png");
-        BorderPane interaactionSceneLaunchButton = createAppButtonLauncher(interaactionSceneProcess, "InterAACtionScene", "images/VisuelSceneDisplay.png");
-        BorderPane gazePlayLaunchButton = createAppButtonLauncher(gazePlayProcess, "GazePlay", "images/gazeplayicon.png");
-        BorderPane interaactionPlayerLaunchButton = createAppButtonLauncher(interAACtionPlayerProcess, "InterAACtionPlayer", "images/gazeMediaPlayer.png");
-
         HBox menuBar = new HBox(
-                augComLaunchButton,
-                interaactionSceneLaunchButton,
-                gazePlayLaunchButton,
-                interaactionPlayerLaunchButton
+                createAppButtonLauncher(new AugComNamedProcessCreator(), "AugCom", "images/Logos_AugCom.png"),
+                createAppButtonLauncher(new InterAACtionSceneNamedProcessCreator(), "InterAACtionScene", "images/VisuelSceneDisplay.png"),
+                createAppButtonLauncher(new GazePlayNamedProcessCreator(gazePlayInstallationRepo), "GazePlay", "images/gazeplayicon.png"),
+                createAppButtonLauncher(new InterAACtionPlayerNamedProcessCreator(), "InterAACtionPlayer", "images/gazeMediaPlayer.png")
         );
 
         menuBar.setAlignment(Pos.CENTER);
@@ -217,17 +172,48 @@ public class HomeScreen extends BorderPane {
         return menuBar;
     }
 
-    private BorderPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL) {
+    private StackPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL) {
         ProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus);
         processButton.getLabel().setText(name);
         processButton.getButton().setStroke(Color.web("#cd2653"));
         processButton.getButton().setStrokeWidth(3);
-        BorderPane borderPaneLauncher = new BorderPane();
-        borderPaneLauncher.setCenter(processButton);
+        StackPane borderPaneLauncher = new StackPane();
+        borderPaneLauncher.getChildren().add(processButton);
         graphicalMenus.getGazeDeviceManager().addEventFilter(processButton.getButton());
+        ImageView downnloadImageView = UtilsUI.getDownloadImageView(processButton);
+
+        if (name.equals(updateManager.updateServices[UpdateService.AUGCOM].getName())) {
+            updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().addListener((obj, oldval, newval) -> {
+                updateLaunchButton(borderPaneLauncher, processButton, downnloadImageView, newval);
+            });
+        } else if (name.equals(updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getName())) {
+            updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().addListener((obj, oldval, newval) -> {
+                updateLaunchButton(borderPaneLauncher, processButton, downnloadImageView, newval);
+            });
+        } else if (name.equals(updateManager.updateServices[UpdateService.GAZEPLAY].getName())) {
+            updateManager.updateServices[UpdateService.GAZEPLAY].getUpdateProperty().addListener((obj, oldval, newval) -> {
+                updateLaunchButton(borderPaneLauncher, processButton, downnloadImageView, newval);
+            });
+        } else if (name.equals(updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getName())) {
+            updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().addListener((obj, oldval, newval) -> {
+                updateLaunchButton(borderPaneLauncher, processButton, downnloadImageView, newval);
+            });
+        }
+
         return borderPaneLauncher;
     }
 
+    private void updateLaunchButton(StackPane borderPaneLauncher, ProgressButton processButton, ImageView downnloadImageView, boolean needsUpdate) {
+//        if (needsUpdate) {
+//            processButton.stop();
+//            processButton.setOpacity(0.5);
+//            borderPaneLauncher.getChildren().add(downnloadImageView);
+//        } else {
+//            processButton.start();
+//            processButton.setOpacity(1);
+//            borderPaneLauncher.getChildren().remove(downnloadImageView);
+//        }
+    }
 
     private void startMouseListener() {
         Thread t = new Thread(() -> {
@@ -249,18 +235,13 @@ public class HomeScreen extends BorderPane {
         Point pointerLocation = pointer.getLocation();
         int x = (int) pointerLocation.getX();
         int y = (int) pointerLocation.getY();
-        log.info("{} : {}, {}", x, y, UtilsOS.isUnix());
-        if (x > 500 &&
-                x < Screen.getPrimary().getBounds().getWidth() - 500 &&
-                y <= 50 &&
+        if ((x > 500) && (x < Screen.getPrimary().getBounds().getWidth() - 500) && (y <= 50) &&
                 (!UtilsOS.isUnix() && !graphicalMenus.primaryStage.isShowing() || (UtilsOS.isUnix() && !graphicalMenus.primaryStage.isShowing()))
         ) {
-
             Platform.runLater(() -> {
                 this.takeSnapShot();
-                graphicalMenus.getHomeScreen().showCloseMenuIfProcessNotNull();
+                graphicalMenus.getHomeScreen().showCloseProcessButtonIfProcessNotNull();
                 graphicalMenus.primaryStage.requestFocus();
-                Platform.setImplicitExit(false);
                 graphicalMenus.primaryStage.show();
                 graphicalMenus.primaryStage.requestFocus();
                 ActivateMainWindowProcess.start();
@@ -275,7 +256,7 @@ public class HomeScreen extends BorderPane {
                 Robot robot = new Robot();
                 BufferedImage bufi = robot.createScreenCapture(new java.awt.Rectangle(0, 0, (int) this.graphicalMenus.primaryStage.getWidth(), (int) this.graphicalMenus.primaryStage.getHeight()));
                 Platform.runLater(() -> {
-                    ImageView img = new ImageView(convertToFxImage(bufi));
+                    ImageView img = new ImageView(UtilsUI.convertToFxImage(bufi));
                     img.fitWidthProperty().bind(closeMenuButton.getButton().radiusProperty().multiply(1.2));
                     img.fitHeightProperty().bind(closeMenuButton.getButton().radiusProperty().multiply(1.2));
                     img.setPreserveRatio(true);
@@ -306,7 +287,7 @@ public class HomeScreen extends BorderPane {
         return closeButton;
     }
 
-    public void showCloseMenuIfProcessNotNull() {
+    public void showCloseProcessButtonIfProcessNotNull() {
         if (graphicalMenus.process != null && graphicalMenus.process.get() != null && !centerMenu.getChildren().contains(closeMenuButton)) {
             centerMenu.translateYProperty().unbind();
             centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(1d / 12d));
