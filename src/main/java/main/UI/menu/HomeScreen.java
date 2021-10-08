@@ -204,15 +204,15 @@ public class HomeScreen extends BorderPane {
     }
 
     private void updateLaunchButton(StackPane borderPaneLauncher, ProgressButton processButton, ImageView downnloadImageView, boolean needsUpdate) {
-        if (needsUpdate) {
-            processButton.stop();
-            processButton.setOpacity(0.5);
-            borderPaneLauncher.getChildren().add(downnloadImageView);
-        } else {
-            processButton.start();
-            processButton.setOpacity(1);
-            borderPaneLauncher.getChildren().remove(downnloadImageView);
-        }
+//        if (needsUpdate) {
+//            processButton.stop();
+//            processButton.setOpacity(0.5);
+//            borderPaneLauncher.getChildren().add(downnloadImageView);
+//        } else {
+//            processButton.start();
+//            processButton.setOpacity(1);
+//            borderPaneLauncher.getChildren().remove(downnloadImageView);
+//        }
     }
 
     private void startMouseListener() {
