@@ -66,7 +66,7 @@ public class HomeScreen extends BorderPane {
 
         checkUpdatesAndAdjustButton(updateButton);
 
-        HBox menuBar = createMenuBar(graphicalMenus.getGazePlayInstallationRepo());
+        HBox menuBar = createMenuBar();
 
         closeMenuButton = createCloseMenuButton();
         centerMenu.getChildren().addAll(closeMenuButton, menuBar);
@@ -158,11 +158,11 @@ public class HomeScreen extends BorderPane {
         return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, 30);
     }
 
-    private HBox createMenuBar(String gazePlayInstallationRepo) {
+    private HBox createMenuBar() {
         HBox menuBar = new HBox(
                 createAppButtonLauncher(new AugComNamedProcessCreator(), "AugCom", "images/Logos_AugCom.png"),
                 createAppButtonLauncher(new InterAACtionSceneNamedProcessCreator(), "InterAACtionScene", "images/VisuelSceneDisplay.png"),
-                createAppButtonLauncher(new GazePlayNamedProcessCreator(gazePlayInstallationRepo), "GazePlay", "images/gazeplayicon.png"),
+                createAppButtonLauncher(new GazePlayNamedProcessCreator(), "GazePlay", "images/gazeplayicon.png"),
                 createAppButtonLauncher(new InterAACtionPlayerNamedProcessCreator(), "InterAACtionPlayer", "images/gazeMediaPlayer.png")
         );
 

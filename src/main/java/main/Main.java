@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.UI.menu.GraphicalMenus;
 import main.utils.StageUtils;
+import main.utils.UtilsOS;
 
 import java.util.List;
 
@@ -21,23 +22,13 @@ public class Main extends Application {
         launch(args);
     }
 
-    public String getGazePlayInstallationRepo() {
-        Parameters parameters = getParameters();
-        List<String> rawArguments = parameters.getRaw();
-        if (rawArguments.size() > 0) {
-            return rawArguments.get(0);
-        } else {
-            return "C:/Program Files (x86)/GazePlay";
-        }
-    }
-
     @Override
     public void start(Stage primaryStage) {
 
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setTitle("InteraactionBox-AFSR");
 
-        GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage, getGazePlayInstallationRepo());
+        GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage);
         Scene scene = new Scene(graphicalMenus.getHomeScreen(), Color.TRANSPARENT);
         graphicalMenus.getConfiguration().setScene(scene);
         primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());
