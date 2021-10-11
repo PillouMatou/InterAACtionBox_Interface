@@ -26,7 +26,6 @@ import main.utils.UtilsUI;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
@@ -190,9 +189,6 @@ public class UpdateMenu extends BorderPane {
                 if (updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get()) {
                     startUpdateSystem();
                 }
-                if (updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
-                    startUpdateAugCom();
-                }
                 if (updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get()) {
                     startUpdateInterAACtonScene();
                 }
@@ -201,6 +197,9 @@ public class UpdateMenu extends BorderPane {
                 }
                 if (updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get()) {
                     startUpdateInterAACtionPlayer();
+                }
+                if (updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
+                    startUpdateAugCom();
                 }
 
                 try {
@@ -215,11 +214,25 @@ public class UpdateMenu extends BorderPane {
         t2.start();
     }
 
+    void closeProcessStream(Process p) {
+        try {
+            p.getInputStream().close();
+            p.getOutputStream().close();
+            p.getErrorStream().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        p.destroy();
+    }
+
     void startUpdateSystem() {
         try {
             ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
             pb.redirectErrorStream(true);
             Process p = pb.start();
+            p.onExit().thenRun(() -> {
+                closeProcessStream(p);
+            });
             progressThing(p, 1);
         } catch (IOException ex) {
             ex.printStackTrace(System.err);
@@ -229,10 +242,12 @@ public class UpdateMenu extends BorderPane {
 
     void startUpdateAugCom() {
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
-            //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/augcomUpdate.sh");
+            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/augcomUpdate.sh");
             pb.redirectErrorStream(true);
             Process p = pb.start();
+            p.onExit().thenRun(() -> {
+                closeProcessStream(p);
+            });
             progressThing(p, 2);
         } catch (IOException ex) {
             ex.printStackTrace(System.err);
@@ -241,10 +256,12 @@ public class UpdateMenu extends BorderPane {
 
     void startUpdateInterAACtonScene() {
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
-            //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh");
+            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh");
             pb.redirectErrorStream(true);
             Process p = pb.start();
+            p.onExit().thenRun(() -> {
+                closeProcessStream(p);
+            });
             progressThing(p, 3);
         } catch (IOException ex) {
             ex.printStackTrace(System.err);
@@ -253,10 +270,12 @@ public class UpdateMenu extends BorderPane {
 
     void startUpdateGazePlay() {
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
-            //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh");
+            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh");
             pb.redirectErrorStream(true);
             Process p = pb.start();
+            p.onExit().thenRun(() -> {
+                closeProcessStream(p);
+            });
             progressThing(p, 4);
         } catch (IOException ex) {
             ex.printStackTrace(System.err);
@@ -265,10 +284,12 @@ public class UpdateMenu extends BorderPane {
 
     void startUpdateInterAACtionPlayer() {
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
-            //ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh");
+            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh");
             pb.redirectErrorStream(true);
             Process p = pb.start();
+            p.onExit().thenRun(() -> {
+                closeProcessStream(p);
+            });
             progressThing(p, 5);
         } catch (IOException ex) {
             ex.printStackTrace(System.err);
@@ -279,40 +300,17 @@ public class UpdateMenu extends BorderPane {
         String s;
         BufferedReader stdout = new BufferedReader(
                 new InputStreamReader(p.getInputStream()));
-        double i = 0;
         while ((s = stdout.readLine()) != null && progressBars[index].getProgress() < 1) {
-            i = i + 0.001 * index;
-            String t = "AugCom.tar.gze       " + ((int) i) + "% [======>               ]   9.65M  5.6MB/s";
-            int indexPercent = t.indexOf('%');
-            int progress = Integer.parseInt(t.substring(indexPercent - 3, indexPercent).replace(" ", ""));
-            progressBars[index].setProgress(progress / 100.);
+            int indexPercent = s.indexOf('%');
+            if (indexPercent != -1) {
+                try {
+                    int progress = Integer.parseInt(s.substring(indexPercent - 3, indexPercent).replace(" ", ""));
+                    progressBars[index].setProgress(progress / 100.);
+                } catch (NumberFormatException e) {
+                    //DO NOTHING
+                }
+            }
         }
-        p.getInputStream().close();
-        p.getOutputStream().close();
-        p.getErrorStream().close();
-        p.destroy();
-    }
-
-    void startUpdate2() {
-        List<ProcessBuilder> processList = new LinkedList<>();
-        if (updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get()) {
-            processList.add(new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh"));
-        }
-
-        if (updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get()) {
-            processList.add(new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh"));
-        }
-
-        if (updateManager.updateServices[UpdateService.GAZEPLAY].getUpdateProperty().get()) {
-            processList.add(new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh"));
-        }
-
-        if (updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
-            processList.add(new ProcessBuilder("sh", "../../Update/augcomUpdate.sh"));
-        }
-
-        letsRunTheProcessList(processList);
-
     }
 
     Runnable letsRunTheProcessList(List<ProcessBuilder> processList) {

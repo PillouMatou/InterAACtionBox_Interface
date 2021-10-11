@@ -16,8 +16,6 @@ public class GraphicalMenus {
     @Getter
     private final Configuration configuration = new Configuration();
     @Getter
-    private final String gazePlayInstallationRepo;
-    @Getter
     private final HomeScreen homeScreen;
     @Getter
     private final OptionsMenu optionsMenu;
@@ -26,10 +24,9 @@ public class GraphicalMenus {
 
     public NamedProcess process = new NamedProcess();
 
-    public GraphicalMenus(Stage primaryStage, String gazePlayInstallationRepo) {
+    public GraphicalMenus(Stage primaryStage) {
         this.primaryStage = primaryStage;
         UpdateManager updateManager = new UpdateManager();
-        this.gazePlayInstallationRepo = gazePlayInstallationRepo;
         this.optionsMenu = new OptionsMenu(this);
         this.homeScreen = new HomeScreen(this, updateManager);
         this.updateMenu = new UpdateMenu(this, updateManager);
