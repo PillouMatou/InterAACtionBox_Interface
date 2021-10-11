@@ -1,5 +1,6 @@
 package main.process;
 
+import lombok.extern.slf4j.Slf4j;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.GazePlayXdotoolProcessCreator;
 import main.utils.NamedProcess;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+@Slf4j
 public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
     ProcessBuilder processBuilder;
 
@@ -53,7 +55,7 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
             try {
                 BufferedReader brTest = new BufferedReader(new FileReader(configFilePath));
                 String text = brTest.readLine();
-                System.out.println("GazePlat directory is: " + text);
+                log.info("GazePlay directory is: " + text);
                 return text;
             } catch (IOException e) {
                 e.printStackTrace();
