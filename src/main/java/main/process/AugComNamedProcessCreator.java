@@ -9,7 +9,6 @@ public class AugComNamedProcessCreator implements AppNamedProcessCreator {
 
     ProcessBuilder processBuilder;
 
-
     @Override
     public void setUpProcessBuilder() {
         if (UtilsOS.isWindows()) {
