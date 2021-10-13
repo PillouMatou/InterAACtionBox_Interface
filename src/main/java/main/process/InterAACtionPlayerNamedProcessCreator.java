@@ -19,6 +19,6 @@ public class InterAACtionPlayerNamedProcessCreator implements AppNamedProcessCre
 
     @Override
     public NamedProcess start(GraphicalMenus graphicalMenus) {
-        return AppNamedProcessCreator.createProcress(new GoogleChromeXdotoolProcessCreator(), processBuilder, graphicalMenus, "GazeMediaPlayer");
+        return AppNamedProcessCreator.createProcressAndWaitForClose(new GoogleChromeXdotoolProcessCreator(), new CloseGoogleChromeProcessCreator(), processBuilder, graphicalMenus, "GazeMediaPlayer");
     }
 }

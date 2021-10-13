@@ -28,7 +28,7 @@ public class InterAACtionSceneNamedProcessCreator implements AppNamedProcessCrea
 
     @Override
     public NamedProcess start(GraphicalMenus graphicalMenus) {
-        return AppNamedProcessCreator.createProcress(new GoogleChromeXdotoolProcessCreator(), processBuilder, graphicalMenus, "InteraactionScene");
+        return AppNamedProcessCreator.createProcressAndWaitForClose(new GoogleChromeXdotoolProcessCreator(), new CloseGoogleChromeProcessCreator(), processBuilder, graphicalMenus, "InteraactionScene");
 
     }
 

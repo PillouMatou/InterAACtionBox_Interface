@@ -9,6 +9,7 @@ public class AugComNamedProcessCreator implements AppNamedProcessCreator {
 
     ProcessBuilder processBuilder;
 
+
     @Override
     public void setUpProcessBuilder() {
         if (UtilsOS.isWindows()) {
@@ -28,7 +29,7 @@ public class AugComNamedProcessCreator implements AppNamedProcessCreator {
 
     @Override
     public NamedProcess start(GraphicalMenus graphicalMenus) {
-        return AppNamedProcessCreator.createProcress(new GoogleChromeXdotoolProcessCreator(), processBuilder, graphicalMenus, "AugCom");
+        return AppNamedProcessCreator.createProcressAndWaitForClose(new GoogleChromeXdotoolProcessCreator(),new CloseGoogleChromeProcessCreator(), processBuilder, graphicalMenus, "AugCom");
     }
 
 }
