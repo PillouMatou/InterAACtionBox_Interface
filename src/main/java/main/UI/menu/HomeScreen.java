@@ -159,7 +159,6 @@ public class HomeScreen extends BorderPane {
     }
 
     private HBox createMenuBar() {
-        CloseGoogleChromeProcessCreator closeGoogleChromeProcessCreator = new CloseGoogleChromeProcessCreator();
         HBox menuBar = new HBox(
                 createAppButtonLauncher(new AugComNamedProcessCreator(), "AugCom", "images/Logos_AugCom.png"),
                 createAppButtonLauncher(new InterAACtionSceneNamedProcessCreator(), "InterAACtionScene", "images/VisuelSceneDisplay.png"),
