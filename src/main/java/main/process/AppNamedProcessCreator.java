@@ -25,39 +25,60 @@ public interface AppNamedProcessCreator {
 
     static NamedProcess createProcress(XdotoolProcessCreator xdotoolProcessCreator, ProcessBuilder processBuilder, GraphicalMenus graphicalMenus, String name) {
         try {
-            NamedProcess namedProcess = new NamedProcess();
+            NamedProcess namedProcess;
             if (UtilsOS.isUnix()) {
                 xdotoolProcessCreator.setUpProcessBuilder();
-                xdotoolProcessCreator.start(graphicalMenus);
+                namedProcess= new NamedProcess(xdotoolProcessCreator.start(graphicalMenus));
             } else {
+                namedProcess= new NamedProcess();
                 graphicalMenus.primaryStage.hide();
                 graphicalMenus.getHomeScreen().removeMenu();
             }
-            Process process = processBuilder.inheritIO().start();
-
-            process.onExit().thenRun(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!namedProcess.exitAskedByUser) {
-                                Platform.runLater((() -> {
-                                    graphicalMenus.getHomeScreen().showCloseProcessButtonIfProcessNotNull();
-                                    graphicalMenus.primaryStage.show();
-                                    graphicalMenus.primaryStage.toFront();
-                                    graphicalMenus.process.set(null);
-                                    graphicalMenus.getHomeScreen().showCloseProcessButtonIfProcessNotNull();
-                                }));
-                            }
-                        }
-                    }
-            );
-            namedProcess.set(process);
-            namedProcess.setName(name);
-            return namedProcess;
+            return getNamedProcess(processBuilder, graphicalMenus, name, namedProcess);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    static NamedProcess createProcressAndWaitForClose(XdotoolProcessCreator xdotoolProcessCreator, CloseGoogleChromeProcessCreator closeGoogleChromeProcessCreator, ProcessBuilder processBuilder, GraphicalMenus graphicalMenus, String name) {
+        try {
+            NamedProcess namedProcess;
+            if (UtilsOS.isUnix()) {
+                xdotoolProcessCreator.setUpProcessBuilder();
+                closeGoogleChromeProcessCreator.setUpProcessBuilder();
+                namedProcess= new NamedProcess(xdotoolProcessCreator.start(graphicalMenus),closeGoogleChromeProcessCreator.waitForCloseRequest());
+            } else {
+                namedProcess= new NamedProcess();
+                graphicalMenus.primaryStage.hide();
+                graphicalMenus.getHomeScreen().removeMenu();
+            }
+            return getNamedProcess(processBuilder, graphicalMenus, name, namedProcess);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    static NamedProcess getNamedProcess(ProcessBuilder processBuilder, GraphicalMenus graphicalMenus, String name, NamedProcess namedProcess) throws IOException {
+        Process process = processBuilder.inheritIO().start();
+
+        process.onExit().thenRun(
+                () -> {
+                    if (!namedProcess.exitAskedByUser) {
+                        Platform.runLater((() -> {
+                            graphicalMenus.getHomeScreen().showCloseProcessButtonIfProcessNotNull();
+                            graphicalMenus.primaryStage.show();
+                            graphicalMenus.primaryStage.toFront();
+                            graphicalMenus.process.set(null);
+                            graphicalMenus.getHomeScreen().showCloseProcessButtonIfProcessNotNull();
+                        }));
+                    }
+                }
+        );
+        namedProcess.set(process);
+        namedProcess.setName(name);
+        return namedProcess;
     }
 
     NamedProcess start(GraphicalMenus graphicalMenus);
