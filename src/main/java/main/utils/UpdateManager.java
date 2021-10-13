@@ -32,9 +32,7 @@ public class UpdateManager {
             while (true) {
                 try {
                     checkUpdates();
-                    log.info("checked");
                     Thread.sleep(Duration.ofHours(1).toMillis());
-                    log.info("wait");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
