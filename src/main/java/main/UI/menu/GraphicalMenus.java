@@ -30,7 +30,6 @@ public class GraphicalMenus {
         this.optionsMenu = new OptionsMenu(this);
         this.homeScreen = new HomeScreen(this, updateManager);
         this.updateMenu = new UpdateMenu(this, updateManager);
-        updateManager.checkUpdates();
     }
 
 }

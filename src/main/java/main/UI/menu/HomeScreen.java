@@ -61,7 +61,7 @@ public class HomeScreen extends BorderPane {
         Button updateButton = createTopBarButton(
                 "Votre syst\u00e8me est \u00e0 jour",
                 "images/refresh.png",
-                (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu())
+                (e) -> { updateManager.checkUpdates(); graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu()); }
         );
 
         checkUpdatesAndAdjustButton(updateButton);
