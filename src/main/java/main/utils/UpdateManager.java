@@ -2,7 +2,11 @@ package main.utils;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+
+@Slf4j
 public class UpdateManager {
 
     public BooleanProperty anyUpdateNeeded = new SimpleBooleanProperty(false);
@@ -24,6 +28,20 @@ public class UpdateManager {
                         updateServices[UpdateService.GAZEPLAY].getUpdateProperty()).or(
                         updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty()
                 ));
+        Thread updateChecker = new Thread(()->{
+            while (true) {
+                try {
+                    checkUpdates();
+                    log.info("checked");
+                    Thread.sleep(Duration.ofHours(1).toMillis());
+                    log.info("wait");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        updateChecker.setDaemon(true);
+        updateChecker.start();
     }
 
     public void checkUpdates() {
