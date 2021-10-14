@@ -84,19 +84,19 @@ public class OptionsMenu extends BorderPane {
         settings.setHgap(20);
 
         {
-            Label useEyeTracker = new Label("Désactiver Eye Tracker:");
+            Label useEyeTracker = new Label("D\u00e9sactiver Eye Tracker:");
 
             useEyeTracker.setFont(new Font(20));
             useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
             useEyeTracker.setTextFill(Color.web("#cd2653"));
 
-            CheckBox useEyeTrackerCheckBox = new CheckBox("Activé");
+            CheckBox useEyeTrackerCheckBox = new CheckBox("Activ\u00e9");
             useEyeTrackerCheckBox.selectedProperty().addListener((obj, oldval, newval) -> {
                 if (newval) {
-                    useEyeTrackerCheckBox.setText("Désactivé");
+                    useEyeTrackerCheckBox.setText("D\u00e9sactiv\u00e9");
                     graphicalMenus.getConfiguration().setMode(Configuration.MOUSE_INTERACTION);
                 } else {
-                    useEyeTrackerCheckBox.setText("Activé");
+                    useEyeTrackerCheckBox.setText("Activ\u00e9");
                     graphicalMenus.getConfiguration().setMode(Configuration.GAZE_INTERACTION);
                 }
             });
@@ -110,8 +110,8 @@ public class OptionsMenu extends BorderPane {
 
         createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 1);
         createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 2);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Paramètres D'Affichage:", "images/notebook.png", "display", 3);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Paramètres de Batterie:", "images/battery.png", "power", 4);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 3);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 4);
 
         {
 

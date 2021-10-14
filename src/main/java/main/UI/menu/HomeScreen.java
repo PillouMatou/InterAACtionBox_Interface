@@ -64,7 +64,7 @@ public class HomeScreen extends BorderPane {
         );
 
         Button updateButton = createTopBarButton(
-                "Votre système est à jour",
+                "Votre syst\u00e8me est \u00e0 jour",
                 "images/refresh.png",
                 goToUpdateMenu
         );
@@ -141,7 +141,7 @@ public class HomeScreen extends BorderPane {
                 if (UtilsOS.isConnectedToInternet()) {
                     if (newval) {
                         updateButton.setOpacity(1);
-                        updateButton.setText("Mise à jour disponible !");
+                        updateButton.setText("Mise \u00e0 jour disponible !");
                         updateButton.setDisable(false);
                         Timeline t = new Timeline();
                         t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
@@ -150,7 +150,7 @@ public class HomeScreen extends BorderPane {
                         t.play();
                     } else {
                         updateButton.setOpacity(1);
-                        updateButton.setText("Votre système est à jour");
+                        updateButton.setText("Votre syst\u00e8me est \u00e0 jour");
                         updateButton.setDisable(false);
                     }
                 } else {
