@@ -28,9 +28,9 @@ public interface AppNamedProcessCreator {
             NamedProcess namedProcess;
             if (UtilsOS.isUnix()) {
                 xdotoolProcessCreator.setUpProcessBuilder();
-                namedProcess= new NamedProcess(xdotoolProcessCreator.start(graphicalMenus));
+                namedProcess = new NamedProcess(xdotoolProcessCreator.start(graphicalMenus));
             } else {
-                namedProcess= new NamedProcess();
+                namedProcess = new NamedProcess();
                 graphicalMenus.primaryStage.hide();
                 graphicalMenus.getHomeScreen().removeMenu();
             }
@@ -47,9 +47,9 @@ public interface AppNamedProcessCreator {
             if (UtilsOS.isUnix()) {
                 xdotoolProcessCreator.setUpProcessBuilder();
                 closeGoogleChromeProcessCreator.setUpProcessBuilder();
-                namedProcess= new NamedProcess(xdotoolProcessCreator.start(graphicalMenus),closeGoogleChromeProcessCreator.waitForCloseRequest());
+                namedProcess = new NamedProcess(xdotoolProcessCreator.start(graphicalMenus), closeGoogleChromeProcessCreator.waitForCloseRequest());
             } else {
-                namedProcess= new NamedProcess();
+                namedProcess = new NamedProcess();
                 graphicalMenus.primaryStage.hide();
                 graphicalMenus.getHomeScreen().removeMenu();
             }
@@ -103,8 +103,6 @@ public interface AppNamedProcessCreator {
             StageUtils.killRunningProcess(graphicalMenus);
             graphicalMenus.process = start(graphicalMenus);
         });
-
-        progressButton.start();
         return progressButton;
     }
 }

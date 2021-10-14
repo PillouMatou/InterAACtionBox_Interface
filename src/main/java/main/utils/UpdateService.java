@@ -21,6 +21,8 @@ public class UpdateService {
     @Getter
     final BooleanProperty updateProperty;
     @Getter
+    final BooleanProperty existProperty;
+    @Getter
     private final String name;
     @Getter
     private final String updateURL;
@@ -31,17 +33,18 @@ public class UpdateService {
         this.name = name;
         this.updateURL = updateURL;
         this.updateProperty = new SimpleBooleanProperty(false);
-    }
-
-    public static boolean isInstalledAt() {
-        return true;
+        File[] directories = new File(System.getProperty("user.home")).listFiles(file -> file.isDirectory() && file.getName().contains(name));
+        this.existProperty = new SimpleBooleanProperty(directories == null || directories.length == 0);
     }
 
     public void checkUpdate() {
+        File[] directories = new File(System.getProperty("user.home")).listFiles(file -> file.isDirectory() && file.getName().contains(name));
+        existProperty.set(directories == null || directories.length == 0);
+
         if (!updateURL.equals("")) {
             try {
                 JSONObject softwareJson = JsonReader.readJsonFromUrl(updateURL);
-                File directory = new File("~/" + softwareJson.get("name"));
+                File directory = new File(System.getProperty("user.home") + softwareJson.get("name"));
                 this.version = "" + softwareJson.get("name");
                 updateProperty.set(!directory.exists() || !directory.isDirectory());
             } catch (IOException | JSONException e) {
