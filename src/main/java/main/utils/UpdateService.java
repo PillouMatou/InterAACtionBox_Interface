@@ -40,10 +40,10 @@ public class UpdateService {
     public void checkUpdate() {
         if (!updateURL.equals("")) {
             try {
-                JSONObject augComJSON = JsonReader.readJsonFromUrl(updateURL);
-                File directory = new File("~/" + augComJSON.get("name"));
-                this.version = "" + augComJSON.get("name");
-                updateProperty.set(true);//!directory.exists() || !directory.isDirectory());
+                JSONObject softwareJson = JsonReader.readJsonFromUrl(updateURL);
+                File directory = new File("~/" + softwareJson.get("name"));
+                this.version = "" + softwareJson.get("name");
+                updateProperty.set(!directory.exists() || !directory.isDirectory());
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }

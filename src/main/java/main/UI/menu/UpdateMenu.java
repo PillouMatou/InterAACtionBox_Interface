@@ -81,7 +81,7 @@ public class UpdateMenu extends BorderPane {
         downloadEverythin.setAlignment(Pos.CENTER);
         downloadEverythin.setSpacing(20);
 
-        displayedLabel = new Label("Mettre à jour tous les logiciels");
+        displayedLabel = new Label("Mettre Ã  jour tous les logiciels");
         displayedLabel.setStyle("-fx-font-weight: bold; " +
                 "-fx-font-family: Helvetica; " +
                 "-fx-text-fill: #cd2653");
@@ -99,10 +99,10 @@ public class UpdateMenu extends BorderPane {
 
         updateManager.anyUpdateNeeded.addListener((obs, oldval, newval) -> {
             if (newval) {
-                displayedLabel.setText("Mettre à jour tous les logiciels");
+                displayedLabel.setText("Mettre Ã  jour tous les logiciels");
                 downloadEverythin.getChildren().add(downloadButton);
             } else {
-                displayedLabel.setText("Votre système est à jour");
+                displayedLabel.setText("Votre systÃ¨me est Ã  jour");
                 downloadEverythin.getChildren().remove(downloadButton);
             }
         });
@@ -139,7 +139,7 @@ public class UpdateMenu extends BorderPane {
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setFill(Color.web("#cd2653"));
 
-        Label title = new Label("Mises \u00e0 jour");
+        Label title = new Label("Mises Ã  jour");
         title.setFont(new Font(30));
         title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         title.setTextFill(Color.web("#faeaed"));
@@ -313,22 +313,6 @@ public class UpdateMenu extends BorderPane {
         }
     }
 
-    Runnable letsRunTheProcessList(List<ProcessBuilder> processList) {
-        if (!processList.isEmpty()) {
-            ProcessBuilder processBuilder = processList.remove(0);
-            return () -> {
-                try {
-                    processBuilder.inheritIO().start().onExit().thenRun(letsRunTheProcessList(processList));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            };
-        }
-
-        return () -> {
-        };
-    }
-
     void createGnomeControlCenterButton(GridPane settings, int serviceIndex) {
         Label displayedLabel = new Label(updateManager.updateServices[serviceIndex].getName() + ":");
         displayedLabel.setFont(new Font(20));
@@ -336,7 +320,7 @@ public class UpdateMenu extends BorderPane {
         displayedLabel.setTextFill(Color.web("#cd2653"));
 
         Button button = createTopBarButton(
-                "Le logiciel est \u00e0 jour",
+                "Le logiciel est Ã€jour",
                 (e) -> {
                 },
                 "images/tick-mark.png"
@@ -362,10 +346,10 @@ public class UpdateMenu extends BorderPane {
                 t.setAutoReverse(true);
                 t.play();
                 String newVersion = updateManager.updateServices[serviceIndex].getVersion();
-                button.setText("Mise \u00e0 jour disponible ! Téléchargez " + newVersion);
+                button.setText("Mise Ã  jour disponible ! TÃ©lÃ©chargez " + newVersion);
                 ((ImageView) button.getGraphic()).setImage(new Image("images/refresh.png"));
             } else {
-                button.setText("Le logiciel est \u00e0 jour");
+                button.setText("Le logiciel est Ã  jour");
                 ((ImageView) button.getGraphic()).setImage(new Image("images/tick-mark.png"));
             }
         });
