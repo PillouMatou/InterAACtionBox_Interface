@@ -26,7 +26,6 @@ import main.utils.UtilsUI;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
 @Slf4j
 public class UpdateMenu extends BorderPane {
@@ -122,12 +121,14 @@ public class UpdateMenu extends BorderPane {
 
         menu.setAlignment(Pos.CENTER);
         progressBars[0].prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(3));
-        progressBars[0].setVisible(false);
-        progressBars[0].progressProperty().addListener((obj, oldval, newval) -> {
-            if (!progressBars[0].isVisible() && newval.doubleValue() > 0) {
-                progressBars[0].setVisible(true);
-            }
-        });
+        progressBars[0].visibleProperty().bind(
+                progressBars[1].visibleProperty().or(
+                progressBars[2].visibleProperty()).or(
+                progressBars[3].visibleProperty()).or(
+                progressBars[4].visibleProperty()).or(
+                progressBars[5].visibleProperty()
+                )
+        );
         menu.getChildren().addAll(downloadEverythin, progressBars[0], settings);
 
         this.setCenter(menu);
@@ -189,6 +190,9 @@ public class UpdateMenu extends BorderPane {
                 if (updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get()) {
                     startUpdateSystem();
                 }
+                if (updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
+                    startUpdateAugCom();
+                }
                 if (updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get()) {
                     startUpdateInterAACtonScene();
                 }
@@ -198,9 +202,7 @@ public class UpdateMenu extends BorderPane {
                 if (updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get()) {
                     startUpdateInterAACtionPlayer();
                 }
-                if (updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
-                    startUpdateAugCom();
-                }
+
 
                 try {
                     Thread.sleep(3000);
@@ -232,6 +234,7 @@ public class UpdateMenu extends BorderPane {
             Process p = pb.start();
             p.onExit().thenRun(() -> {
                 closeProcessStream(p);
+                progressBars[UpdateService.SYSTEME + 1].setVisible(false);
             });
             progressThing(p, 1);
         } catch (IOException ex) {
@@ -247,6 +250,7 @@ public class UpdateMenu extends BorderPane {
             Process p = pb.start();
             p.onExit().thenRun(() -> {
                 closeProcessStream(p);
+                progressBars[UpdateService.AUGCOM + 1].setVisible(false);
             });
             progressThing(p, 2);
         } catch (IOException ex) {
@@ -261,6 +265,7 @@ public class UpdateMenu extends BorderPane {
             Process p = pb.start();
             p.onExit().thenRun(() -> {
                 closeProcessStream(p);
+                progressBars[UpdateService.INTERAACTION_SCENE + 1].setVisible(false);
             });
             progressThing(p, 3);
         } catch (IOException ex) {
@@ -275,6 +280,7 @@ public class UpdateMenu extends BorderPane {
             Process p = pb.start();
             p.onExit().thenRun(() -> {
                 closeProcessStream(p);
+                progressBars[UpdateService.GAZEPLAY + 1].setVisible(false);
             });
             progressThing(p, 4);
         } catch (IOException ex) {
@@ -289,6 +295,7 @@ public class UpdateMenu extends BorderPane {
             Process p = pb.start();
             p.onExit().thenRun(() -> {
                 closeProcessStream(p);
+                progressBars[UpdateService.INTERAACTION_PLAYER + 1].setVisible(false);
             });
             progressThing(p, 5);
         } catch (IOException ex) {

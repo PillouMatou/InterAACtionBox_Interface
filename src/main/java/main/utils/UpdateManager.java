@@ -43,8 +43,10 @@ public class UpdateManager {
     }
 
     public void checkUpdates() {
-        for (UpdateService updateService : updateServices)
+        for (UpdateService updateService : updateServices) {
             updateService.checkUpdate();
+            updateService.checkExist();
+        }
     }
 
 }
