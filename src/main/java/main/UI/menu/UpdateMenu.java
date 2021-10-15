@@ -26,7 +26,6 @@ import main.utils.UtilsUI;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
 @Slf4j
 public class UpdateMenu extends BorderPane {
@@ -81,7 +80,7 @@ public class UpdateMenu extends BorderPane {
         downloadEverythin.setAlignment(Pos.CENTER);
         downloadEverythin.setSpacing(20);
 
-        displayedLabel = new Label("Mettre à jour tous les logiciels");
+        displayedLabel = new Label("Mettre \u00e0 jour tous les logiciels");
         displayedLabel.setStyle("-fx-font-weight: bold; " +
                 "-fx-font-family: Helvetica; " +
                 "-fx-text-fill: #cd2653");
@@ -99,10 +98,10 @@ public class UpdateMenu extends BorderPane {
 
         updateManager.anyUpdateNeeded.addListener((obs, oldval, newval) -> {
             if (newval) {
-                displayedLabel.setText("Mettre à jour tous les logiciels");
+                displayedLabel.setText("Mettre \u00e0 jour tous les logiciels");
                 downloadEverythin.getChildren().add(downloadButton);
             } else {
-                displayedLabel.setText("Votre système est à jour");
+                displayedLabel.setText("Votre syst\u00e8me est \u00e0 jour");
                 downloadEverythin.getChildren().remove(downloadButton);
             }
         });
@@ -122,12 +121,14 @@ public class UpdateMenu extends BorderPane {
 
         menu.setAlignment(Pos.CENTER);
         progressBars[0].prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(3));
-        progressBars[0].setVisible(false);
-        progressBars[0].progressProperty().addListener((obj, oldval, newval) -> {
-            if (!progressBars[0].isVisible() && newval.doubleValue() > 0) {
-                progressBars[0].setVisible(true);
-            }
-        });
+        progressBars[0].visibleProperty().bind(
+                progressBars[1].visibleProperty().or(
+                progressBars[2].visibleProperty()).or(
+                progressBars[3].visibleProperty()).or(
+                progressBars[4].visibleProperty()).or(
+                progressBars[5].visibleProperty()
+                )
+        );
         menu.getChildren().addAll(downloadEverythin, progressBars[0], settings);
 
         this.setCenter(menu);
@@ -189,6 +190,9 @@ public class UpdateMenu extends BorderPane {
                 if (updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get()) {
                     startUpdateSystem();
                 }
+                if (updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
+                    startUpdateAugCom();
+                }
                 if (updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get()) {
                     startUpdateInterAACtonScene();
                 }
@@ -198,9 +202,7 @@ public class UpdateMenu extends BorderPane {
                 if (updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get()) {
                     startUpdateInterAACtionPlayer();
                 }
-                if (updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
-                    startUpdateAugCom();
-                }
+
 
                 try {
                     Thread.sleep(3000);
@@ -232,6 +234,7 @@ public class UpdateMenu extends BorderPane {
             Process p = pb.start();
             p.onExit().thenRun(() -> {
                 closeProcessStream(p);
+                progressBars[UpdateService.SYSTEME + 1].setVisible(false);
             });
             progressThing(p, 1);
         } catch (IOException ex) {
@@ -247,6 +250,7 @@ public class UpdateMenu extends BorderPane {
             Process p = pb.start();
             p.onExit().thenRun(() -> {
                 closeProcessStream(p);
+                progressBars[UpdateService.AUGCOM + 1].setVisible(false);
             });
             progressThing(p, 2);
         } catch (IOException ex) {
@@ -261,6 +265,7 @@ public class UpdateMenu extends BorderPane {
             Process p = pb.start();
             p.onExit().thenRun(() -> {
                 closeProcessStream(p);
+                progressBars[UpdateService.INTERAACTION_SCENE + 1].setVisible(false);
             });
             progressThing(p, 3);
         } catch (IOException ex) {
@@ -275,6 +280,7 @@ public class UpdateMenu extends BorderPane {
             Process p = pb.start();
             p.onExit().thenRun(() -> {
                 closeProcessStream(p);
+                progressBars[UpdateService.GAZEPLAY + 1].setVisible(false);
             });
             progressThing(p, 4);
         } catch (IOException ex) {
@@ -289,6 +295,7 @@ public class UpdateMenu extends BorderPane {
             Process p = pb.start();
             p.onExit().thenRun(() -> {
                 closeProcessStream(p);
+                progressBars[UpdateService.INTERAACTION_PLAYER + 1].setVisible(false);
             });
             progressThing(p, 5);
         } catch (IOException ex) {
@@ -311,22 +318,6 @@ public class UpdateMenu extends BorderPane {
                 }
             }
         }
-    }
-
-    Runnable letsRunTheProcessList(List<ProcessBuilder> processList) {
-        if (!processList.isEmpty()) {
-            ProcessBuilder processBuilder = processList.remove(0);
-            return () -> {
-                try {
-                    processBuilder.inheritIO().start().onExit().thenRun(letsRunTheProcessList(processList));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            };
-        }
-
-        return () -> {
-        };
     }
 
     void createGnomeControlCenterButton(GridPane settings, int serviceIndex) {
@@ -362,7 +353,7 @@ public class UpdateMenu extends BorderPane {
                 t.setAutoReverse(true);
                 t.play();
                 String newVersion = updateManager.updateServices[serviceIndex].getVersion();
-                button.setText("Mise \u00e0 jour disponible ! Téléchargez " + newVersion);
+                button.setText("Mise \u00e0 jour disponible ! T\u00e9l\u00e9chargez " + newVersion);
                 ((ImageView) button.getGraphic()).setImage(new Image("images/refresh.png"));
             } else {
                 button.setText("Le logiciel est \u00e0 jour");

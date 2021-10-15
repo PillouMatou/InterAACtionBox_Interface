@@ -36,6 +36,7 @@ public class HomeScreen extends BorderPane {
     private final GraphicalMenus graphicalMenus;
     private final ProgressButton closeMenuButton;
     private final VBox centerMenu;
+    private final EventHandler goToUpdateMenu;
     private UpdateManager updateManager;
 
     public HomeScreen(GraphicalMenus graphicalMenus, UpdateManager updateManager) {
@@ -52,6 +53,10 @@ public class HomeScreen extends BorderPane {
         centerMenu.spacingProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(6));
         centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(5));
 
+        goToUpdateMenu = (e) -> {
+            updateManager.checkUpdates();
+            graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu());
+        };
         Button optionButton = createTopBarButton(
                 "Options",
                 "images/settings_white.png",
@@ -61,7 +66,7 @@ public class HomeScreen extends BorderPane {
         Button updateButton = createTopBarButton(
                 "Votre syst\u00e8me est \u00e0 jour",
                 "images/refresh.png",
-                (e) -> { updateManager.checkUpdates(); graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu()); }
+                goToUpdateMenu
         );
 
         checkUpdatesAndAdjustButton(updateButton);
@@ -99,8 +104,9 @@ public class HomeScreen extends BorderPane {
 
         ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
 
-        startMouseListener();
+        // startMouseListener();
     }
+
 
     private StackPane createOptionBar(Button optionButton, Button updateButton, Button tobiiButton, Button exitButton) {
         StackPane titlePane = new StackPane();
@@ -131,26 +137,28 @@ public class HomeScreen extends BorderPane {
 
     private void checkUpdatesAndAdjustButton(Button updateButton) {
         updateManager.anyUpdateNeeded.addListener((obs, oldval, newval) -> {
-            if (UtilsOS.isConnectedToInternet()) {
-                if (newval) {
-                    updateButton.setOpacity(1);
-                    updateButton.setText("Mise \u00e0 jour disponible !");
-                    updateButton.setDisable(false);
-                    Timeline t = new Timeline();
-                    t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
-                    t.setCycleCount(20);
-                    t.setAutoReverse(true);
-                    t.play();
+            Platform.runLater(() -> {
+                if (UtilsOS.isConnectedToInternet()) {
+                    if (newval) {
+                        updateButton.setOpacity(1);
+                        updateButton.setText("Mise \u00e0 jour disponible !");
+                        updateButton.setDisable(false);
+                        Timeline t = new Timeline();
+                        t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
+                        t.setCycleCount(20);
+                        t.setAutoReverse(true);
+                        t.play();
+                    } else {
+                        updateButton.setOpacity(1);
+                        updateButton.setText("Votre syst\u00e8me est \u00e0 jour");
+                        updateButton.setDisable(false);
+                    }
                 } else {
-                    updateButton.setOpacity(1);
-                    updateButton.setText("Votre syst\u00e8me est \u00e0 jour");
-                    updateButton.setDisable(false);
+                    updateButton.setOpacity(0.5);
+                    updateButton.setText("Connection Introuvable");
+                    updateButton.setDisable(true);
                 }
-            } else {
-                updateButton.setOpacity(0.5);
-                updateButton.setText("Connection Introuvable");
-                updateButton.setDisable(true);
-            }
+            });
         });
     }
 
@@ -183,36 +191,47 @@ public class HomeScreen extends BorderPane {
         ImageView downnloadImageView = UtilsUI.getDownloadImageView(processButton);
 
         if (name.equals(updateManager.updateServices[UpdateService.AUGCOM].getName())) {
-            updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().addListener((obj, oldval, newval) -> {
-                updateLaunchButton(borderPaneLauncher, processButton, downnloadImageView, newval);
+            updateLaunchButtonIfExist(borderPaneLauncher, processButton, downnloadImageView, updateManager.updateServices[UpdateService.AUGCOM].getExistProperty().getValue());
+            updateManager.updateServices[UpdateService.AUGCOM].getExistProperty().addListener((obj, oldval, newval) -> {
+                updateLaunchButtonIfExist(borderPaneLauncher, processButton, downnloadImageView, newval);
             });
         } else if (name.equals(updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getName())) {
-            updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().addListener((obj, oldval, newval) -> {
-                updateLaunchButton(borderPaneLauncher, processButton, downnloadImageView, newval);
+            updateLaunchButtonIfExist(borderPaneLauncher, processButton, downnloadImageView, updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getExistProperty().getValue());
+            updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getExistProperty().addListener((obj, oldval, newval) -> {
+                updateLaunchButtonIfExist(borderPaneLauncher, processButton, downnloadImageView, newval);
             });
         } else if (name.equals(updateManager.updateServices[UpdateService.GAZEPLAY].getName())) {
-            updateManager.updateServices[UpdateService.GAZEPLAY].getUpdateProperty().addListener((obj, oldval, newval) -> {
-                updateLaunchButton(borderPaneLauncher, processButton, downnloadImageView, newval);
+            updateLaunchButtonIfExist(borderPaneLauncher, processButton, downnloadImageView, updateManager.updateServices[UpdateService.GAZEPLAY].getExistProperty().getValue());
+            updateManager.updateServices[UpdateService.GAZEPLAY].getExistProperty().addListener((obj, oldval, newval) -> {
+                updateLaunchButtonIfExist(borderPaneLauncher, processButton, downnloadImageView, newval);
             });
         } else if (name.equals(updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getName())) {
-            updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().addListener((obj, oldval, newval) -> {
-                updateLaunchButton(borderPaneLauncher, processButton, downnloadImageView, newval);
+            updateLaunchButtonIfExist(borderPaneLauncher, processButton, downnloadImageView, updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getExistProperty().getValue());
+            updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getExistProperty().addListener((obj, oldval, newval) -> {
+                updateLaunchButtonIfExist(borderPaneLauncher, processButton, downnloadImageView, newval);
             });
         }
 
         return borderPaneLauncher;
     }
 
-    private void updateLaunchButton(StackPane borderPaneLauncher, ProgressButton processButton, ImageView downnloadImageView, boolean needsUpdate) {
-//        if (needsUpdate) {
-//            processButton.stop();
-//            processButton.setOpacity(0.5);
-//            borderPaneLauncher.getChildren().add(downnloadImageView);
-//        } else {
-//            processButton.start();
-//            processButton.setOpacity(1);
-//            borderPaneLauncher.getChildren().remove(downnloadImageView);
-//        }
+    private void updateLaunchButtonIfExist(StackPane borderPaneLauncher, ProgressButton processButton, ImageView downnloadImageView, boolean needsUpdate) {
+
+        if (needsUpdate) {
+            Platform.runLater(() -> {
+                processButton.stop();
+                processButton.setOpacity(0.5);
+                borderPaneLauncher.getChildren().add(downnloadImageView);
+                borderPaneLauncher.setOnMouseClicked(goToUpdateMenu);
+            });
+        } else {
+            Platform.runLater(() -> {
+                processButton.start();
+                processButton.setOpacity(1);
+                borderPaneLauncher.getChildren().remove(downnloadImageView);
+                borderPaneLauncher.setOnMouseClicked(null);
+            });
+        }
     }
 
     private void startMouseListener() {

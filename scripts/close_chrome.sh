@@ -1,8 +1,8 @@
 #!/bin/bash
-while [ ! -e ~/Téléchargements/close.txt ] && [ ! -e ~/Downloads/close.txt ]
+while [ ! -e ~/Téléchargements/close161918.txt ] && [ ! -e ~/Downloads/close161918.txt ]
 do
     sleep 1
 done
 pkill chrome
-rm -f ~/Téléchargements/close.txt
-rm -f ~/Downloads/close.txt
+rm -f ~/Téléchargements/close161918.txt
+rm -f ~/Downloads/close161918.txt
