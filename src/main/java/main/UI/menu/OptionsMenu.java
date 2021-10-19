@@ -22,6 +22,7 @@ import main.UI.DoubleClickedButton;
 import main.process.GnomeControlCenterNamedProcessCreator;
 import main.process.TeamviewerNamedProcessCreator;
 import main.utils.StageUtils;
+import main.utils.UtilsUI;
 
 public class OptionsMenu extends BorderPane {
 
@@ -42,6 +43,7 @@ public class OptionsMenu extends BorderPane {
 
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
+        backgroundForTitle.heightProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(10));
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setFill(Color.web("#cd2653"));
 
@@ -50,24 +52,8 @@ public class OptionsMenu extends BorderPane {
         title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         title.setTextFill(Color.web("#faeaed"));
 
-        DoubleClickedButton back = new DoubleClickedButton("Retour");
-        back.setPrefHeight(50);
-        back.setMaxHeight(50);
-        back.setStyle(
-                "-fx-border-color: transparent; " +
-                        "-fx-border-width: 0; " +
-                        "-fx-background-radius: 0; " +
-                        "-fx-background-color: transparent; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed"
-        );
-        ImageView graphic = new ImageView("images/back.png");
-        graphic.setPreserveRatio(true);
-        graphic.setFitHeight(30);
-        back.setGraphic(graphic);
-
-        back.assignHandler((e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()));
+        Button back = UtilsUI.getDoubleClickedButton("Retour","images/back.png",(e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()),graphicalMenus.primaryStage);
+        back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
 
         HBox titleBox = new HBox(back, title);
         title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));

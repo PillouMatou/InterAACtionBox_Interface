@@ -6,7 +6,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -27,12 +29,13 @@ public class Main extends Application {
 
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setTitle("InteraactionBox-AFSR");
-
-        GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage);
-        Scene scene = new Scene(graphicalMenus.getHomeScreen(), Color.TRANSPARENT);
-        graphicalMenus.getConfiguration().setScene(scene);
         primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());
         primaryStage.setHeight(Screen.getPrimary().getBounds().getHeight());
+        Scene scene = new Scene(new Pane(new Rectangle(0,0,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight())), Color.TRANSPARENT);
+
+        GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage);
+        scene.setRoot(graphicalMenus.getHomeScreen());
+        graphicalMenus.getConfiguration().setScene(scene);
 
         primaryStage.setScene(scene);
 

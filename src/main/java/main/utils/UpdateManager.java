@@ -12,7 +12,7 @@ public class UpdateManager {
     public BooleanProperty anyUpdateNeeded = new SimpleBooleanProperty(false);
 
     public UpdateService[] updateServices = {
-            new UpdateService("Système", ""),
+            new UpdateService("Syst\u00e8me", ""),
             new UpdateService("AugCom", "https://api.github.com/repos/AFSR/AugCom-AFSR/releases/latest"),
             new UpdateService("InterAACtionScene", "https://api.github.com/repos/AFSR/InteraactionScene-AFSR/releases/latest"),
             new UpdateService("GazePlay", "https://api.github.com/repos/AFSR/GazePlay-AFSR/releases/latest"),

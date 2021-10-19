@@ -111,8 +111,16 @@ public class HomeScreen extends BorderPane {
     private StackPane createOptionBar(Button optionButton, Button updateButton, Button tobiiButton, Button exitButton) {
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
-        backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+        backgroundForTitle.setHeight(graphicalMenus.primaryStage.getHeight()/10);
+        backgroundForTitle.setWidth(graphicalMenus.primaryStage.getWidth());
         backgroundForTitle.setFill(Color.web("#cd2653"));
+
+
+        optionButton.setPrefHeight(graphicalMenus.primaryStage.getHeight()/10);
+        updateButton.setPrefHeight(graphicalMenus.primaryStage.getHeight()/10);
+        tobiiButton.setPrefHeight(graphicalMenus.primaryStage.getHeight()/10);
+        exitButton.setPrefHeight(graphicalMenus.primaryStage.getHeight()/10);
+
 
         Label title = new Label("InteraactionBox-AFSR");
         title.setFont(new Font(30));
@@ -163,7 +171,7 @@ public class HomeScreen extends BorderPane {
     }
 
     Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
-        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, 30);
+        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler,graphicalMenus.primaryStage);
     }
 
     private HBox createMenuBar() {
