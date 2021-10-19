@@ -23,6 +23,7 @@ import main.utils.UpdateManager;
 import main.utils.UpdateService;
 import main.utils.UtilsUI;
 
+import javax.swing.border.Border;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -130,11 +131,13 @@ public class UpdateMenu extends BorderPane {
         title.setFont(new Font(30));
         title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         title.setTextFill(Color.web("#faeaed"));
-        HBox titleBox = new HBox(back, title);
+        BorderPane titleBox = new BorderPane();
         title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
+        titleBox.setLeft(back);
+        titleBox.setCenter(title);
         titlePane.getChildren().addAll(backgroundForTitle, titleBox);
 
         BorderPane.setAlignment(titlePane, Pos.CENTER);

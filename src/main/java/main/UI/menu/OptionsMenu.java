@@ -6,10 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -55,11 +52,13 @@ public class OptionsMenu extends BorderPane {
         Button back = UtilsUI.getDoubleClickedButton("Retour","images/back.png",(e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()),graphicalMenus.primaryStage);
         back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
 
-        HBox titleBox = new HBox(back, title);
+        BorderPane titleBox = new BorderPane();
         title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
+        titleBox.setLeft(back);
+        titleBox.setCenter(title);
         titlePane.getChildren().addAll(backgroundForTitle, titleBox);
 
         BorderPane.setAlignment(titlePane, Pos.CENTER);
