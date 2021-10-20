@@ -22,6 +22,7 @@ import javafx.stage.Screen;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import main.UI.ProgressButton;
+import main.UI.ProgressDoubleClickedButton;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
 import main.process.xdotoolProcess.ActivateMainWindowProcess;
@@ -92,13 +93,17 @@ public class HomeScreen extends BorderPane {
                 }
         );
 
-        Button exitButton = createTopBarButton(
+        ProgressDoubleClickedButton exitButton = createExitTopBarButton(
                 "Exit",
                 "images/on-off-button_white.png",
                 (e) -> {
                     this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus));
                 }
         );
+        exitButton.assignIndicator((e) -> {
+            this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus));
+        });
+        exitButton.start();
 
         StackPane optionBar = createOptionBar(optionButton, updateButton, tobiiButton, exitButton);
         this.setTop(optionBar);
@@ -109,7 +114,7 @@ public class HomeScreen extends BorderPane {
     }
 
 
-    private StackPane createOptionBar(Button optionButton, Button updateButton, Button tobiiButton, Button exitButton) {
+    private StackPane createOptionBar(Button optionButton, Button updateButton, Button tobiiButton, StackPane exitButton) {
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
         backgroundForTitle.setHeight(graphicalMenus.primaryStage.getHeight() / 10);
@@ -173,6 +178,11 @@ public class HomeScreen extends BorderPane {
 
     Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
         return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, graphicalMenus.primaryStage);
+    }
+
+    ProgressDoubleClickedButton createExitTopBarButton(String text, String imagePath, EventHandler eventhandler) {
+
+        return new ProgressDoubleClickedButton(text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
     private HBox createMenuBar() {
