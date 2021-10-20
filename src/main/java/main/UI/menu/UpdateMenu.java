@@ -18,7 +18,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
-import main.UI.DoubleClickedButton;
 import main.utils.UpdateManager;
 import main.utils.UpdateService;
 import main.utils.UtilsUI;
@@ -51,24 +50,7 @@ public class UpdateMenu extends BorderPane {
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        DoubleClickedButton back = new DoubleClickedButton("Retour");
-        back.setPrefHeight(50);
-        back.setMaxHeight(50);
-        back.setStyle(
-                "-fx-border-color: transparent; " +
-                        "-fx-border-width: 0; " +
-                        "-fx-background-radius: 0; " +
-                        "-fx-background-color: transparent; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed"
-        );
-        ImageView graphic = new ImageView("images/back.png");
-        graphic.setPreserveRatio(true);
-        graphic.setFitHeight(30);
-        back.setGraphic(graphic);
-
-        back.assignHandler((e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()));
+        Button back = UtilsUI.getDoubleClickedButton("Retour", "images/back.png", (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()), graphicalMenus.primaryStage);
 
         this.setTop(createTopBar(back));
 
@@ -109,6 +91,7 @@ public class UpdateMenu extends BorderPane {
 
         GridPane settings = new GridPane();
         settings.setHgap(20);
+        settings.setVgap(graphicalMenus.primaryStage.getHeight() / 30);
 
         createGnomeControlCenterButton(settings, UpdateService.SYSTEME);
         createGnomeControlCenterButton(settings, UpdateService.AUGCOM);
@@ -123,10 +106,10 @@ public class UpdateMenu extends BorderPane {
         progressBars[0].prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(3));
         progressBars[0].visibleProperty().bind(
                 progressBars[1].visibleProperty().or(
-                progressBars[2].visibleProperty()).or(
-                progressBars[3].visibleProperty()).or(
-                progressBars[4].visibleProperty()).or(
-                progressBars[5].visibleProperty()
+                        progressBars[2].visibleProperty()).or(
+                        progressBars[3].visibleProperty()).or(
+                        progressBars[4].visibleProperty()).or(
+                        progressBars[5].visibleProperty()
                 )
         );
         menu.getChildren().addAll(downloadEverythin, progressBars[0], settings);
@@ -134,21 +117,26 @@ public class UpdateMenu extends BorderPane {
         this.setCenter(menu);
     }
 
-    StackPane createTopBar(DoubleClickedButton back) {
+    StackPane createTopBar(Button back) {
         StackPane titlePane = new StackPane();
-        Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
+        Rectangle backgroundForTitle = new Rectangle(0, 0, graphicalMenus.primaryStage.getWidth(), graphicalMenus.primaryStage.getHeight() / 10);
+        backgroundForTitle.heightProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(10));
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setFill(Color.web("#cd2653"));
+
+        back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
 
         Label title = new Label("Mises \u00e0 jour");
         title.setFont(new Font(30));
         title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         title.setTextFill(Color.web("#faeaed"));
-        HBox titleBox = new HBox(back, title);
+        BorderPane titleBox = new BorderPane();
         title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
+        titleBox.setLeft(back);
+        titleBox.setCenter(title);
         titlePane.getChildren().addAll(backgroundForTitle, titleBox);
 
         BorderPane.setAlignment(titlePane, Pos.CENTER);
@@ -353,7 +341,7 @@ public class UpdateMenu extends BorderPane {
                 t.setAutoReverse(true);
                 t.play();
                 String newVersion = updateManager.updateServices[serviceIndex].getVersion();
-                button.setText("Mise \u00e0 jour disponible ! T\u00e9l\u00e9chargez " + newVersion);
+                button.setText("Mise \u00e0 jour " + newVersion + " disponible !");
                 ((ImageView) button.getGraphic()).setImage(new Image("images/refresh.png"));
             } else {
                 button.setText("Le logiciel est \u00e0 jour");
@@ -371,7 +359,7 @@ public class UpdateMenu extends BorderPane {
     }
 
     Button createTopBarButton(String text, EventHandler eventhandler, String imagePath) {
-        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, 20);
+        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
 

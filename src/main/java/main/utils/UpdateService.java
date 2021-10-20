@@ -38,24 +38,26 @@ public class UpdateService {
     }
 
     public void checkUpdate() {
-
-
         if (!updateURL.equals("")) {
             try {
                 if (name.equals("GazePlay")) {
                     JSONObject softwareJson = JsonReader.readJsonFromUrl(updateURL);
-                    File directory = new File(System.getProperty("user.home") +"/"+ softwareJson.get("name"));
-                    File directoryspace = new File(System.getProperty("user.home") +"/ "+ softwareJson.get("name"));
-                    this.version = "" + softwareJson.get("name");
-                    log.info(directory.getAbsolutePath());
-                    updateProperty.set(!((directory.exists() && directory.isDirectory()) || (directoryspace.exists() && directoryspace.isDirectory())));
+                    if (softwareJson != null) {
+                        File directory = new File(System.getProperty("user.home") + "/" + softwareJson.get("name"));
+                        File directoryspace = new File(System.getProperty("user.home") + "/ " + softwareJson.get("name"));
+                        this.version = "" + softwareJson.get("name");
+                        log.info(directory.getAbsolutePath());
+                        updateProperty.set(!((directory.exists() && directory.isDirectory()) || (directoryspace.exists() && directoryspace.isDirectory())));
+                    }
                 } else {
                     JSONObject softwareJson = JsonReader.readJsonFromUrl(updateURL);
-                    File directory = new File(System.getProperty("user.home") + "/dist/"+ softwareJson.get("name"));
-                    File directoryspace = new File(System.getProperty("user.home") + "/dist/ "+ softwareJson.get("name"));
-                    this.version = "" + softwareJson.get("name");
-                    log.info(directory.getAbsolutePath());
-                    updateProperty.set( !((directory.exists() && directory.isDirectory()) || (directoryspace.exists() && directoryspace.isDirectory())));
+                    if (softwareJson != null) {
+                        File directory = new File(System.getProperty("user.home") + "/dist/" + softwareJson.get("name"));
+                        File directoryspace = new File(System.getProperty("user.home") + "/dist/ " + softwareJson.get("name"));
+                        this.version = "" + softwareJson.get("name");
+                        log.info(directory.getAbsolutePath());
+                        updateProperty.set(!((directory.exists() && directory.isDirectory()) || (directoryspace.exists() && directoryspace.isDirectory())));
+                    }
                 }
 
             } catch (IOException | JSONException e) {
@@ -66,13 +68,13 @@ public class UpdateService {
         }
     }
 
-    public void checkExist(){
+    public void checkExist() {
         if (name.equals("GazePlay")) {
-            File[] directories = new File(System.getProperty("user.home")).listFiles(file -> file.isDirectory() && file.getName().toLowerCase().contains(name.toLowerCase()+"-afsr"));
+            File[] directories = new File(System.getProperty("user.home")).listFiles(file -> file.isDirectory() && file.getName().toLowerCase().contains(name.toLowerCase() + "-afsr"));
             existProperty.set(directories == null || directories.length == 0);
-    } else {
-            File[] directories = new File(System.getProperty("user.home")+"/dist").listFiles(file -> file.isDirectory() && file.getName().toLowerCase().contains(name.toLowerCase()));
+        } else {
+            File[] directories = new File(System.getProperty("user.home") + "/dist").listFiles(file -> file.isDirectory() && file.getName().toLowerCase().contains(name.toLowerCase()));
             existProperty.set(directories == null || directories.length == 0);
-    }
+        }
     }
 }

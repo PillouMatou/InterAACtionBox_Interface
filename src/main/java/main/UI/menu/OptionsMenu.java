@@ -6,10 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -22,6 +19,7 @@ import main.UI.DoubleClickedButton;
 import main.process.GnomeControlCenterNamedProcessCreator;
 import main.process.TeamviewerNamedProcessCreator;
 import main.utils.StageUtils;
+import main.utils.UtilsUI;
 
 public class OptionsMenu extends BorderPane {
 
@@ -42,6 +40,7 @@ public class OptionsMenu extends BorderPane {
 
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
+        backgroundForTitle.heightProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(10));
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setFill(Color.web("#cd2653"));
 
@@ -50,30 +49,16 @@ public class OptionsMenu extends BorderPane {
         title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         title.setTextFill(Color.web("#faeaed"));
 
-        DoubleClickedButton back = new DoubleClickedButton("Retour");
-        back.setPrefHeight(50);
-        back.setMaxHeight(50);
-        back.setStyle(
-                "-fx-border-color: transparent; " +
-                        "-fx-border-width: 0; " +
-                        "-fx-background-radius: 0; " +
-                        "-fx-background-color: transparent; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed"
-        );
-        ImageView graphic = new ImageView("images/back.png");
-        graphic.setPreserveRatio(true);
-        graphic.setFitHeight(30);
-        back.setGraphic(graphic);
+        Button back = UtilsUI.getDoubleClickedButton("Retour","images/back.png",(e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()),graphicalMenus.primaryStage);
+        back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
 
-        back.assignHandler((e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()));
-
-        HBox titleBox = new HBox(back, title);
+        BorderPane titleBox = new BorderPane();
         title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));
         titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
+        titleBox.setLeft(back);
+        titleBox.setCenter(title);
         titlePane.getChildren().addAll(backgroundForTitle, titleBox);
 
         BorderPane.setAlignment(titlePane, Pos.CENTER);
@@ -82,15 +67,17 @@ public class OptionsMenu extends BorderPane {
 
         GridPane settings = new GridPane();
         settings.setHgap(20);
+        settings.setVgap(graphicalMenus.primaryStage.getHeight()/15);
 
         {
-            Label useEyeTracker = new Label("D\u00e9sactiver Eye Tracker:");
+            Label useEyeTracker = new Label("Eye Tracker:");
 
             useEyeTracker.setFont(new Font(20));
             useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
             useEyeTracker.setTextFill(Color.web("#cd2653"));
 
             CheckBox useEyeTrackerCheckBox = new CheckBox("Activ\u00e9");
+            useEyeTrackerCheckBox.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 20");
             useEyeTrackerCheckBox.selectedProperty().addListener((obj, oldval, newval) -> {
                 if (newval) {
                     useEyeTrackerCheckBox.setText("D\u00e9sactiv\u00e9");
@@ -103,6 +90,7 @@ public class OptionsMenu extends BorderPane {
 
             useEyeTrackerCheckBox.setSelected(true);
             useEyeTrackerCheckBox.setTextFill(Color.web("#faeaed"));
+            useEyeTrackerCheckBox.resize(100,100);
 
             settings.add(useEyeTracker, 0, 0);
             settings.add(useEyeTrackerCheckBox, 1, 0);
@@ -177,7 +165,8 @@ public class OptionsMenu extends BorderPane {
                         "-fx-background-color: transparent; " +
                         "-fx-font-weight: bold; " +
                         "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed"
+                        "-fx-text-fill: #faeaed;"+
+                        "-fx-font-size: 20"
         );
         ImageView graphic = new ImageView(imagePath);
         graphic.setPreserveRatio(true);

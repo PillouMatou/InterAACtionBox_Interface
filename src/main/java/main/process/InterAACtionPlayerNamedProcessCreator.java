@@ -14,6 +14,9 @@ public class InterAACtionPlayerNamedProcessCreator implements AppNamedProcessCre
                 "--kiosk",
                 "--window-position=0,0",
                 "--fullscreen",
+                "--disable-component-update",
+                "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'",
+                "--disable-features=Translate",
                 "http://localhost:8082/");
     }
 

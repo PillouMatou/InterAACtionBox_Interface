@@ -12,6 +12,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import main.UI.DoubleClickedButton;
 import main.UI.ProgressButton;
 import main.UI.menu.GraphicalMenus;
@@ -20,22 +21,22 @@ import java.awt.image.BufferedImage;
 
 public class UtilsUI {
 
-    public static Button getDoubleClickedButton(String text, String imagePath, EventHandler eventhandler, int fitHeight) {
+    public static Button getDoubleClickedButton(String text, String imagePath, EventHandler eventhandler, Stage primaryStage) {
         DoubleClickedButton optionButton = new DoubleClickedButton(text);
-        optionButton.setPrefHeight(50);
-        optionButton.setMaxHeight(50);
+        // optionButton.setMaxHeight(50);
         optionButton.setStyle(
-                "-fx-border-color: transparent; " +
+                        "-fx-border-color: transparent; " +
                         "-fx-border-width: 0; " +
                         "-fx-background-radius: 0; " +
                         "-fx-background-color: transparent; " +
                         "-fx-font-weight: bold; " +
                         "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed"
+                        "-fx-text-fill: #faeaed;" +
+                        "-fx-font-size: 20;"
         );
         ImageView graphic = new ImageView(imagePath);
         graphic.setPreserveRatio(true);
-        graphic.setFitHeight(fitHeight);
+        graphic.setFitHeight((primaryStage.getHeight() / 10) * 0.7);
         optionButton.setGraphic(graphic);
         optionButton.assignHandler(eventhandler);
         return optionButton;

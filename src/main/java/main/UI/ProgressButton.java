@@ -67,7 +67,7 @@ public class ProgressButton extends StackPane {
             indicator.setMinHeight(2 * newVal.doubleValue());
             indicator.setMinWidth(2 * newVal.doubleValue());
             double width = newVal.doubleValue() * 2;
-            this.getImage().setFitWidth((90 * width) / 100);
+            this.getImage().setFitWidth((99 * width) / 100);
         });
     }
 
