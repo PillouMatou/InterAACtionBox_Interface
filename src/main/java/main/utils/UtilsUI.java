@@ -1,17 +1,23 @@
 package main.utils;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import main.UI.DoubleClickedButton;
 import main.UI.ProgressButton;
@@ -52,6 +58,31 @@ public class UtilsUI {
         dropShadow.setColor(Color.web("#cd2653"));
         downnloadImageView.setEffect(dropShadow);
         return downnloadImageView;
+    }
+
+    public static StackPane createTopBar(GraphicalMenus graphicalMenus, String label){
+        StackPane titlePane = new StackPane();
+        Rectangle backgroundForTitle = new Rectangle(0, 0, graphicalMenus.primaryStage.getWidth(), graphicalMenus.primaryStage.getHeight() / 10);
+        backgroundForTitle.heightProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(10));
+        backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+        backgroundForTitle.setFill(Color.web("#cd2653"));
+
+        Button back = UtilsUI.getDoubleClickedButton("Retour", "images/back.png", (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()), graphicalMenus.primaryStage);
+        back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
+
+        Label title = new Label(label);
+        title.setFont(new Font(30));
+        title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
+        title.setTextFill(Color.web("#faeaed"));
+        BorderPane titleBox = new BorderPane();
+        title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));
+        titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
+        title.setTextAlignment(TextAlignment.CENTER);
+        title.setAlignment(Pos.CENTER);
+        titleBox.setLeft(back);
+        titleBox.setCenter(title);
+        titlePane.getChildren().addAll(backgroundForTitle, titleBox);
+        return titlePane;
     }
 
     public static Image convertToFxImage(BufferedImage image) {

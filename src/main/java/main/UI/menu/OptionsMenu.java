@@ -38,28 +38,7 @@ public class OptionsMenu extends BorderPane {
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        StackPane titlePane = new StackPane();
-        Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
-        backgroundForTitle.heightProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(10));
-        backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        backgroundForTitle.setFill(Color.web("#cd2653"));
-
-        Label title = new Label("Options");
-        title.setFont(new Font(30));
-        title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
-        title.setTextFill(Color.web("#faeaed"));
-
-        Button back = UtilsUI.getDoubleClickedButton("Retour","images/back.png",(e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()),graphicalMenus.primaryStage);
-        back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
-
-        BorderPane titleBox = new BorderPane();
-        title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));
-        titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        title.setTextAlignment(TextAlignment.CENTER);
-        title.setAlignment(Pos.CENTER);
-        titleBox.setLeft(back);
-        titleBox.setCenter(title);
-        titlePane.getChildren().addAll(backgroundForTitle, titleBox);
+        StackPane titlePane = UtilsUI.createTopBar(graphicalMenus,"Options");
 
         BorderPane.setAlignment(titlePane, Pos.CENTER);
         this.setTop(titlePane);
