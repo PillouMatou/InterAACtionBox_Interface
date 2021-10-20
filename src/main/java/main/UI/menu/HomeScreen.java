@@ -50,8 +50,9 @@ public class HomeScreen extends BorderPane {
 
         centerMenu.setAlignment(Pos.TOP_CENTER);
         BorderPane.setAlignment(centerMenu, Pos.CENTER);
-        centerMenu.spacingProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(6));
-        centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(5));
+        double rest = graphicalMenus.primaryStage.getHeight() - (graphicalMenus.primaryStage.getHeight() / 10 + 2 * graphicalMenus.primaryStage.getWidth() / 5);
+        centerMenu.setSpacing(rest / 3);
+        centerMenu.setTranslateY(rest / 3);
 
         goToUpdateMenu = (e) -> {
             updateManager.checkUpdates();
@@ -111,15 +112,15 @@ public class HomeScreen extends BorderPane {
     private StackPane createOptionBar(Button optionButton, Button updateButton, Button tobiiButton, Button exitButton) {
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
-        backgroundForTitle.setHeight(graphicalMenus.primaryStage.getHeight()/10);
+        backgroundForTitle.setHeight(graphicalMenus.primaryStage.getHeight() / 10);
         backgroundForTitle.setWidth(graphicalMenus.primaryStage.getWidth());
         backgroundForTitle.setFill(Color.web("#cd2653"));
 
 
-        optionButton.setPrefHeight(graphicalMenus.primaryStage.getHeight()/10);
-        updateButton.setPrefHeight(graphicalMenus.primaryStage.getHeight()/10);
-        tobiiButton.setPrefHeight(graphicalMenus.primaryStage.getHeight()/10);
-        exitButton.setPrefHeight(graphicalMenus.primaryStage.getHeight()/10);
+        optionButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
+        updateButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
+        tobiiButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
+        exitButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
 
 
         Label title = new Label("InteraactionBox-AFSR");
@@ -171,7 +172,7 @@ public class HomeScreen extends BorderPane {
     }
 
     Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
-        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler,graphicalMenus.primaryStage);
+        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
     private HBox createMenuBar() {
@@ -191,6 +192,7 @@ public class HomeScreen extends BorderPane {
     private StackPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL) {
         ProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus);
         processButton.getLabel().setText(name);
+        processButton.getLabel().setFont(new Font(20));
         processButton.getButton().setStroke(Color.web("#cd2653"));
         processButton.getButton().setStrokeWidth(3);
         StackPane borderPaneLauncher = new StackPane();
@@ -299,8 +301,7 @@ public class HomeScreen extends BorderPane {
 
     public ProgressButton createCloseMenuButton() {
         ProgressButton closeButton = new ProgressButton();
-
-        closeButton.getButton().radiusProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(1d / 12d));
+        closeButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 10);
         closeButton.getButton().setStroke(Color.web("#cd2653"));
         closeButton.getButton().setStrokeWidth(3);
 
@@ -316,13 +317,15 @@ public class HomeScreen extends BorderPane {
 
     public void showCloseProcessButtonIfProcessNotNull() {
         if (graphicalMenus.process != null && graphicalMenus.process.get() != null && !centerMenu.getChildren().contains(closeMenuButton)) {
-            centerMenu.translateYProperty().unbind();
-            centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(1d / 12d));
+            double rest = graphicalMenus.primaryStage.getHeight() - (graphicalMenus.primaryStage.getHeight() / 10 + 2 * graphicalMenus.primaryStage.getWidth() / 5);
+            centerMenu.setSpacing(rest / 2);
+            centerMenu.setTranslateY(rest / 2);
             centerMenu.getChildren().add(0, closeMenuButton);
             closeMenuButton.getLabel().setText("Back To :\n" + graphicalMenus.process.getName());
         } else if (graphicalMenus.process == null || graphicalMenus.process.get() == null) {
-            centerMenu.translateYProperty().unbind();
-            centerMenu.translateYProperty().bind(graphicalMenus.primaryStage.heightProperty().multiply(4d / 12d));
+            double rest = graphicalMenus.primaryStage.getHeight() - (graphicalMenus.primaryStage.getHeight() / 10 + graphicalMenus.primaryStage.getWidth() / 5);
+            double spacingoffset = (graphicalMenus.primaryStage.getHeight() - (graphicalMenus.primaryStage.getHeight() / 10 + 2 * graphicalMenus.primaryStage.getWidth() / 5)) / 3;
+            centerMenu.setTranslateY(rest / 3 + spacingoffset);
             removeMenu();
         }
     }

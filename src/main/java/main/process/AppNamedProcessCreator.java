@@ -87,13 +87,13 @@ public interface AppNamedProcessCreator {
 
     default ProgressButton createButton(Image image, GraphicalMenus graphicalMenus) {
         ProgressButton progressButton = new ProgressButton();
-        progressButton.getButton().setRadius(100);
+        progressButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 10);
 
         ImageView logo = new ImageView(image);
-        logo.setFitWidth(progressButton.getButton().getRadius() * 0.95);
-        logo.setFitHeight(progressButton.getButton().getRadius() * 0.95);
-        logo.fitWidthProperty().bind(progressButton.getButton().radiusProperty().multiply(0.95));
-        logo.fitHeightProperty().bind(progressButton.getButton().radiusProperty().multiply(0.95));
+        logo.setFitWidth(progressButton.getButton().getRadius() * 0.99);
+        logo.setFitHeight(progressButton.getButton().getRadius() * 0.99);
+        logo.fitWidthProperty().bind(progressButton.getButton().radiusProperty().multiply(0.99));
+        logo.fitHeightProperty().bind(progressButton.getButton().radiusProperty().multiply(0.99));
         logo.setPreserveRatio(true);
 
         progressButton.setImage(logo);

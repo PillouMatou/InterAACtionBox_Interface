@@ -23,7 +23,7 @@ public class UtilsUI {
 
     public static Button getDoubleClickedButton(String text, String imagePath, EventHandler eventhandler, Stage primaryStage) {
         DoubleClickedButton optionButton = new DoubleClickedButton(text);
-       // optionButton.setMaxHeight(50);
+        // optionButton.setMaxHeight(50);
         optionButton.setStyle(
                 "-fx-border-color: transparent; " +
                         "-fx-border-width: 0; " +
@@ -31,11 +31,12 @@ public class UtilsUI {
                         "-fx-background-color: transparent; " +
                         "-fx-font-weight: bold; " +
                         "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed;"
+                        "-fx-text-fill: #faeaed;" +
+                        "-fx-font-size: 20;"
         );
         ImageView graphic = new ImageView(imagePath);
         graphic.setPreserveRatio(true);
-        graphic.setFitHeight((primaryStage.getHeight()/10)*0.7);
+        graphic.setFitHeight((primaryStage.getHeight() / 10) * 0.7);
         optionButton.setGraphic(graphic);
         optionButton.assignHandler(eventhandler);
         return optionButton;
