@@ -25,7 +25,7 @@ public class UtilsUI {
         DoubleClickedButton optionButton = new DoubleClickedButton(text);
         // optionButton.setMaxHeight(50);
         optionButton.setStyle(
-                "-fx-border-color: transparent; " +
+                        "-fx-border-color: transparent; " +
                         "-fx-border-width: 0; " +
                         "-fx-background-radius: 0; " +
                         "-fx-background-color: transparent; " +

@@ -40,7 +40,7 @@ public class ExitMenu extends BorderPane {
 
 
         Button shutdownButton = createTopBarButton(
-                "Yes, shutdown the box",
+                "Oui, \u00e9teindre la box",
                 "images/on-off-button.png",
                 (e) -> {
                     if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
@@ -58,7 +58,7 @@ public class ExitMenu extends BorderPane {
         );
 
         Button exitButton = createTopBarButton(
-                "[For tests purpose] Exit the box only",
+                "[Pour les tests] Sortir de l'interface InterAACtionBox",
                 "images/cross.png",
                 (e) -> {
                     if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
@@ -71,7 +71,7 @@ public class ExitMenu extends BorderPane {
         );
 
         Button cancelButton = createTopBarButton(
-                "Cancel",
+                "Annuler",
                 "images/cross.png",
                 (e) -> {
                     graphicalMenus.primaryStage.getScene().setRoot(graphicalMenus.getHomeScreen());
@@ -84,7 +84,7 @@ public class ExitMenu extends BorderPane {
         hbox.spacingProperty().bind(this.widthProperty().divide(20));
 
         Label exitPrompt = new Label();
-        exitPrompt.setText("Do you really want to shutdown the box ?");
+        exitPrompt.setText("Voulez vous vraiment \u00e9teindre la box ?");
         exitPrompt.setFont(new Font(30));
         exitPrompt.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         exitPrompt.setTextFill(Color.BLACK);
@@ -125,7 +125,8 @@ public class ExitMenu extends BorderPane {
                         "-fx-background-color: transparent; " +
                         "-fx-font-weight: bold; " +
                         "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: Black"
+                        "-fx-text-fill: Black;" +
+                        "-fx-font-size: 20"
         );
         ImageView graphic = new ImageView(imagePath);
         graphic.setPreserveRatio(true);

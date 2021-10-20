@@ -67,15 +67,17 @@ public class OptionsMenu extends BorderPane {
 
         GridPane settings = new GridPane();
         settings.setHgap(20);
+        settings.setVgap(graphicalMenus.primaryStage.getHeight()/15);
 
         {
-            Label useEyeTracker = new Label("D\u00e9sactiver Eye Tracker:");
+            Label useEyeTracker = new Label("Eye Tracker:");
 
             useEyeTracker.setFont(new Font(20));
             useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
             useEyeTracker.setTextFill(Color.web("#cd2653"));
 
             CheckBox useEyeTrackerCheckBox = new CheckBox("Activ\u00e9");
+            useEyeTrackerCheckBox.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 20");
             useEyeTrackerCheckBox.selectedProperty().addListener((obj, oldval, newval) -> {
                 if (newval) {
                     useEyeTrackerCheckBox.setText("D\u00e9sactiv\u00e9");
@@ -88,6 +90,7 @@ public class OptionsMenu extends BorderPane {
 
             useEyeTrackerCheckBox.setSelected(true);
             useEyeTrackerCheckBox.setTextFill(Color.web("#faeaed"));
+            useEyeTrackerCheckBox.resize(100,100);
 
             settings.add(useEyeTracker, 0, 0);
             settings.add(useEyeTrackerCheckBox, 1, 0);
@@ -162,7 +165,8 @@ public class OptionsMenu extends BorderPane {
                         "-fx-background-color: transparent; " +
                         "-fx-font-weight: bold; " +
                         "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed"
+                        "-fx-text-fill: #faeaed;"+
+                        "-fx-font-size: 20"
         );
         ImageView graphic = new ImageView(imagePath);
         graphic.setPreserveRatio(true);
