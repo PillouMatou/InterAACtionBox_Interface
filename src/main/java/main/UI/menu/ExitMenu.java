@@ -1,16 +1,14 @@
 package main.UI.menu;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -18,17 +16,17 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.util.Duration;
-import main.UI.DoubleClickedButton;
+import main.UI.ProgressButton;
 import main.utils.UtilsOS;
 
 import java.io.IOException;
 
 public class ExitMenu extends BorderPane {
 
-    private Timeline loop = new Timeline();
+    private GraphicalMenus graphicalMenus;
 
     public ExitMenu(GraphicalMenus graphicalMenus) {
+        this.graphicalMenus = graphicalMenus;
         Rectangle r = new Rectangle();
         r.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         r.heightProperty().bind(graphicalMenus.primaryStage.heightProperty());
@@ -39,9 +37,7 @@ public class ExitMenu extends BorderPane {
         this.getChildren().add(r);
 
 
-        Button shutdownButton = createTopBarButton(
-                "Oui, \u00e9teindre la box",
-                "images/on-off-button.png",
+        StackPane shutdownButton = createAppButtonLauncher(
                 (e) -> {
                     if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
@@ -54,12 +50,12 @@ public class ExitMenu extends BorderPane {
                     }
                     Platform.exit();
                     System.exit(0);
-                }
+                },
+                "Oui, \u00e9teindre",
+                "images/on-off-button.png"
         );
 
-        Button exitButton = createTopBarButton(
-                "[Pour les tests] Sortir de l'interface InterAACtionBox",
-                "images/cross.png",
+        StackPane exitButton = createAppButtonLauncher(
                 (e) -> {
                     if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
@@ -67,15 +63,17 @@ public class ExitMenu extends BorderPane {
                     }
                     Platform.exit();
                     System.exit(0);
-                }
+                },
+                "Non, aller vers Ubuntu",
+                "images/exit.png"
         );
 
-        Button cancelButton = createTopBarButton(
-                "Annuler",
-                "images/cross.png",
+        StackPane cancelButton = createAppButtonLauncher(
                 (e) -> {
                     graphicalMenus.primaryStage.getScene().setRoot(graphicalMenus.getHomeScreen());
-                }
+                },
+                "Non, annuler",
+                "images/cross.png"
         );
 
         HBox hbox = new HBox(cancelButton, exitButton, shutdownButton);
@@ -85,7 +83,7 @@ public class ExitMenu extends BorderPane {
 
         Label exitPrompt = new Label();
         exitPrompt.setText("Voulez vous vraiment \u00e9teindre la box ?");
-        exitPrompt.setFont(new Font(30));
+        exitPrompt.setFont(new Font(60));
         exitPrompt.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         exitPrompt.setTextFill(Color.BLACK);
 
@@ -114,40 +112,29 @@ public class ExitMenu extends BorderPane {
         System.exit(0);
     }
 
-    DoubleClickedButton createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
-        DoubleClickedButton optionButton = new DoubleClickedButton(text);
-        optionButton.setPrefHeight(50);
-        optionButton.setMaxHeight(50);
-        optionButton.setStyle(
-                "-fx-border-color: transparent; " +
-                        "-fx-border-width: 0; " +
-                        "-fx-background-radius: 0; " +
-                        "-fx-background-color: transparent; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: Black;" +
-                        "-fx-font-size: 20"
-        );
-        ImageView graphic = new ImageView(imagePath);
-        graphic.setPreserveRatio(true);
-        graphic.setFitHeight(30);
-        optionButton.setGraphic(graphic);
+    private StackPane createAppButtonLauncher(EventHandler eventHandler, String name, String imageURL) {
 
-        optionButton.setOnMouseClicked((e) -> {
-            this.loop.stop();
-            eventhandler.handle(null);
-        });
-        optionButton.setOnMouseExited((e) -> {
-            if (loop != null && loop.getStatus() == Animation.Status.RUNNING) {
-                eventhandler.handle(null);
-            } else {
-                this.loop = new Timeline(new KeyFrame(Duration.millis(500), arg -> {
-                    loop.stop();
-                }));
-                this.loop.play();
-            }
-        });
+        ProgressButton progressButton = new ProgressButton();
+        progressButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 10);
+        progressButton.getButton().setStroke(Color.BLACK);
 
-        return optionButton;
+        ImageView logo = new ImageView(new Image(imageURL));
+        logo.setFitWidth(progressButton.getButton().getRadius() * 0.99);
+        logo.setFitHeight(progressButton.getButton().getRadius() * 0.99);
+        logo.fitWidthProperty().bind(progressButton.getButton().radiusProperty().multiply(0.99));
+        logo.fitHeightProperty().bind(progressButton.getButton().radiusProperty().multiply(0.99));
+        logo.setPreserveRatio(true);
+
+        progressButton.setImage(logo);
+
+        progressButton.assignIndicator(eventHandler);
+
+        progressButton.getLabel().setText(name);
+        progressButton.getLabel().setTextFill(Color.BLACK);
+        progressButton.getLabel().setFont(new Font(20));
+        progressButton.getButton().setStrokeWidth(3);
+
+        progressButton.start();
+        return progressButton;
     }
 }
