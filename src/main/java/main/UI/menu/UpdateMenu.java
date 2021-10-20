@@ -18,12 +18,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
-import main.UI.DoubleClickedButton;
 import main.utils.UpdateManager;
 import main.utils.UpdateService;
 import main.utils.UtilsUI;
 
-import javax.swing.border.Border;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -52,7 +50,7 @@ public class UpdateMenu extends BorderPane {
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        Button back = UtilsUI.getDoubleClickedButton("Retour","images/back.png",(e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()),graphicalMenus.primaryStage);
+        Button back = UtilsUI.getDoubleClickedButton("Retour", "images/back.png", (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()), graphicalMenus.primaryStage);
 
         this.setTop(createTopBar(back));
 
@@ -93,7 +91,7 @@ public class UpdateMenu extends BorderPane {
 
         GridPane settings = new GridPane();
         settings.setHgap(20);
-        settings.setVgap(graphicalMenus.primaryStage.getHeight()/30);
+        settings.setVgap(graphicalMenus.primaryStage.getHeight() / 30);
 
         createGnomeControlCenterButton(settings, UpdateService.SYSTEME);
         createGnomeControlCenterButton(settings, UpdateService.AUGCOM);
@@ -108,10 +106,10 @@ public class UpdateMenu extends BorderPane {
         progressBars[0].prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(3));
         progressBars[0].visibleProperty().bind(
                 progressBars[1].visibleProperty().or(
-                progressBars[2].visibleProperty()).or(
-                progressBars[3].visibleProperty()).or(
-                progressBars[4].visibleProperty()).or(
-                progressBars[5].visibleProperty()
+                        progressBars[2].visibleProperty()).or(
+                        progressBars[3].visibleProperty()).or(
+                        progressBars[4].visibleProperty()).or(
+                        progressBars[5].visibleProperty()
                 )
         );
         menu.getChildren().addAll(downloadEverythin, progressBars[0], settings);
@@ -121,7 +119,7 @@ public class UpdateMenu extends BorderPane {
 
     StackPane createTopBar(Button back) {
         StackPane titlePane = new StackPane();
-        Rectangle backgroundForTitle = new Rectangle(0, 0, graphicalMenus.primaryStage.getWidth(), graphicalMenus.primaryStage.getHeight()/10);
+        Rectangle backgroundForTitle = new Rectangle(0, 0, graphicalMenus.primaryStage.getWidth(), graphicalMenus.primaryStage.getHeight() / 10);
         backgroundForTitle.heightProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(10));
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setFill(Color.web("#cd2653"));
@@ -343,7 +341,7 @@ public class UpdateMenu extends BorderPane {
                 t.setAutoReverse(true);
                 t.play();
                 String newVersion = updateManager.updateServices[serviceIndex].getVersion();
-                button.setText("Mise \u00e0 jour disponible ! T\u00e9l\u00e9chargez " + newVersion);
+                button.setText("Mise \u00e0 jour " + newVersion + " disponible !");
                 ((ImageView) button.getGraphic()).setImage(new Image("images/refresh.png"));
             } else {
                 button.setText("Le logiciel est \u00e0 jour");
@@ -361,7 +359,7 @@ public class UpdateMenu extends BorderPane {
     }
 
     Button createTopBarButton(String text, EventHandler eventhandler, String imagePath) {
-        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler,graphicalMenus.primaryStage);
+        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
 
