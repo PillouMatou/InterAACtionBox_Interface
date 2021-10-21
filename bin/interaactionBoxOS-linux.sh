@@ -15,6 +15,10 @@ echo "SCRIPT_DIR = ${SCRIPT_DIR}"
 LIB_DIR=${SCRIPT_DIR}/../lib  
   
 echo "LIB_DIR = ${LIB_DIR}"  
+
+JAVA_OPTS=-Djdk.gtk.version=2
+
+echo "JAVA_OPTS = ${JAVA_OPTS}"
   
 LIB_DIR_RELATIVE=$(realpath --relative-to="${WORKING_DIR}" "${LIB_DIR}")  
   
