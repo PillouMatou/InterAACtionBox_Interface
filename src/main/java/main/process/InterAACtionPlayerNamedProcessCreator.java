@@ -3,6 +3,7 @@ package main.process;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
 import main.utils.NamedProcess;
+import main.utils.UtilsOS;
 
 public class InterAACtionPlayerNamedProcessCreator implements AppNamedProcessCreator {
 
@@ -17,7 +18,7 @@ public class InterAACtionPlayerNamedProcessCreator implements AppNamedProcessCre
                 "--disable-component-update",
                 "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'",
                 "--disable-features=Translate",
-                "http://localhost:8082/");
+                "http://localhost:8082/connect/"+ UtilsOS.getUserNameFromOSForPWA());
     }
 
     @Override
