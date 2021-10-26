@@ -1,7 +1,10 @@
 package main.utils;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
@@ -29,12 +32,14 @@ public class UpdateService {
     @Getter
     String version;
 
+    @Getter
+    StringProperty output = new SimpleStringProperty("");
+
     public UpdateService(String name, String updateURL) {
         this.name = name;
         this.updateURL = updateURL;
         this.updateProperty = new SimpleBooleanProperty(false);
-        File[] directories = new File(System.getProperty("user.home")).listFiles(file -> file.isDirectory() && file.getName().contains(name));
-        this.existProperty = new SimpleBooleanProperty(directories == null || directories.length == 0);
+        this.existProperty = new SimpleBooleanProperty(false);
     }
 
     public void checkUpdate() {
@@ -47,7 +52,9 @@ public class UpdateService {
                         File directoryspace = new File(System.getProperty("user.home") + "/ " + softwareJson.get("name"));
                         this.version = "" + softwareJson.get("name");
                         log.info(directory.getAbsolutePath());
-                        updateProperty.set(!((directory.exists() && directory.isDirectory()) || (directoryspace.exists() && directoryspace.isDirectory())));
+                        Platform.runLater(() -> {
+                            updateProperty.set(!((directory.exists() && directory.isDirectory()) || (directoryspace.exists() && directoryspace.isDirectory())));
+                        });
                     }
                 } else {
                     JSONObject softwareJson = JsonReader.readJsonFromUrl(updateURL);
@@ -55,8 +62,9 @@ public class UpdateService {
                         File directory = new File(System.getProperty("user.home") + "/dist/" + softwareJson.get("name"));
                         File directoryspace = new File(System.getProperty("user.home") + "/dist/ " + softwareJson.get("name"));
                         this.version = "" + softwareJson.get("name");
-                        log.info(directory.getAbsolutePath());
-                        updateProperty.set(!((directory.exists() && directory.isDirectory()) || (directoryspace.exists() && directoryspace.isDirectory())));
+                        Platform.runLater(() -> {
+                            updateProperty.set(!((directory.exists() && directory.isDirectory()) || (directoryspace.exists() && directoryspace.isDirectory())));
+                        });
                     }
                 }
 

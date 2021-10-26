@@ -62,7 +62,7 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
                 log.info("GazePlay directory is: " + text);
                 return text;
             } catch (IOException e) {
-                e.printStackTrace();
+                log.info("configuration.conf non trouvé");
                 return "";
             }
         }

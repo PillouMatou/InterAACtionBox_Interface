@@ -13,9 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import main.utils.UpdateManager;
@@ -146,29 +144,7 @@ public class UpdateMenu extends BorderPane {
 
         Thread t2 = new Thread() {
             public void run() {
-                if (updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get()) {
                     startUpdateSystem();
-                }
-                if (updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
-                    startUpdateAugCom();
-                }
-                if (updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get()) {
-                    startUpdateInterAACtonScene();
-                }
-                if (updateManager.updateServices[UpdateService.GAZEPLAY].getUpdateProperty().get()) {
-                    startUpdateGazePlay();
-                }
-                if (updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get()) {
-                    startUpdateInterAACtionPlayer();
-                }
-
-
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                updateManager.checkUpdates();
             }
         };
         t2.setDaemon(true);
@@ -187,96 +163,133 @@ public class UpdateMenu extends BorderPane {
     }
 
     void startUpdateSystem() {
-        try {
-            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
-            pb.redirectErrorStream(true);
-            Process p = pb.start();
-            p.onExit().thenRun(() -> {
-                closeProcessStream(p);
-                progressBars[UpdateService.SYSTEME + 1].setVisible(false);
-            });
-            progressThing(p, 1);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.err);
-        }
-
+        if (updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    progressBars[UpdateService.SYSTEME + 1].setVisible(false);
+                    updateManager.updateServices[UpdateService.SYSTEME].getOutput().setValue("");
+                    startUpdateAugCom();
+                });
+                progressPercent(p, 1);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+        } else { startUpdateAugCom();}
     }
 
     void startUpdateAugCom() {
-        try {
-            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/augcomUpdate.sh");
-            pb.redirectErrorStream(true);
-            Process p = pb.start();
-            p.onExit().thenRun(() -> {
-                closeProcessStream(p);
-                progressBars[UpdateService.AUGCOM + 1].setVisible(false);
-            });
-            progressThing(p, 2);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.err);
+        if (updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/augcomUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    progressBars[UpdateService.AUGCOM + 1].setVisible(false);
+                    updateManager.updateServices[UpdateService.AUGCOM].getOutput().setValue("");
+                    startUpdateInterAACtonScene();
+                });
+                progressPercent(p, 2);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+        } else {
+            startUpdateInterAACtonScene();
         }
     }
 
     void startUpdateInterAACtonScene() {
-        try {
-            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh");
-            pb.redirectErrorStream(true);
-            Process p = pb.start();
-            p.onExit().thenRun(() -> {
-                closeProcessStream(p);
-                progressBars[UpdateService.INTERAACTION_SCENE + 1].setVisible(false);
-            });
-            progressThing(p, 3);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.err);
-        }
+        if (updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    progressBars[UpdateService.INTERAACTION_SCENE + 1].setVisible(false);
+                    updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getOutput().setValue("");
+                    startUpdateInterAACtionPlayer();
+                });
+                progressPercent(p, 3);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+        } else { startUpdateInterAACtionPlayer();}
     }
 
     void startUpdateGazePlay() {
-        try {
-            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh");
-            pb.redirectErrorStream(true);
-            Process p = pb.start();
-            p.onExit().thenRun(() -> {
-                closeProcessStream(p);
-                progressBars[UpdateService.GAZEPLAY + 1].setVisible(false);
-            });
-            progressThing(p, 4);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.err);
+        if (updateManager.updateServices[UpdateService.GAZEPLAY].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    progressBars[UpdateService.GAZEPLAY + 1].setVisible(false);
+                    updateManager.updateServices[UpdateService.GAZEPLAY].getOutput().setValue("");
+                    updateManager.checkUpdates();
+                });
+                progressPercent(p, 4);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+        } else {
+            updateManager.checkUpdates();
         }
     }
 
     void startUpdateInterAACtionPlayer() {
-        try {
-            ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh");
-            pb.redirectErrorStream(true);
-            Process p = pb.start();
-            p.onExit().thenRun(() -> {
-                closeProcessStream(p);
-                progressBars[UpdateService.INTERAACTION_PLAYER + 1].setVisible(false);
-            });
-            progressThing(p, 5);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.err);
-        }
+
+        if (updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    progressBars[UpdateService.INTERAACTION_PLAYER + 1].setVisible(false);
+                    updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getOutput().setValue("");
+                    startUpdateGazePlay();
+                });
+                progressPercent(p, 5);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+        }else { startUpdateGazePlay();}
     }
 
-    void progressThing(Process p, int index) throws IOException {
-        String s;
-        BufferedReader stdout = new BufferedReader(
-                new InputStreamReader(p.getInputStream()));
-        while ((s = stdout.readLine()) != null && progressBars[index].getProgress() < 1) {
-            int indexPercent = s.indexOf('%');
-            if (indexPercent != -1) {
-                try {
-                    int progress = Integer.parseInt(s.substring(indexPercent - 3, indexPercent).replace(" ", ""));
-                    progressBars[index].setProgress(progress / 100.);
-                } catch (NumberFormatException e) {
-                    //DO NOTHING
+    void progressPercent(Process p, int index){
+        Thread t = new Thread(() -> {
+            String s;
+            try {
+                BufferedReader stdout = new BufferedReader(
+                        new InputStreamReader(p.getInputStream()));
+                while ((s = stdout.readLine()) != null) {
+                    int indexPercent = s.indexOf('%');
+                    if (indexPercent != -1) {
+                        try {
+                            int progress = Integer.parseInt(s.substring(indexPercent - 3, indexPercent).replace(" ", ""));
+                            progressBars[index].setProgress(progress / 100.);
+                        } catch (NumberFormatException e) {
+                            //DO NOTHING
+                        }
+                    } else {
+                        String finalS = s;
+                        Platform.runLater(()->{
+                        updateManager.updateServices[index-1].getOutput().setValue(finalS);
+                        });
+                    }
                 }
+            } catch (IOException e){
+                //DO NOTHING
             }
-        }
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
     void createGnomeControlCenterButton(GridPane settings, int serviceIndex) {
@@ -299,6 +312,14 @@ public class UpdateMenu extends BorderPane {
 
         settings.add(displayedLabel, 0, row);
         settings.add(button, 1, row);
+        Label output = new Label();
+        output.textProperty().bind(updateManager.updateServices[serviceIndex].getOutput());
+        output.setOpacity(0.5);
+        output.setWrapText(true);
+        output.setStyle("-fx-font-size: 5");
+        output.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(10));
+        output.maxWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(10));
+        settings.add(output, 3, row);
 
         checkMainUpdate(settings, serviceIndex, button);
     }

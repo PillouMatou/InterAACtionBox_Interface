@@ -22,7 +22,7 @@ public class UpdateManager {
 
     public UpdateManager() {
         anyUpdateNeeded.bind(
-                updateServices[UpdateService.SYSTEME].getUpdateProperty().or(
+                        updateServices[UpdateService.SYSTEME].getUpdateProperty().or(
                         updateServices[UpdateService.AUGCOM].getUpdateProperty()).or(
                         updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty()).or(
                         updateServices[UpdateService.GAZEPLAY].getUpdateProperty()).or(
