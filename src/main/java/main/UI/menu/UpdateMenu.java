@@ -48,7 +48,7 @@ public class UpdateMenu extends BorderPane {
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        this.setTop(UtilsUI.createTopBar(graphicalMenus,"Mises \u00e0 jour"));
+        this.setTop(UtilsUI.createTopBar(graphicalMenus, "Mises \u00e0 jour"));
 
 
         VBox menu = new VBox();
@@ -144,7 +144,7 @@ public class UpdateMenu extends BorderPane {
 
         Thread t2 = new Thread() {
             public void run() {
-                    startUpdateSystem();
+                startUpdateSystem();
             }
         };
         t2.setDaemon(true);
@@ -170,15 +170,19 @@ public class UpdateMenu extends BorderPane {
                 Process p = pb.start();
                 p.onExit().thenRun(() -> {
                     closeProcessStream(p);
-                    progressBars[UpdateService.SYSTEME + 1].setVisible(false);
-                    updateManager.updateServices[UpdateService.SYSTEME].getOutput().setValue("");
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.SYSTEME + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.SYSTEME].getOutput().setValue("");
+                    });
                     startUpdateAugCom();
                 });
                 progressPercent(p, 1);
             } catch (IOException ex) {
                 ex.printStackTrace(System.err);
             }
-        } else { startUpdateAugCom();}
+        } else {
+            startUpdateAugCom();
+        }
     }
 
     void startUpdateAugCom() {
@@ -189,8 +193,10 @@ public class UpdateMenu extends BorderPane {
                 Process p = pb.start();
                 p.onExit().thenRun(() -> {
                     closeProcessStream(p);
-                    progressBars[UpdateService.AUGCOM + 1].setVisible(false);
-                    updateManager.updateServices[UpdateService.AUGCOM].getOutput().setValue("");
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.AUGCOM + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.AUGCOM].getOutput().setValue("");
+                    });
                     startUpdateInterAACtonScene();
                 });
                 progressPercent(p, 2);
@@ -210,15 +216,19 @@ public class UpdateMenu extends BorderPane {
                 Process p = pb.start();
                 p.onExit().thenRun(() -> {
                     closeProcessStream(p);
-                    progressBars[UpdateService.INTERAACTION_SCENE + 1].setVisible(false);
-                    updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getOutput().setValue("");
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.INTERAACTION_SCENE + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getOutput().setValue("");
+                    });
                     startUpdateInterAACtionPlayer();
                 });
                 progressPercent(p, 3);
             } catch (IOException ex) {
                 ex.printStackTrace(System.err);
             }
-        } else { startUpdateInterAACtionPlayer();}
+        } else {
+            startUpdateInterAACtionPlayer();
+        }
     }
 
     void startUpdateGazePlay() {
@@ -229,8 +239,10 @@ public class UpdateMenu extends BorderPane {
                 Process p = pb.start();
                 p.onExit().thenRun(() -> {
                     closeProcessStream(p);
-                    progressBars[UpdateService.GAZEPLAY + 1].setVisible(false);
-                    updateManager.updateServices[UpdateService.GAZEPLAY].getOutput().setValue("");
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.GAZEPLAY + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.GAZEPLAY].getOutput().setValue("");
+                    });
                     updateManager.checkUpdates();
                 });
                 progressPercent(p, 4);
@@ -251,18 +263,22 @@ public class UpdateMenu extends BorderPane {
                 Process p = pb.start();
                 p.onExit().thenRun(() -> {
                     closeProcessStream(p);
-                    progressBars[UpdateService.INTERAACTION_PLAYER + 1].setVisible(false);
-                    updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getOutput().setValue("");
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.INTERAACTION_PLAYER + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getOutput().setValue("");
+                    });
                     startUpdateGazePlay();
                 });
                 progressPercent(p, 5);
             } catch (IOException ex) {
                 ex.printStackTrace(System.err);
             }
-        }else { startUpdateGazePlay();}
+        } else {
+            startUpdateGazePlay();
+        }
     }
 
-    void progressPercent(Process p, int index){
+    void progressPercent(Process p, int index) {
         Thread t = new Thread(() -> {
             String s;
             try {
@@ -279,12 +295,12 @@ public class UpdateMenu extends BorderPane {
                         }
                     } else {
                         String finalS = s;
-                        Platform.runLater(()->{
-                        updateManager.updateServices[index-1].getOutput().setValue(finalS);
+                        Platform.runLater(() -> {
+                            updateManager.updateServices[index - 1].getOutput().setValue(finalS);
                         });
                     }
                 }
-            } catch (IOException e){
+            } catch (IOException e) {
                 //DO NOTHING
             }
         });
