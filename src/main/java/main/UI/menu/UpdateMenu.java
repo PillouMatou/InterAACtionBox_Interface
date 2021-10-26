@@ -50,9 +50,7 @@ public class UpdateMenu extends BorderPane {
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        Button back = UtilsUI.getDoubleClickedButton("Retour", "images/back.png", (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()), graphicalMenus.primaryStage);
-
-        this.setTop(createTopBar(back));
+        this.setTop(UtilsUI.createTopBar(graphicalMenus,"Mises \u00e0 jour"));
 
 
         VBox menu = new VBox();
@@ -116,33 +114,6 @@ public class UpdateMenu extends BorderPane {
 
         this.setCenter(menu);
     }
-
-    StackPane createTopBar(Button back) {
-        StackPane titlePane = new StackPane();
-        Rectangle backgroundForTitle = new Rectangle(0, 0, graphicalMenus.primaryStage.getWidth(), graphicalMenus.primaryStage.getHeight() / 10);
-        backgroundForTitle.heightProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(10));
-        backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        backgroundForTitle.setFill(Color.web("#cd2653"));
-
-        back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
-
-        Label title = new Label("Mises \u00e0 jour");
-        title.setFont(new Font(30));
-        title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
-        title.setTextFill(Color.web("#faeaed"));
-        BorderPane titleBox = new BorderPane();
-        title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));
-        titleBox.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        title.setTextAlignment(TextAlignment.CENTER);
-        title.setAlignment(Pos.CENTER);
-        titleBox.setLeft(back);
-        titleBox.setCenter(title);
-        titlePane.getChildren().addAll(backgroundForTitle, titleBox);
-
-        BorderPane.setAlignment(titlePane, Pos.CENTER);
-        return titlePane;
-    }
-
 
     void startUpdateAll() {
         Thread t = new Thread() {
