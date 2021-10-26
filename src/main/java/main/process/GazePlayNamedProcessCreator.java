@@ -28,7 +28,7 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
     private ProcessBuilder createGazePlayBuilder() {
         String javaBin;
         String gazePlayInstallationRepo = getGazePlayRepo();
-        if( ! gazePlayInstallationRepo.equals("")) {
+        if (!gazePlayInstallationRepo.equals("")) {
             if (UtilsOS.isWindows()) {
                 javaBin = gazePlayInstallationRepo + "/lib/jre/bin/java.exe";
             } else {
@@ -36,11 +36,11 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
             }
             String classpath = gazePlayInstallationRepo + "/lib/*";
 
-            LinkedList<String> commands = new LinkedList<>(Arrays.asList(javaBin, "-cp", classpath, "-Djdk.gtk.version=2", "net.gazeplay.GazePlayLauncher" ,"--user", UtilsOS.getUserNameFromOSForGazePlay()));
+            LinkedList<String> commands = new LinkedList<>(Arrays.asList(javaBin, "-cp", classpath, "-Djdk.gtk.version=2", "net.gazeplay.GazePlayLauncher", "--user", UtilsOS.getUserNameFromOSForGazePlay()));
 
             return new ProcessBuilder(commands);
-        }else{
-            return  new ProcessBuilder();
+        } else {
+            return new ProcessBuilder();
         }
     }
 
@@ -55,7 +55,7 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
         if (UtilsOS.isWindows()) {
             return "C:/Program Files (x86)/GazePlay";
         } else {
-            String configFilePath = System.getProperty("user.home")+"/interaactionBox_Interface-linux/bin/configuration.conf";
+            String configFilePath = System.getProperty("user.home") + "/interaactionBox_Interface-linux/bin/configuration.conf";
             try {
                 BufferedReader brTest = new BufferedReader(new FileReader(configFilePath));
                 String text = brTest.readLine();
