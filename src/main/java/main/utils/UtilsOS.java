@@ -36,4 +36,14 @@ public class UtilsOS {
             return false;
         }
     }
+
+    public static String getUserNameFromOSForPWA(){
+        String username = System.getProperty("user.name").toLowerCase();
+        return username.replace(" ","_");
+    }
+
+    public static String getUserNameFromOSForGazePlay(){
+        return System.getProperty("user.name");
+    }
+
 }
