@@ -16,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import main.utils.UpdateManager;
@@ -32,7 +31,7 @@ public class UpdateMenu extends BorderPane {
 
     UpdateManager updateManager;
     ProgressBar[] progressBars = new ProgressBar[6];
-    Button displayedLabel;
+    Button installAllButton;
     GraphicalMenus graphicalMenus;
 
     public UpdateMenu(GraphicalMenus graphicalMenus, UpdateManager updateManager) {
@@ -60,30 +59,30 @@ public class UpdateMenu extends BorderPane {
         downloadEverythin.setAlignment(Pos.CENTER);
         downloadEverythin.setSpacing(20);
 
-        displayedLabel = createTopBarButton("Mettre \u00e0 jour tous les logiciels", (event) -> {
+        installAllButton = createTopBarButton("Mettre \u00e0 jour tous les logiciels", (event) -> {
             if (updateManager.anyUpdateNeeded.getValue()) {
                 startUpdateAll();
             }
-        }, "images/tick-mark.png");
-        String style = "-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 30; " +
+        }, null);
+        String style = "-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em; " +
                 "-fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; -fx-background-color: transparent; ";
-        displayedLabel.setStyle(style);
-        displayedLabel.hoverProperty().addListener((obs, oldval, newval) -> {
+        installAllButton.setStyle(style);
+        installAllButton.hoverProperty().addListener((obs, oldval, newval) -> {
             if (newval && updateManager.anyUpdateNeeded.getValue()) {
-                displayedLabel.setStyle(style + "-fx-cursor: hand; -fx-underline: true");
+                installAllButton.setStyle(style + "-fx-cursor: hand; -fx-underline: true");
             } else {
-                displayedLabel.setStyle(style);
+                installAllButton.setStyle(style);
             }
         });
         menu.setSpacing(30);
 
-        downloadEverythin.getChildren().addAll(displayedLabel);
+        downloadEverythin.getChildren().addAll(installAllButton);
 
         updateManager.anyUpdateNeeded.addListener((obs, oldval, newval) -> {
             if (newval) {
-                displayedLabel.setText("Mettre \u00e0 jour tous les logiciels");
+                installAllButton.setText("Mettre \u00e0 jour tous les logiciels");
             } else {
-                displayedLabel.setText("Votre syst\u00e8me est \u00e0 jour");
+                installAllButton.setText("Votre syst\u00e8me est \u00e0 jour");
             }
         });
 
@@ -414,8 +413,7 @@ public class UpdateMenu extends BorderPane {
 
     void createGnomeControlCenterButton(GridPane settings, int serviceIndex) {
         Label displayedLabel = new Label(updateManager.updateServices[serviceIndex].getName() + ":");
-        displayedLabel.setFont(new Font(20));
-        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
+        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 2.5em");
         displayedLabel.setTextFill(Color.web("#cd2653"));
 
         Button button = createTopBarButton(
@@ -446,7 +444,7 @@ public class UpdateMenu extends BorderPane {
                 "images/tick-mark.png"
         );
 
-        String style = "-fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; " +
+        String style = "-fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; -fx-font-size: 2em ;" +
                 "-fx-background-color: transparent; -fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #faeaed;";
         button.setStyle(style);
         button.hoverProperty().addListener((obs, oldval, newval) -> {

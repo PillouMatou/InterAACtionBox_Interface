@@ -31,7 +31,7 @@ public class UtilsUI {
         DoubleClickedButton optionButton = new DoubleClickedButton(text);
         // optionButton.setMaxHeight(50);
         optionButton.setStyle(
-                        "-fx-border-color: transparent; " +
+                "-fx-border-color: transparent; " +
                         "-fx-border-width: 0; " +
                         "-fx-background-radius: 0; " +
                         "-fx-background-color: transparent; " +
@@ -40,10 +40,12 @@ public class UtilsUI {
                         "-fx-text-fill: #faeaed;" +
                         "-fx-font-size: 20;"
         );
-        ImageView graphic = new ImageView(imagePath);
-        graphic.setPreserveRatio(true);
-        graphic.setFitHeight((primaryStage.getHeight() / 10) * 0.7);
-        optionButton.setGraphic(graphic);
+        if (imagePath != null) {
+            ImageView graphic = new ImageView(imagePath);
+            graphic.setPreserveRatio(true);
+            graphic.setFitHeight((primaryStage.getHeight() / 10) * 0.7);
+            optionButton.setGraphic(graphic);
+        }
         optionButton.assignHandler(eventhandler);
         return optionButton;
     }
@@ -60,7 +62,7 @@ public class UtilsUI {
         return downnloadImageView;
     }
 
-    public static StackPane createTopBar(GraphicalMenus graphicalMenus, String label){
+    public static StackPane createTopBar(GraphicalMenus graphicalMenus, String label) {
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, graphicalMenus.primaryStage.getWidth(), graphicalMenus.primaryStage.getHeight() / 10);
         backgroundForTitle.heightProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(10));
