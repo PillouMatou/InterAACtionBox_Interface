@@ -2,9 +2,7 @@ package main.UI.menu;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -13,7 +11,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
+import lombok.extern.slf4j.Slf4j;
 import main.Configuration;
 import main.UI.DoubleClickedButton;
 import main.process.GnomeControlCenterNamedProcessCreator;
@@ -21,7 +19,10 @@ import main.process.TeamviewerNamedProcessCreator;
 import main.utils.StageUtils;
 import main.utils.UtilsUI;
 
+@Slf4j
 public class OptionsMenu extends BorderPane {
+
+    public String langage = "Francais";
 
     public OptionsMenu(GraphicalMenus graphicalMenus) {
         super();
@@ -79,6 +80,7 @@ public class OptionsMenu extends BorderPane {
         createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 2);
         createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 3);
         createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 4);
+        createGnomeControlCenterButtonLang(settings);
 
         {
 
@@ -131,6 +133,50 @@ public class OptionsMenu extends BorderPane {
 
         settings.add(displayedLabel, 0, row);
         settings.add(button, 1, row);
+    }
+
+    void createGnomeControlCenterButtonLang(GridPane settings) {
+        Label displayedLabel = new Label("Langue");
+        displayedLabel.setFont(new Font(20));
+        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
+        displayedLabel.setTextFill(Color.web("#cd2653"));
+
+        MenuItem menuItemFR = new MenuItem("Francais");
+        MenuItem menuItemEN = new MenuItem("English");
+
+        MenuButton menuButton = new MenuButton(langage);
+
+        menuItemFR.setOnAction(eventMenuLanguages -> {
+            langage = menuItemFR.getText();
+            menuButton.setText(langage);
+        });
+        menuItemEN.setOnAction(eventMenuLanguages -> {
+            langage = menuItemEN.getText();
+            menuButton.setText(langage);
+        });
+        menuButton.getItems().addAll(menuItemEN,menuItemFR);
+
+
+        /*
+
+        Button button = createTopBarButton(
+                "Ouvrir>",
+                imageName,
+                (e) -> {
+                    StageUtils.killRunningProcess(graphicalMenus);
+                    GnomeControlCenterNamedProcessCreator process = new GnomeControlCenterNamedProcessCreator(panelToOpen);
+                    process.setUpProcessBuilder();
+                    graphicalMenus.process = process.start(graphicalMenus);
+                }
+        );
+
+         */
+
+        // button.setTextFill(Color.web("#faeaed"));
+
+        settings.add(displayedLabel, 0, 6);
+        settings.add(menuButton,1, 6);
+        // settings.add(button, 1, row);
     }
 
     Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
