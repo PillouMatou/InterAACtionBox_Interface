@@ -16,7 +16,6 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import main.UI.DoubleClickedButton;
@@ -38,7 +37,7 @@ public class UtilsUI {
                         "-fx-font-weight: bold; " +
                         "-fx-font-family: Helvetica; " +
                         "-fx-text-fill: #faeaed;" +
-                        "-fx-font-size: 20;"
+                        "-fx-font-size: 2em;"
         );
         if (imagePath != null) {
             ImageView graphic = new ImageView(imagePath);
@@ -73,8 +72,7 @@ public class UtilsUI {
         back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
 
         Label title = new Label(label);
-        title.setFont(new Font(30));
-        title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
+        title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em");
         title.setTextFill(Color.web("#faeaed"));
         BorderPane titleBox = new BorderPane();
         title.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().subtract(back.widthProperty().multiply(2)));

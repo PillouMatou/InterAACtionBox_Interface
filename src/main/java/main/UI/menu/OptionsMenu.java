@@ -6,14 +6,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import main.Configuration;
 import main.UI.DoubleClickedButton;
 import main.process.GnomeControlCenterNamedProcessCreator;
@@ -38,7 +38,7 @@ public class OptionsMenu extends BorderPane {
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        StackPane titlePane = UtilsUI.createTopBar(graphicalMenus,"Options");
+        StackPane titlePane = UtilsUI.createTopBar(graphicalMenus, "Options");
 
         BorderPane.setAlignment(titlePane, Pos.CENTER);
         this.setTop(titlePane);
@@ -46,17 +46,22 @@ public class OptionsMenu extends BorderPane {
 
         GridPane settings = new GridPane();
         settings.setHgap(20);
-        settings.setVgap(graphicalMenus.primaryStage.getHeight()/15);
+        settings.setVgap(graphicalMenus.primaryStage.getHeight() / 15);
 
         {
             Label useEyeTracker = new Label("Eye Tracker:");
-
-            useEyeTracker.setFont(new Font(20));
-            useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
-            useEyeTracker.setTextFill(Color.web("#cd2653"));
+            useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
             CheckBox useEyeTrackerCheckBox = new CheckBox("Activ\u00e9");
-            useEyeTrackerCheckBox.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 20");
+            String style = "-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 2.5em; ";
+            useEyeTrackerCheckBox.setStyle(style);
+            useEyeTrackerCheckBox.hoverProperty().addListener((obs, oldval, newval) -> {
+                if (newval) {
+                    useEyeTrackerCheckBox.setStyle(style + "-fx-cursor: hand; -fx-underline: true");
+                } else {
+                    useEyeTrackerCheckBox.setStyle(style);
+                }
+            });
             useEyeTrackerCheckBox.selectedProperty().addListener((obj, oldval, newval) -> {
                 if (newval) {
                     useEyeTrackerCheckBox.setText("D\u00e9sactiv\u00e9");
@@ -69,7 +74,7 @@ public class OptionsMenu extends BorderPane {
 
             useEyeTrackerCheckBox.setSelected(true);
             useEyeTrackerCheckBox.setTextFill(Color.web("#faeaed"));
-            useEyeTrackerCheckBox.resize(100,100);
+            useEyeTrackerCheckBox.resize(100, 100);
 
             settings.add(useEyeTracker, 0, 0);
             settings.add(useEyeTrackerCheckBox, 1, 0);
@@ -83,10 +88,7 @@ public class OptionsMenu extends BorderPane {
         {
 
             Label teamviewerLabel = new Label("Lancer TeamViewer:");
-
-            teamviewerLabel.setFont(new Font(20));
-            teamviewerLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
-            teamviewerLabel.setTextFill(Color.web("#cd2653"));
+            teamviewerLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
             Button teamViewerButton = createTopBarButton(
                     "Ouvrir>",
@@ -112,9 +114,7 @@ public class OptionsMenu extends BorderPane {
 
     void createGnomeControlCenterButton(GraphicalMenus graphicalMenus, GridPane settings, String label, String imageName, String panelToOpen, int row) {
         Label displayedLabel = new Label(label);
-        displayedLabel.setFont(new Font(20));
-        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
-        displayedLabel.setTextFill(Color.web("#cd2653"));
+        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em");
 
         Button button = createTopBarButton(
                 "Ouvrir>",
@@ -137,16 +137,16 @@ public class OptionsMenu extends BorderPane {
         DoubleClickedButton optionButton = new DoubleClickedButton(text);
         optionButton.setPrefHeight(50);
         optionButton.setMaxHeight(50);
-        optionButton.setStyle(
-                "-fx-border-color: transparent; " +
-                        "-fx-border-width: 0; " +
-                        "-fx-background-radius: 0; " +
-                        "-fx-background-color: transparent; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed;"+
-                        "-fx-font-size: 20"
-        );
+        String style = "-fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; -fx-background-color: transparent; " +
+                "-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #faeaed; -fx-font-size: 2.5em; ";
+        optionButton.setStyle(style);
+        optionButton.hoverProperty().addListener((obs, oldval, newval) -> {
+            if (newval) {
+                optionButton.setStyle(style + "-fx-cursor: hand; -fx-underline: true");
+            } else {
+                optionButton.setStyle(style);
+            }
+        });
         ImageView graphic = new ImageView(imagePath);
         graphic.setPreserveRatio(true);
         graphic.setFitHeight(30);

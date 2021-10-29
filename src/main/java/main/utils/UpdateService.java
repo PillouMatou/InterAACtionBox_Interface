@@ -33,7 +33,7 @@ public class UpdateService {
     String version;
 
     @Getter
-    StringProperty output = new SimpleStringProperty("");
+    StringProperty output = new SimpleStringProperty("ALORS ??? wejdene");
 
     public UpdateService(String name, String updateURL) {
         this.name = name;
