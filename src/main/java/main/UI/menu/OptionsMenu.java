@@ -38,7 +38,7 @@ public class OptionsMenu extends BorderPane {
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        StackPane titlePane = UtilsUI.createTopBar(graphicalMenus, "Options");
+        StackPane titlePane = UtilsUI.createTopBar(graphicalMenus.getHomeScreen(), graphicalMenus, "Options");
 
         BorderPane.setAlignment(titlePane, Pos.CENTER);
         this.setTop(titlePane);
@@ -46,7 +46,7 @@ public class OptionsMenu extends BorderPane {
 
         GridPane settings = new GridPane();
         settings.setHgap(20);
-        settings.setVgap(graphicalMenus.primaryStage.getHeight() / 15);
+        settings.setVgap(graphicalMenus.primaryStage.getHeight() / 20);
 
         {
             Label useEyeTracker = new Label("Eye Tracker:");
@@ -84,6 +84,26 @@ public class OptionsMenu extends BorderPane {
         createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 2);
         createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 3);
         createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 4);
+
+        {
+
+            Label teamviewerLabel = new Label("Informations de l'utilisateur:");
+            teamviewerLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
+
+            Button teamViewerButton = createTopBarButton(
+                    "Ouvrir>",
+                    "images/user.png",
+                    (e) -> {
+                        StageUtils.killRunningProcess(graphicalMenus);
+                        graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUserPageMenu());
+                    }
+            );
+
+            teamViewerButton.setTextFill(Color.web("#faeaed"));
+
+            settings.add(teamviewerLabel, 0, 6);
+            settings.add(teamViewerButton, 1, 6);
+        }
 
         {
 
