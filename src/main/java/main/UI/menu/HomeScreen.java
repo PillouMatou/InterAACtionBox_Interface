@@ -82,7 +82,7 @@ public class HomeScreen extends BorderPane {
         showCloseProcessButtonIfProcessNotNull();
 
         Button tobiiButton = createTopBarButton(
-                "Tobii Manager",
+                "Eye-Tracker Manager",
                 "images/eye-tracking_white.png",
                 (e) -> {
                     StageUtils.killRunningProcess(graphicalMenus);
@@ -311,7 +311,7 @@ public class HomeScreen extends BorderPane {
 
     public ProgressButton createCloseMenuButton() {
         ProgressButton closeButton = new ProgressButton();
-        closeButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 10);
+        closeButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 15);
         closeButton.getButton().setStroke(Color.web("#cd2653"));
         closeButton.getButton().setStrokeWidth(3);
 
@@ -331,7 +331,7 @@ public class HomeScreen extends BorderPane {
             centerMenu.setSpacing(rest / 2);
             centerMenu.setTranslateY(rest / 2);
             centerMenu.getChildren().add(0, closeMenuButton);
-            closeMenuButton.getLabel().setText("Back To :\n" + graphicalMenus.process.getName());
+            closeMenuButton.getLabel().setText("Retourner sur :\n" + graphicalMenus.process.getName());
         } else if (graphicalMenus.process == null || graphicalMenus.process.get() == null) {
             double rest = graphicalMenus.primaryStage.getHeight() - (graphicalMenus.primaryStage.getHeight() / 10 + graphicalMenus.primaryStage.getWidth() / 5);
             double spacingoffset = (graphicalMenus.primaryStage.getHeight() - (graphicalMenus.primaryStage.getHeight() / 10 + 2 * graphicalMenus.primaryStage.getWidth() / 5)) / 3;
