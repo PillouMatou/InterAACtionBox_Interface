@@ -463,7 +463,7 @@ public class UpdateMenu extends BorderPane {
         output.textProperty().bind(updateManager.updateServices[serviceIndex].getOutput());
         output.setOpacity(0.5);
         output.setWrapText(true);
-        output.setStyle("-fx-font-size: 0.5");
+        output.setStyle("-fx-font-size: 0.5em");
         output.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(10));
         output.maxWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(10));
         settings.add(output, 3, row);
