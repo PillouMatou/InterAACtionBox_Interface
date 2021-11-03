@@ -110,4 +110,28 @@ public class UtilsUI {
         r.setFill(lg1);
         return r;
     }
+
+
+    public static Button createButton(String text, String imagePath, EventHandler eventhandler) {
+        DoubleClickedButton optionButton = new DoubleClickedButton(text);
+        optionButton.setPrefHeight(50);
+        optionButton.setMaxHeight(50);
+        String style = "-fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; -fx-background-color: transparent; " +
+                "-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #faeaed; -fx-font-size: 2.5em; ";
+        optionButton.setStyle(style);
+        optionButton.hoverProperty().addListener((obs, oldval, newval) -> {
+            if (newval) {
+                optionButton.setStyle(style + "-fx-cursor: hand; -fx-underline: true");
+            } else {
+                optionButton.setStyle(style);
+            }
+        });
+        ImageView graphic = new ImageView(imagePath);
+        graphic.setPreserveRatio(true);
+        graphic.setFitHeight(30);
+        optionButton.setGraphic(graphic);
+
+        optionButton.assignHandler(eventhandler);
+        return optionButton;
+    }
 }
