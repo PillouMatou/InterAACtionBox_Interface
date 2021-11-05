@@ -44,7 +44,7 @@ public class UpdateManager {
 
     public void checkUpdates() {
         for (UpdateService updateService : updateServices) {
-            updateService.checkUpdate(false);
+            updateService.checkUpdate(true);
             updateService.checkExist();
         }
     }
