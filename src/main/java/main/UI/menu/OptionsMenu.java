@@ -110,6 +110,8 @@ public class OptionsMenu extends BorderPane {
         settings.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(settings, Pos.CENTER);
         this.setCenter(settings);
+
+        this.setBottom(new Label(Configuration.VERSION));
     }
 
     void createGnomeControlCenterButton(GraphicalMenus graphicalMenus, GridPane settings, String label, String imageName, String panelToOpen, int row) {

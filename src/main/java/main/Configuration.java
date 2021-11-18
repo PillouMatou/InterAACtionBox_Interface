@@ -11,6 +11,8 @@ import java.util.LinkedList;
 
 public class Configuration {
 
+    public final static String VERSION = "InterAACtionBox-Interface 1.0.0 Dev v.2021.18.11";
+
     public final static int MOUSE_INTERACTION = 0;
     public final static int GAZE_INTERACTION = 1;
     @Setter
