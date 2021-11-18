@@ -21,7 +21,7 @@ public class CloseGoogleChromeProcessCreator {
 
     Process waitForCloseRequest() {
         try {
-            File fileFR = new File("~/Téléchargements/close161918.txt");
+            File fileFR = new File("~/TÃ©lÃ©chargements/close161918.txt");
             File fileEN = new File("~/Downloads/close161918.txt");
             if(fileFR.exists()) {
                 fileFR.delete();

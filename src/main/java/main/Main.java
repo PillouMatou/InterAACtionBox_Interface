@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.UI.menu.ContactUs;
 import main.UI.menu.GraphicalMenus;
 import main.utils.StageUtils;
 import main.utils.UtilsOS;
@@ -34,7 +35,8 @@ public class Main extends Application {
         Scene scene = new Scene(new Pane(new Rectangle(0,0,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight())), Color.TRANSPARENT);
 
         GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage);
-        scene.setRoot(graphicalMenus.getHomeScreen());
+        //scene.setRoot(graphicalMenus.getHomeScreen());
+        scene.setRoot(graphicalMenus.getContactUs());
         graphicalMenus.getConfiguration().setScene(scene);
 
         primaryStage.setScene(scene);
