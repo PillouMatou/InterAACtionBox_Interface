@@ -26,7 +26,7 @@ public class UtilsMail {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
             keyGenerator.init(128); // block size is 128bits
             LinkedList<Integer> byteList = new LinkedList<>();
-            BufferedReader buffReader = new BufferedReader(new FileReader("C:/Users/Sebastien/.email/crypted_key.txt"));
+            BufferedReader buffReader = new BufferedReader(new FileReader("~/.email/crypted_key.txt"));
             String[] stringbyteArray = buffReader.readLine().split(",");
             byte[] realBytesArray = new byte[stringbyteArray.length];
             for (int i = 0; i < stringbyteArray.length; i++) {
@@ -50,7 +50,7 @@ public class UtilsMail {
             };
             cipher = Cipher.getInstance("AES");
 
-            BufferedReader buffReaderpass = new BufferedReader(new FileReader("C:/Users/Sebastien/.email/crypted_pass.txt"));
+            BufferedReader buffReaderpass = new BufferedReader(new FileReader("~/.email/crypted_pass.txt"));
             return decrypt(buffReaderpass.readLine(), secretKey);
         } catch (Exception e) {
             return "";
