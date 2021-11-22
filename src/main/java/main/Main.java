@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.UI.menu.ContactUs;
 import main.UI.menu.GraphicalMenus;
 import main.utils.StageUtils;
 import main.utils.UtilsOS;

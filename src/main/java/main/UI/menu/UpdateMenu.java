@@ -11,11 +11,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
+import main.Configuration;
 import main.utils.UpdateManager;
 import main.utils.UpdateService;
 import main.utils.UtilsUI;
@@ -28,9 +31,8 @@ import java.io.InputStreamReader;
 public class UpdateMenu extends BorderPane {
 
     UpdateManager updateManager;
-    Button downloadButton;
     ProgressBar[] progressBars = new ProgressBar[6];
-    Label displayedLabel;
+    Button installAllButton;
     GraphicalMenus graphicalMenus;
 
     public UpdateMenu(GraphicalMenus graphicalMenus, UpdateManager updateManager) {
@@ -48,7 +50,7 @@ public class UpdateMenu extends BorderPane {
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        this.setTop(UtilsUI.createTopBar(graphicalMenus, "Mises \u00e0 jour"));
+        this.setTop(UtilsUI.createTopBar(graphicalMenus.getHomeScreen(), graphicalMenus, "Mises \u00e0 jour"));
 
 
         VBox menu = new VBox();
@@ -58,29 +60,30 @@ public class UpdateMenu extends BorderPane {
         downloadEverythin.setAlignment(Pos.CENTER);
         downloadEverythin.setSpacing(20);
 
-        displayedLabel = new Label("Mettre \u00e0 jour tous les logiciels");
-        displayedLabel.setStyle("-fx-font-weight: bold; " +
-                "-fx-font-family: Helvetica; " +
-                "-fx-text-fill: #cd2653");
-        displayedLabel.setFont(new Font(30));
+        installAllButton = createTopBarButton("Mettre \u00e0 jour tous les logiciels", (event) -> {
+            if (updateManager.anyUpdateNeeded.getValue()) {
+                startUpdateAll();
+            }
+        }, null);
+        String style = "-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em; " +
+                "-fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; -fx-background-color: transparent; ";
+        installAllButton.setStyle(style);
+        installAllButton.hoverProperty().addListener((obs, oldval, newval) -> {
+            if (newval && updateManager.anyUpdateNeeded.getValue()) {
+                installAllButton.setStyle(style + "-fx-cursor: hand; -fx-underline: true");
+            } else {
+                installAllButton.setStyle(style);
+            }
+        });
         menu.setSpacing(30);
 
-        downloadButton = new Button("Installer tous");
-
-        downloadButton.setOnMouseClicked((event) -> {
-            downloadButton.setVisible(false);
-            startUpdateAll();
-        });
-
-        downloadEverythin.getChildren().addAll(displayedLabel);
+        downloadEverythin.getChildren().addAll(installAllButton);
 
         updateManager.anyUpdateNeeded.addListener((obs, oldval, newval) -> {
             if (newval) {
-                displayedLabel.setText("Mettre \u00e0 jour tous les logiciels");
-                downloadEverythin.getChildren().add(downloadButton);
+                installAllButton.setText("Mettre \u00e0 jour tous les logiciels");
             } else {
-                displayedLabel.setText("Votre syst\u00e8me est \u00e0 jour");
-                downloadEverythin.getChildren().remove(downloadButton);
+                installAllButton.setText("Votre syst\u00e8me est \u00e0 jour");
             }
         });
 
@@ -111,6 +114,7 @@ public class UpdateMenu extends BorderPane {
         menu.getChildren().addAll(downloadEverythin, progressBars[0], settings);
 
         this.setCenter(menu);
+        this.setBottom(new Label(Configuration.VERSION));
     }
 
     void startUpdateAll() {
@@ -165,7 +169,7 @@ public class UpdateMenu extends BorderPane {
     void startUpdateSystem() {
         if (updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get()) {
             try {
-                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
+                ProcessBuilder pb = new ProcessBuilder("");
                 pb.redirectErrorStream(true);
                 Process p = pb.start();
                 p.onExit().thenRun(() -> {
@@ -182,6 +186,26 @@ public class UpdateMenu extends BorderPane {
             }
         } else {
             startUpdateAugCom();
+        }
+    }
+
+    void startUpdateOnlySystem() {
+        if (updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.SYSTEME + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.SYSTEME].getOutput().setValue("");
+                    });
+                });
+                progressPercent(p, 1);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
         }
     }
 
@@ -208,6 +232,26 @@ public class UpdateMenu extends BorderPane {
         }
     }
 
+    void startUpdateOnlyAugCom() {
+        if (updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/augcomUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.AUGCOM + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.AUGCOM].getOutput().setValue("");
+                    });
+                });
+                progressPercent(p, 2);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+        }
+    }
+
     void startUpdateInterAACtonScene() {
         if (updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get()) {
             try {
@@ -228,6 +272,26 @@ public class UpdateMenu extends BorderPane {
             }
         } else {
             startUpdateInterAACtionPlayer();
+        }
+    }
+
+    void startUpdateOnlyInterAACtonScene() {
+        if (updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionSceneUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.INTERAACTION_SCENE + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getOutput().setValue("");
+                    });
+                });
+                progressPercent(p, 3);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
         }
     }
 
@@ -254,6 +318,26 @@ public class UpdateMenu extends BorderPane {
         }
     }
 
+    void startUpdateOnlyGazePlay() {
+        if (updateManager.updateServices[UpdateService.GAZEPLAY].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/gazeplayUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.GAZEPLAY + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.GAZEPLAY].getOutput().setValue("");
+                    });
+                });
+                progressPercent(p, 4);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+        }
+    }
+
     void startUpdateInterAACtionPlayer() {
 
         if (updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get()) {
@@ -275,6 +359,27 @@ public class UpdateMenu extends BorderPane {
             }
         } else {
             startUpdateGazePlay();
+        }
+    }
+
+    void startUpdateOnlyInterAACtionPlayer() {
+
+        if (updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionPlayerUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.INTERAACTION_PLAYER + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getOutput().setValue("");
+                    });
+                });
+                progressPercent(p, 5);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
         }
     }
 
@@ -310,19 +415,47 @@ public class UpdateMenu extends BorderPane {
 
     void createGnomeControlCenterButton(GridPane settings, int serviceIndex) {
         Label displayedLabel = new Label(updateManager.updateServices[serviceIndex].getName() + ":");
-        displayedLabel.setFont(new Font(20));
-        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
+        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 2.5em");
         displayedLabel.setTextFill(Color.web("#cd2653"));
 
         Button button = createTopBarButton(
                 "Le logiciel est \u00e0 jour",
-                (e) -> {
+                (event) -> {
+                    if (updateManager.updateServices[serviceIndex].getUpdateProperty().getValue()) {
+                        switch (serviceIndex) {
+                            case UpdateService.SYSTEME:
+                                startUpdateOnlySystem();
+                                break;
+                            case UpdateService.AUGCOM:
+                                startUpdateOnlyAugCom();
+                                break;
+                            case UpdateService.INTERAACTION_SCENE:
+                                startUpdateOnlyInterAACtonScene();
+                                break;
+                            case UpdateService.GAZEPLAY:
+                                startUpdateOnlyGazePlay();
+                                break;
+                            case UpdateService.INTERAACTION_PLAYER:
+                                startUpdateOnlyInterAACtionPlayer();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 },
                 "images/tick-mark.png"
         );
 
-
-        button.setTextFill(Color.web("#faeaed"));
+        String style = "-fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; -fx-font-size: 2em ;" +
+                "-fx-background-color: transparent; -fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #faeaed;";
+        button.setStyle(style);
+        button.hoverProperty().addListener((obs, oldval, newval) -> {
+            if (newval && updateManager.updateServices[serviceIndex].getUpdateProperty().getValue()) {
+                button.setStyle(style + "-fx-cursor: hand; -fx-underline: true");
+            } else {
+                button.setStyle(style);
+            }
+        });
 
         int row = serviceIndex + 1;
 
@@ -332,7 +465,7 @@ public class UpdateMenu extends BorderPane {
         output.textProperty().bind(updateManager.updateServices[serviceIndex].getOutput());
         output.setOpacity(0.5);
         output.setWrapText(true);
-        output.setStyle("-fx-font-size: 5");
+        output.setStyle("-fx-font-size: 0.5em");
         output.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(10));
         output.maxWidthProperty().bind(graphicalMenus.primaryStage.widthProperty().divide(10));
         settings.add(output, 3, row);

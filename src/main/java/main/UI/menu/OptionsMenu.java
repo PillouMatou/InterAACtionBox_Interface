@@ -4,7 +4,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -27,37 +28,31 @@ public class OptionsMenu extends BorderPane {
     public OptionsMenu(GraphicalMenus graphicalMenus) {
         super();
 
-        Rectangle r = new Rectangle();
-        r.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
-        r.heightProperty().bind(graphicalMenus.primaryStage.heightProperty());
-        Stop[] stops = new Stop[]{new Stop(0, Color.web("#faeaed")), new Stop(1, Color.web("#cd2653"))};
-        LinearGradient lg1 = new LinearGradient(0, 1, 1.5, 0, true, CycleMethod.NO_CYCLE, stops);
-        r.setFill(lg1);
-
-        this.getChildren().add(r);
+        this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        StackPane titlePane = UtilsUI.createTopBar(graphicalMenus,"Options");
-
-        BorderPane.setAlignment(titlePane, Pos.CENTER);
-        this.setTop(titlePane);
-
+        this.setTop(UtilsUI.createTopBar(graphicalMenus.getHomeScreen(), graphicalMenus, "Options"));
 
         GridPane settings = new GridPane();
-        settings.setHgap(20);
-        settings.setVgap(graphicalMenus.primaryStage.getHeight()/15);
+        settings.setHgap(15);
+        settings.setVgap(graphicalMenus.primaryStage.getHeight() / 20);
 
         {
             Label useEyeTracker = new Label("Eye Tracker:");
-
-            useEyeTracker.setFont(new Font(20));
-            useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
-            useEyeTracker.setTextFill(Color.web("#cd2653"));
+            useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
             CheckBox useEyeTrackerCheckBox = new CheckBox("Activ\u00e9");
-            useEyeTrackerCheckBox.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 20");
+            String style = "-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 2.5em; ";
+            useEyeTrackerCheckBox.setStyle(style);
+            useEyeTrackerCheckBox.hoverProperty().addListener((obs, oldval, newval) -> {
+                if (newval) {
+                    useEyeTrackerCheckBox.setStyle(style + "-fx-cursor: hand; -fx-underline: true");
+                } else {
+                    useEyeTrackerCheckBox.setStyle(style);
+                }
+            });
             useEyeTrackerCheckBox.selectedProperty().addListener((obj, oldval, newval) -> {
                 if (newval) {
                     useEyeTrackerCheckBox.setText("D\u00e9sactiv\u00e9");
@@ -70,7 +65,7 @@ public class OptionsMenu extends BorderPane {
 
             useEyeTrackerCheckBox.setSelected(true);
             useEyeTrackerCheckBox.setTextFill(Color.web("#faeaed"));
-            useEyeTrackerCheckBox.resize(100,100);
+            useEyeTrackerCheckBox.resize(100, 100);
 
             settings.add(useEyeTracker, 0, 0);
             settings.add(useEyeTrackerCheckBox, 1, 0);
@@ -84,13 +79,50 @@ public class OptionsMenu extends BorderPane {
 
         {
 
+            Label userInformationLabel = new Label("Une id\u00e9e ? Besoin d'aide ? ");
+            userInformationLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
+
+            Button userInformationButton = UtilsUI.createButton(
+                    "Contactez-nous>",
+                    "images/contact.png",
+                    (e) -> {
+                        StageUtils.killRunningProcess(graphicalMenus);
+                        graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getContactUs());
+                    }
+            );
+
+            userInformationButton.setTextFill(Color.web("#faeaed"));
+
+            settings.add(userInformationLabel, 0, 7);
+            settings.add(userInformationButton, 1, 7);
+        }
+
+        {
+
+            Label userInformationLabel = new Label("Informations de l'utilisateur:");
+            userInformationLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
+
+            Button userInformationButton = UtilsUI.createButton(
+                    "Ouvrir>",
+                    "images/user_white.png",
+                    (e) -> {
+                        StageUtils.killRunningProcess(graphicalMenus);
+                        graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUserPageMenu());
+                    }
+            );
+
+            userInformationButton.setTextFill(Color.web("#faeaed"));
+
+            settings.add(userInformationLabel, 0, 6);
+            settings.add(userInformationButton, 1, 6);
+        }
+
+        {
+
             Label teamviewerLabel = new Label("Lancer TeamViewer:");
+            teamviewerLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
-            teamviewerLabel.setFont(new Font(20));
-            teamviewerLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
-            teamviewerLabel.setTextFill(Color.web("#cd2653"));
-
-            Button teamViewerButton = createTopBarButton(
+            Button teamViewerButton = UtilsUI.createButton(
                     "Ouvrir>",
                     "images/teamviewer.png",
                     (e) -> {
@@ -110,15 +142,15 @@ public class OptionsMenu extends BorderPane {
         settings.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(settings, Pos.CENTER);
         this.setCenter(settings);
+
+        this.setBottom(new Label(Configuration.VERSION));
     }
 
     void createGnomeControlCenterButton(GraphicalMenus graphicalMenus, GridPane settings, String label, String imageName, String panelToOpen, int row) {
         Label displayedLabel = new Label(label);
-        displayedLabel.setFont(new Font(20));
-        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
-        displayedLabel.setTextFill(Color.web("#cd2653"));
+        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em");
 
-        Button button = createTopBarButton(
+        Button button = UtilsUI.createButton(
                 "Ouvrir>",
                 imageName,
                 (e) -> {
