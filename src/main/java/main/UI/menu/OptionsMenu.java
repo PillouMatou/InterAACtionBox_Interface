@@ -29,7 +29,7 @@ public class OptionsMenu extends BorderPane {
         this.setTop(UtilsUI.createTopBar(graphicalMenus.getHomeScreen(), graphicalMenus, "Options"));
 
         GridPane settings = new GridPane();
-        settings.setHgap(20);
+        settings.setHgap(15);
         settings.setVgap(graphicalMenus.primaryStage.getHeight() / 20);
 
         {
@@ -71,10 +71,30 @@ public class OptionsMenu extends BorderPane {
 
         {
 
-            Label teamviewerLabel = new Label("Informations de l'utilisateur:");
-            teamviewerLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
+            Label userInformationLabel = new Label("Une id\u00e9e ? Besoin d'aide ? ");
+            userInformationLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
-            Button teamViewerButton = UtilsUI.createButton(
+            Button userInformationButton = UtilsUI.createButton(
+                    "Contactez-nous>",
+                    "images/contact.png",
+                    (e) -> {
+                        StageUtils.killRunningProcess(graphicalMenus);
+                        graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getContactUs());
+                    }
+            );
+
+            userInformationButton.setTextFill(Color.web("#faeaed"));
+
+            settings.add(userInformationLabel, 0, 7);
+            settings.add(userInformationButton, 1, 7);
+        }
+
+        {
+
+            Label userInformationLabel = new Label("Informations de l'utilisateur:");
+            userInformationLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
+
+            Button userInformationButton = UtilsUI.createButton(
                     "Ouvrir>",
                     "images/user_white.png",
                     (e) -> {
@@ -83,10 +103,10 @@ public class OptionsMenu extends BorderPane {
                     }
             );
 
-            teamViewerButton.setTextFill(Color.web("#faeaed"));
+            userInformationButton.setTextFill(Color.web("#faeaed"));
 
-            settings.add(teamviewerLabel, 0, 6);
-            settings.add(teamViewerButton, 1, 6);
+            settings.add(userInformationLabel, 0, 6);
+            settings.add(userInformationButton, 1, 6);
         }
 
         {

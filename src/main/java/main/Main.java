@@ -35,8 +35,7 @@ public class Main extends Application {
         Scene scene = new Scene(new Pane(new Rectangle(0,0,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight())), Color.TRANSPARENT);
 
         GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage);
-        //scene.setRoot(graphicalMenus.getHomeScreen());
-        scene.setRoot(graphicalMenus.getContactUs());
+        scene.setRoot(graphicalMenus.getHomeScreen());
         graphicalMenus.getConfiguration().setScene(scene);
 
         primaryStage.setScene(scene);
