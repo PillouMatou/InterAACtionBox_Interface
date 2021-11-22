@@ -28,7 +28,6 @@ public class UserPageMenu extends BorderPane {
         settings.setHgap(20);
         settings.setVgap(graphicalMenus.primaryStage.getHeight() / 20);
 
-        Label l =new Label("test");
         {
             Label displayedLabel = new Label("Mot de Passe");
             displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em");
@@ -39,7 +38,7 @@ public class UserPageMenu extends BorderPane {
                     "images/user_white.png",
                     (e) -> {
                         try {
-                            changePassword(l);
+                            changePassword();
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
@@ -55,10 +54,9 @@ public class UserPageMenu extends BorderPane {
         settings.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(settings, Pos.CENTER);
         this.setCenter(settings);
-        this.setBottom(l);
     }
 
-    void changePassword(Label l) throws IOException {
+    void changePassword() throws IOException {
             ProcessBuilder pb = new ProcessBuilder("bash", "./scripts/changePassword.sh");
            pb.inheritIO().start();
     }
