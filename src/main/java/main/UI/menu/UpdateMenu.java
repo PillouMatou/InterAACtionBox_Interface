@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
+import main.Configuration;
 import main.utils.UpdateManager;
 import main.utils.UpdateService;
 import main.utils.UtilsUI;
@@ -113,6 +114,7 @@ public class UpdateMenu extends BorderPane {
         menu.getChildren().addAll(downloadEverythin, progressBars[0], settings);
 
         this.setCenter(menu);
+        this.setBottom(new Label(Configuration.VERSION));
     }
 
     void startUpdateAll() {
