@@ -21,7 +21,7 @@ public class TobiiManagerNamedProcessCreator implements AppNamedProcessCreator {
                     "/max ",
                     System.getProperty("user.home") + "/AppData/Local/Programs/TobiiProEyeTrackerManager/TobiiProEyeTrackerManager.exe");
         } else {
-            processBuilder = new ProcessBuilder("tobiiproeyetrackermanager");
+            processBuilder = new ProcessBuilder("tobii_config");
         }
     }
 

@@ -23,6 +23,8 @@ public class GraphicalMenus {
     private final UpdateMenu updateMenu;
     @Getter
     private final UserPageMenu userPageMenu;
+    @Getter
+    private final ContactUs contactUs;
 
     public NamedProcess process = new NamedProcess();
 
@@ -33,6 +35,7 @@ public class GraphicalMenus {
         this.optionsMenu = new OptionsMenu(this);
         this.updateMenu = new UpdateMenu(this, updateManager);
         this.userPageMenu = new UserPageMenu(this);
+        this.contactUs = new ContactUs(this);
     }
 
 }

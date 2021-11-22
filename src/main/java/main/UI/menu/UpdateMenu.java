@@ -167,7 +167,7 @@ public class UpdateMenu extends BorderPane {
     void startUpdateSystem() {
         if (updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get()) {
             try {
-                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
+                ProcessBuilder pb = new ProcessBuilder("");
                 pb.redirectErrorStream(true);
                 Process p = pb.start();
                 p.onExit().thenRun(() -> {
@@ -190,7 +190,7 @@ public class UpdateMenu extends BorderPane {
     void startUpdateOnlySystem() {
         if (updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get()) {
             try {
-                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir /s /b \"C:/Users/Sebastien\" ");
+                ProcessBuilder pb = new ProcessBuilder("");
                 pb.redirectErrorStream(true);
                 Process p = pb.start();
                 p.onExit().thenRun(() -> {
