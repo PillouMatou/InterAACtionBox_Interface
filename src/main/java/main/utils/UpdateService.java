@@ -42,8 +42,8 @@ public class UpdateService {
         this.existProperty = new SimpleBooleanProperty(false);
     }
 
-    public void checkUpdate() {
-        if (!updateURL.equals("")) {
+    public void checkUpdate(boolean testBool) {
+        if (!updateURL.equals("") && testBool) {
             try {
                 if (name.equals("GazePlay")) {
                     JSONObject softwareJson = JsonReader.readJsonFromUrl(updateURL);

@@ -49,7 +49,7 @@ public class UpdateMenu extends BorderPane {
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        this.setTop(UtilsUI.createTopBar(graphicalMenus, "Mises \u00e0 jour"));
+        this.setTop(UtilsUI.createTopBar(graphicalMenus.getHomeScreen(), graphicalMenus, "Mises \u00e0 jour"));
 
 
         VBox menu = new VBox();

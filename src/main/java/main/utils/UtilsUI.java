@@ -2,6 +2,7 @@ package main.utils;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -61,14 +62,14 @@ public class UtilsUI {
         return downnloadImageView;
     }
 
-    public static StackPane createTopBar(GraphicalMenus graphicalMenus, String label) {
+    public static StackPane createTopBar(Parent parent, GraphicalMenus graphicalMenus, String label) {
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, graphicalMenus.primaryStage.getWidth(), graphicalMenus.primaryStage.getHeight() / 10);
         backgroundForTitle.heightProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(10));
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setFill(Color.web("#cd2653"));
 
-        Button back = UtilsUI.getDoubleClickedButton("Retour", "images/back.png", (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getHomeScreen()), graphicalMenus.primaryStage);
+        Button back = UtilsUI.getDoubleClickedButton("Retour", "images/back.png", (e) -> graphicalMenus.getConfiguration().scene.setRoot(parent), graphicalMenus.primaryStage);
         back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
 
         Label title = new Label(label);
@@ -108,5 +109,29 @@ public class UtilsUI {
         LinearGradient lg1 = new LinearGradient(0, 1, 1.5, 0, true, CycleMethod.NO_CYCLE, stops);
         r.setFill(lg1);
         return r;
+    }
+
+
+    public static Button createButton(String text, String imagePath, EventHandler eventhandler) {
+        DoubleClickedButton optionButton = new DoubleClickedButton(text);
+        optionButton.setPrefHeight(50);
+        optionButton.setMaxHeight(50);
+        String style = "-fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; -fx-background-color: transparent; " +
+                "-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #faeaed; -fx-font-size: 2.5em; ";
+        optionButton.setStyle(style);
+        optionButton.hoverProperty().addListener((obs, oldval, newval) -> {
+            if (newval) {
+                optionButton.setStyle(style + "-fx-cursor: hand; -fx-underline: true");
+            } else {
+                optionButton.setStyle(style);
+            }
+        });
+        ImageView graphic = new ImageView(imagePath);
+        graphic.setPreserveRatio(true);
+        graphic.setFitHeight(30);
+        optionButton.setGraphic(graphic);
+
+        optionButton.assignHandler(eventhandler);
+        return optionButton;
     }
 }
