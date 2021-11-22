@@ -36,8 +36,8 @@ public class OptionsMenu extends BorderPane {
         this.setTop(UtilsUI.createTopBar(graphicalMenus.getHomeScreen(), graphicalMenus, "Options"));
 
         GridPane settings = new GridPane();
-        settings.setHgap(15);
-        settings.setVgap(graphicalMenus.primaryStage.getHeight() / 20);
+        settings.setHgap(20);
+        settings.setVgap(graphicalMenus.primaryStage.getHeight() / 30);
 
         {
             Label useEyeTracker = new Label("Eye Tracker:");
@@ -67,14 +67,14 @@ public class OptionsMenu extends BorderPane {
             useEyeTrackerCheckBox.setTextFill(Color.web("#faeaed"));
             useEyeTrackerCheckBox.resize(100, 100);
 
-            settings.add(useEyeTracker, 0, 0);
-            settings.add(useEyeTrackerCheckBox, 1, 0);
+            settings.add(useEyeTracker, 0, 1);
+            settings.add(useEyeTrackerCheckBox, 1, 1);
         }
 
-        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 1);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 2);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 3);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 4);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 2);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 3);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 4);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 5);
         createGnomeControlCenterButtonLang(settings);
 
         {
@@ -93,8 +93,8 @@ public class OptionsMenu extends BorderPane {
 
             userInformationButton.setTextFill(Color.web("#faeaed"));
 
-            settings.add(userInformationLabel, 0, 7);
-            settings.add(userInformationButton, 1, 7);
+            settings.add(userInformationLabel, 0, 8);
+            settings.add(userInformationButton, 1, 8);
         }
 
         {
@@ -113,8 +113,8 @@ public class OptionsMenu extends BorderPane {
 
             userInformationButton.setTextFill(Color.web("#faeaed"));
 
-            settings.add(userInformationLabel, 0, 6);
-            settings.add(userInformationButton, 1, 6);
+            settings.add(userInformationLabel, 0, 7);
+            settings.add(userInformationButton, 1, 7);
         }
 
         {
@@ -135,8 +135,8 @@ public class OptionsMenu extends BorderPane {
 
             teamViewerButton.setTextFill(Color.web("#faeaed"));
 
-            settings.add(teamviewerLabel, 0, 5);
-            settings.add(teamViewerButton, 1, 5);
+            settings.add(teamviewerLabel, 0, 6);
+            settings.add(teamViewerButton, 1, 6);
         }
 
         settings.setAlignment(Pos.CENTER);
@@ -168,9 +168,8 @@ public class OptionsMenu extends BorderPane {
     }
 
     void createGnomeControlCenterButtonLang(GridPane settings) {
-        Label displayedLabel = new Label("Langue");
-        displayedLabel.setFont(new Font(20));
-        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
+        Label displayedLabel = new Label("Choisir une langue:");
+        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
         displayedLabel.setTextFill(Color.web("#cd2653"));
 
         MenuItem menuItemFR = new MenuItem("Francais");
@@ -188,50 +187,8 @@ public class OptionsMenu extends BorderPane {
         });
         menuButton.getItems().addAll(menuItemEN,menuItemFR);
 
-
-        /*
-
-        Button button = createTopBarButton(
-                "Ouvrir>",
-                imageName,
-                (e) -> {
-                    StageUtils.killRunningProcess(graphicalMenus);
-                    GnomeControlCenterNamedProcessCreator process = new GnomeControlCenterNamedProcessCreator(panelToOpen);
-                    process.setUpProcessBuilder();
-                    graphicalMenus.process = process.start(graphicalMenus);
-                }
-        );
-
-         */
-
-        // button.setTextFill(Color.web("#faeaed"));
-
-        settings.add(displayedLabel, 0, 6);
-        settings.add(menuButton,1, 6);
-        // settings.add(button, 1, row);
-    }
-
-    Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
-        DoubleClickedButton optionButton = new DoubleClickedButton(text);
-        optionButton.setPrefHeight(50);
-        optionButton.setMaxHeight(50);
-        optionButton.setStyle(
-                "-fx-border-color: transparent; " +
-                        "-fx-border-width: 0; " +
-                        "-fx-background-radius: 0; " +
-                        "-fx-background-color: transparent; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-family: Helvetica; " +
-                        "-fx-text-fill: #faeaed;"+
-                        "-fx-font-size: 20"
-        );
-        ImageView graphic = new ImageView(imagePath);
-        graphic.setPreserveRatio(true);
-        graphic.setFitHeight(30);
-        optionButton.setGraphic(graphic);
-
-        optionButton.assignHandler(eventhandler);
-        return optionButton;
+        settings.add(displayedLabel, 0, 0);
+        settings.add(menuButton,1, 0);
     }
 
 
