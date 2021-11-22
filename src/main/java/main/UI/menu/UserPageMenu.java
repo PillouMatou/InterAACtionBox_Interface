@@ -57,7 +57,7 @@ public class UserPageMenu extends BorderPane {
     void changePassword() throws IOException {
             ProcessBuilder pb = new ProcessBuilder("sh", "./scripts/changePassword.sh");
             pb.redirectErrorStream(true);
-            pb.start();
+            pb.inheritIO().start();
     }
 
 }
