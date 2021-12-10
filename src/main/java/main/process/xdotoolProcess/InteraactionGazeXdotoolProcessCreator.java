@@ -16,7 +16,7 @@ public class InteraactionGazeXdotoolProcessCreator {
     public void setUpProcessBuilder() {
         processBuilder = new ProcessBuilder(
                 "sh",
-                "./scripts/interaactionPicto_windowId.sh"
+                "./scripts/interAACtionGaze_windowId.sh"
         );
     }
 
