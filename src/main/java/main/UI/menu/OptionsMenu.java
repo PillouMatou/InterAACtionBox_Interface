@@ -2,13 +2,17 @@ package main.UI.menu;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import lombok.extern.slf4j.Slf4j;
 import main.Configuration;
 import main.UI.DoubleClickedButton;
 import main.process.GnomeControlCenterNamedProcessCreator;
@@ -16,7 +20,10 @@ import main.process.TeamviewerNamedProcessCreator;
 import main.utils.StageUtils;
 import main.utils.UtilsUI;
 
+@Slf4j
 public class OptionsMenu extends BorderPane {
+
+    public String langage = "Francais";
 
     public OptionsMenu(GraphicalMenus graphicalMenus) {
         super();
@@ -29,8 +36,8 @@ public class OptionsMenu extends BorderPane {
         this.setTop(UtilsUI.createTopBar(graphicalMenus.getHomeScreen(), graphicalMenus, "Options"));
 
         GridPane settings = new GridPane();
-        settings.setHgap(15);
-        settings.setVgap(graphicalMenus.primaryStage.getHeight() / 20);
+        settings.setHgap(20);
+        settings.setVgap(graphicalMenus.primaryStage.getHeight() / 30);
 
         {
             Label useEyeTracker = new Label("Eye Tracker:");
@@ -60,14 +67,15 @@ public class OptionsMenu extends BorderPane {
             useEyeTrackerCheckBox.setTextFill(Color.web("#faeaed"));
             useEyeTrackerCheckBox.resize(100, 100);
 
-            settings.add(useEyeTracker, 0, 0);
-            settings.add(useEyeTrackerCheckBox, 1, 0);
+            settings.add(useEyeTracker, 0, 1);
+            settings.add(useEyeTrackerCheckBox, 1, 1);
         }
 
-        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 1);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 2);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 3);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 4);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 2);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 3);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 4);
+        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 5);
+        createGnomeControlCenterButtonLang(settings);
 
         {
 
@@ -85,8 +93,8 @@ public class OptionsMenu extends BorderPane {
 
             userInformationButton.setTextFill(Color.web("#faeaed"));
 
-            settings.add(userInformationLabel, 0, 7);
-            settings.add(userInformationButton, 1, 7);
+            settings.add(userInformationLabel, 0, 8);
+            settings.add(userInformationButton, 1, 8);
         }
 
         {
@@ -105,8 +113,8 @@ public class OptionsMenu extends BorderPane {
 
             userInformationButton.setTextFill(Color.web("#faeaed"));
 
-            settings.add(userInformationLabel, 0, 6);
-            settings.add(userInformationButton, 1, 6);
+            settings.add(userInformationLabel, 0, 7);
+            settings.add(userInformationButton, 1, 7);
         }
 
         {
@@ -127,8 +135,8 @@ public class OptionsMenu extends BorderPane {
 
             teamViewerButton.setTextFill(Color.web("#faeaed"));
 
-            settings.add(teamviewerLabel, 0, 5);
-            settings.add(teamViewerButton, 1, 5);
+            settings.add(teamviewerLabel, 0, 6);
+            settings.add(teamViewerButton, 1, 6);
         }
 
         settings.setAlignment(Pos.CENTER);
@@ -158,5 +166,30 @@ public class OptionsMenu extends BorderPane {
         settings.add(displayedLabel, 0, row);
         settings.add(button, 1, row);
     }
+
+    void createGnomeControlCenterButtonLang(GridPane settings) {
+        Label displayedLabel = new Label("Choisir une langue:");
+        displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
+        displayedLabel.setTextFill(Color.web("#cd2653"));
+
+        MenuItem menuItemFR = new MenuItem("Francais");
+        MenuItem menuItemEN = new MenuItem("English");
+
+        MenuButton menuButton = new MenuButton(langage);
+
+        menuItemFR.setOnAction(eventMenuLanguages -> {
+            langage = menuItemFR.getText();
+            menuButton.setText(langage);
+        });
+        menuItemEN.setOnAction(eventMenuLanguages -> {
+            langage = menuItemEN.getText();
+            menuButton.setText(langage);
+        });
+        menuButton.getItems().addAll(menuItemEN,menuItemFR);
+
+        settings.add(displayedLabel, 0, 0);
+        settings.add(menuButton,1, 0);
+    }
+
 
 }
