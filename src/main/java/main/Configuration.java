@@ -17,7 +17,7 @@ public class Configuration {
     public final static int GAZE_INTERACTION = 1;
     @Setter
     public Scene scene;
-    public int numberOfLastPositionsToCheck = 200;
+    public int numberOfLastPositionsToCheck = 7;
     public LinkedList<Point2D> lastPositions = new LinkedList<>();
     public LinkedList<Point2D> currentPoint = new LinkedList<>();
     IntegerProperty selectionMode = new SimpleIntegerProperty(Configuration.MOUSE_INTERACTION);

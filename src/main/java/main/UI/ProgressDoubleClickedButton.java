@@ -108,7 +108,7 @@ public class ProgressDoubleClickedButton extends StackPane {
                 indicator.setProgress(0);
 
                 timelineProgressBar.getKeyFrames().clear();
-                timelineProgressBar.setDelay(new Duration(300));
+                timelineProgressBar.setDelay(new Duration(500));
                 timelineProgressBar.getKeyFrames().add(
                         new KeyFrame(new Duration(ProgressDoubleClickedButton.FIXATION_LENGTH), new KeyValue(indicator.progressProperty(), 1)));
 
