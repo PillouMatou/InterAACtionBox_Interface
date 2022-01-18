@@ -20,6 +20,8 @@ import main.process.TeamviewerNamedProcessCreator;
 import main.utils.StageUtils;
 import main.utils.UtilsUI;
 
+import java.io.IOException;
+
 @Slf4j
 public class OptionsMenu extends BorderPane {
 
@@ -55,15 +57,13 @@ public class OptionsMenu extends BorderPane {
             });
             useEyeTrackerCheckBox.selectedProperty().addListener((obj, oldval, newval) -> {
                 if (newval) {
-                    useEyeTrackerCheckBox.setText("D\u00e9sactiv\u00e9");
-                    graphicalMenus.getConfiguration().setMode(Configuration.MOUSE_INTERACTION);
-                } else {
-                    useEyeTrackerCheckBox.setText("Activ\u00e9");
                     graphicalMenus.getConfiguration().setMode(Configuration.GAZE_INTERACTION);
+                } else {
+                    graphicalMenus.getConfiguration().setMode(Configuration.MOUSE_INTERACTION);
                 }
             });
 
-            useEyeTrackerCheckBox.setSelected(true);
+            useEyeTrackerCheckBox.setSelected(false);
             useEyeTrackerCheckBox.setTextFill(Color.web("#faeaed"));
             useEyeTrackerCheckBox.resize(100, 100);
 
@@ -98,23 +98,27 @@ public class OptionsMenu extends BorderPane {
         }
 
         {
+            Label changePasswordLabel = new Label("Mot de Passe");
+            changePasswordLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em");
 
-            Label userInformationLabel = new Label("Informations de l'utilisateur:");
-            userInformationLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
-            Button userInformationButton = UtilsUI.createButton(
-                    "Ouvrir>",
+            Button changePasswordButton = UtilsUI.createButton(
+                    "Changer>",
                     "images/user_white.png",
                     (e) -> {
-                        StageUtils.killRunningProcess(graphicalMenus);
-                        graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUserPageMenu());
+                        try {
+                            ProcessBuilder pb = new ProcessBuilder("bash", "./scripts/changePassword.sh");
+                            pb.inheritIO().start();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                     }
             );
 
-            userInformationButton.setTextFill(Color.web("#faeaed"));
+            changePasswordButton.setTextFill(Color.web("#faeaed"));
 
-            settings.add(userInformationLabel, 0, 7);
-            settings.add(userInformationButton, 1, 7);
+            settings.add(changePasswordLabel, 0, 7);
+            settings.add(changePasswordButton, 1, 7);
         }
 
         {
