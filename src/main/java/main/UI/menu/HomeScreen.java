@@ -27,9 +27,11 @@ import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
 import main.process.xdotoolProcess.ActivateMainWindowProcess;
 import main.utils.*;
+import tobii.Tobii;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 @Slf4j
 public class HomeScreen extends BorderPane {
@@ -49,6 +51,8 @@ public class HomeScreen extends BorderPane {
         this.updateManager = updateManager;
 
         this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
+
+        String tobiiNotConnected = Arrays.toString(Tobii.gazePosition());
 
         centerMenu = new VBox();
 
@@ -85,7 +89,7 @@ public class HomeScreen extends BorderPane {
 
         showCloseProcessButtonIfProcessNotNull();
 
-        Button tobiiButton = createTopBarButton(
+        /*Button tobiiButton = createTopBarButton(
                 "Eye-Tracker Manager",
                 "images/eye-tracking_white.png",
                 (e) -> {
@@ -95,14 +99,23 @@ public class HomeScreen extends BorderPane {
                     graphicalMenus.process = tobiiManagerProcess.start(graphicalMenus);
                     showCloseProcessButtonIfProcessNotNull();
                 }
-        );
+        );*/
 
         Button tobiiButton2 = createTopBarButton(
                 "Calibration",
                 "images/eye-tracking_white.png",
                 (e) -> {
-                    log.info("start calibration");
-                   interAACtionGazeNamedProcessCreator.start();
+
+                    if (Arrays.toString(Tobii.gazePosition()).equals(tobiiNotConnected)){
+                        StageUtils.killRunningProcess(graphicalMenus);
+                        TobiiManagerNamedProcessCreator tobiiManagerProcess = new TobiiManagerNamedProcessCreator();
+                        tobiiManagerProcess.setUpProcessBuilder();
+                        graphicalMenus.process = tobiiManagerProcess.start(graphicalMenus);
+                        showCloseProcessButtonIfProcessNotNull();
+                    }
+                    else {
+                        interAACtionGazeNamedProcessCreator.start();
+                    }
                 }
         );
 
@@ -118,7 +131,7 @@ public class HomeScreen extends BorderPane {
         });
         exitButton.start();
 
-        StackPane optionBar = createOptionBar(optionButton, updateButton, tobiiButton,tobiiButton2, exitButton);
+        StackPane optionBar = createOptionBar(optionButton, updateButton,tobiiButton2, exitButton);
         this.setTop(optionBar);
 
         ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
@@ -127,7 +140,7 @@ public class HomeScreen extends BorderPane {
     }
 
 
-    private StackPane createOptionBar(Button optionButton, Button updateButton, Button tobiiButton,Button tobiiButton2, StackPane exitButton) {
+    private StackPane createOptionBar(Button optionButton, Button updateButton,Button tobiiButton2, StackPane exitButton) {
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
         backgroundForTitle.setHeight(graphicalMenus.primaryStage.getHeight() / 10);
@@ -137,7 +150,6 @@ public class HomeScreen extends BorderPane {
 
         optionButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
         updateButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
-        tobiiButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
         tobiiButton2.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
         exitButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
 
@@ -156,7 +168,7 @@ public class HomeScreen extends BorderPane {
 
 
         titleBox.setLeft(new HBox(optionButton, updateButton));
-        titleBox.setRight(new HBox(tobiiButton,tobiiButton2, exitButton));
+        titleBox.setRight(new HBox(tobiiButton2, exitButton));
 
         BorderPane.setAlignment(titlePane, Pos.CENTER_LEFT);
 
