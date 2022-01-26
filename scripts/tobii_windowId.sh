@@ -1,31 +1,76 @@
 #!/bin/bash
-rm -f tobii_windowId.txt
-var=$(xdotool search --onlyvisible --class tobii)
-while [ -z "$var" ]
-do
 
-  var=$(xdotool search --onlyvisible --class tobii)
-  sleep 0.2
+zenity --info \
+	--title="InterAACtionBox" \
+  	--text="Eye Tracker non connecté ou non calibré" \
+	--width=300 \
+	--height=100 \
+	--ok-label Quitter \
+  	--extra-button Suivant  
+start=$?
+if [ $start -eq 0 ];
+then
+	exit 0
+else
 
-done
+	zenity --question \
+  		--title="InterAACtionBox" \
+  		--text="Avez-vous brancher votre Eye Tracker ?" \
+  		--width=300 \
+  		--height=100 \
+  		--ok-label="Oui" \
+  		--cancel-label="Non"
+  		
+  	if [ $? -eq 1 ];
+  	then
+  		zenity --info \
+  		--title="InterAACtionBox" \
+  		--text="Veuillez brancher votre Eye Tracker !" \
+  		--width=300 \
+  		--height=100 
+  	else
+  		zenity --question \
+  			--title="InterAACtionBox" \
+  			--text="Voulez-vous faire une première calibration ?" \
+  			--width=300 \
+  			--height=100 \
+  			--ok-label="Oui" \
+  			--cancel-label="Non"
+  			
+  		if [ $? -eq 1 ];
+  		then
+  			exit 0
+  		else
+  			rm -f tobii_windowId.txt
+			var=$(xdotool search --onlyvisible --class tobii)
+			while [ -z "$var" ]
+			do
 
-echo "$var" >tobii_windowId.txt
-xdotool windowsize "$var" 100% 100%
+  				var=$(xdotool search --onlyvisible --class tobii)
+  				sleep 0.2
 
-pgrep -x "tobii_config"
-var_running=$?
+			done
 
-while [ "$var_running" = "0" ];
-do
-  sleep 2
-  pgrep -x "tobii_config"
-  var_running=$?
-done
+			echo "$var" >tobii_windowId.txt
+			xdotool windowsize "$var" 100% 100%
 
-sleep 2
+			pgrep -x "tobii_config"
+			var_runing=$?
 
-sh ~/InterAACtionBox_Interface-linux/bin/scripts/transition.sh ~/InterAACtionBox_Interface-linux/bin/images/transition.gif
+			while [ "$var_runing" = "0" ];
+			do
+				sleep 2
+				pgrep -x "tobii_config"
+				var_runing=$?
+			done	
 
-sh ~/InterAACtionBox_Interface-linux/bin/scripts/interAACtionGaze_windowId.sh
+			sleep 2
+
+			sh ~/InterAACtionBox_Interface-linux/bin/scripts/transition.sh ~/InterAACtionBox_Interface-linux/bin/images/transition.gif
+
+			sh ~/InterAACtionBox_Interface-linux/bin/scripts/interAACtionGaze_windowId.sh
+  		fi
+  	fi	
+fi
 
 exit 0
