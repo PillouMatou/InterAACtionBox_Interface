@@ -111,7 +111,6 @@ public class HomeScreen extends BorderPane {
                         TobiiManagerNamedProcessCreator tobiiManagerProcess = new TobiiManagerNamedProcessCreator();
                         tobiiManagerProcess.setUpProcessBuilder();
                         graphicalMenus.process = tobiiManagerProcess.start(graphicalMenus);
-                        showCloseProcessButtonIfProcessNotNull();
                     }
                     else {
                         interAACtionGazeNamedProcessCreator.start();
