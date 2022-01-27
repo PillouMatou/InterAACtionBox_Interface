@@ -68,7 +68,7 @@ else
 
 			sh ~/InterAACtionBox_Interface-linux/bin/scripts/transition.sh ~/InterAACtionBox_Interface-linux/bin/images/transition.gif
 
-			sh ~/InterAACtionBox_Interface-linux/bin/scripts/interAACtionGaze_windowId.sh
+			sh ~/InterAACtionBox_Interface-linux/bin/scripts/interAACtionGaze-calibration_windowId.sh
   		fi
   	fi	
 fi
