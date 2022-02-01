@@ -5,6 +5,7 @@ zenity --info \
   	--text="Eye Tracker non connecté ou non calibré" \
 	--width=300 \
 	--height=100 \
+	--geometry=30500 \
 	--ok-label Quitter \
   	--extra-button Suivant  
 start=$?
@@ -18,6 +19,7 @@ else
   		--text="Avez-vous brancher votre Eye Tracker ?" \
   		--width=300 \
   		--height=100 \
+  		--geometry=30500 \
   		--ok-label="Oui" \
   		--cancel-label="Non"
   		
@@ -27,13 +29,15 @@ else
   		--title="InterAACtionBox" \
   		--text="Veuillez brancher votre Eye Tracker !" \
   		--width=300 \
-  		--height=100 
+  		--height=100 \
+  		--geometry=30500
   	else
   		zenity --question \
   			--title="InterAACtionBox" \
   			--text="Voulez-vous faire une première calibration ?" \
   			--width=300 \
   			--height=100 \
+  			--geometry=30500 \
   			--ok-label="Oui" \
   			--cancel-label="Non"
   			
