@@ -15,7 +15,7 @@ else
 
 	zenity --question \
   		--title="InterAACtionBox" \
-  		--text="Avez-vous brancher votre Eye Tracker ?" \
+  		--text="Avez-vous branché votre Eye Tracker ?" \
   		--width=300 \
   		--height=100 \
   		--ok-label="Oui" \
