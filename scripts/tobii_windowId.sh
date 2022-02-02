@@ -1,45 +1,38 @@
 #!/bin/bash
 
-zenity --info \
-	--title="InterAACtionBox" \
+yad	--title="InterAACtionBox" \
   	--text="Eye Tracker non connecté ou non calibré" \
-	--width=300 \
-	--height=100 \
-	--geometry=30500 \
-	--ok-label Quitter \
-  	--extra-button Suivant  
+	--geometry=300x100+810+200 \
+	--button="Suivant" \
+  	--button="Quitter"  
 start=$?
-if [ $start -eq 0 ];
+if [ $start -eq 1 ];
 then
 	exit 0
 else
 
-	zenity --question \
+	yad --question \
   		--title="InterAACtionBox" \
   		--text="Avez-vous brancher votre Eye Tracker ?" \
-  		--width=300 \
-  		--height=100 \
-  		--geometry=30500 \
-  		--ok-label="Oui" \
-  		--cancel-label="Non"
+  		--geometry=300x100+810+200 \
+  		--button="Oui" \
+  		--button="Non"
   		
   	if [ $? -eq 1 ];
   	then
-  		zenity --info \
+  		yad --info \
   		--title="InterAACtionBox" \
   		--text="Veuillez brancher votre Eye Tracker !" \
-  		--width=300 \
-  		--height=100 \
-  		--geometry=30500
+  		--geometry=300x100+810+200 \
+  		--button="Oui" \
+  		--button="Non"
   	else
-  		zenity --question \
+  		yad --question \
   			--title="InterAACtionBox" \
   			--text="Voulez-vous faire une première calibration ?" \
-  			--width=300 \
-  			--height=100 \
-  			--geometry=30500 \
-  			--ok-label="Oui" \
-  			--cancel-label="Non"
+  			--geometry=300x100+810+200 \
+  			--button="Oui" \
+  			--button="Non"
   			
   		if [ $? -eq 1 ];
   		then
