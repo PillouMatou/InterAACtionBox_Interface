@@ -21,8 +21,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
-import main.UI.ProgressButton;
-import main.UI.ProgressDoubleClickedButton;
+import main.Main;
+import main.UI.*;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
 import main.process.xdotoolProcess.ActivateMainWindowProcess;
@@ -45,10 +45,12 @@ public class HomeScreen extends BorderPane {
     InterAACtionGazeNamedProcessCreator interAACtionGazeNamedProcessCreator = new InterAACtionGazeNamedProcessCreator();
 
 
-    public HomeScreen(GraphicalMenus graphicalMenus, UpdateManager updateManager) {
+    public HomeScreen(GraphicalMenus graphicalMenus, UpdateManager updateManager, Main main) {
         super();
         this.graphicalMenus = graphicalMenus;
         this.updateManager = updateManager;
+
+        final Translator translator = main.getTranslator();
 
         this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 
@@ -100,7 +102,8 @@ public class HomeScreen extends BorderPane {
                     showCloseProcessButtonIfProcessNotNull();
                 }
         );*/
-
+        I18NButton tobiiButton2 = new I18NButton(translator,"Calibration");
+/*
         Button tobiiButton2 = createTopBarButton(
                 "Calibration",
                 "images/eye-tracking_white.png",
@@ -117,6 +120,7 @@ public class HomeScreen extends BorderPane {
                     }
                 }
         );
+         */
 
         ProgressDoubleClickedButton exitButton = createExitTopBarButton(
                 "Exit",

@@ -3,6 +3,8 @@ package main.UI.menu;
 import javafx.stage.Stage;
 import lombok.Getter;
 import main.Configuration;
+import main.ConfigurationBuilder;
+import main.Main;
 import main.gaze.devicemanager.AbstractGazeDeviceManager;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.utils.NamedProcess;
@@ -13,6 +15,8 @@ public class GraphicalMenus {
     final public Stage primaryStage;
     @Getter
     private final AbstractGazeDeviceManager gazeDeviceManager = new TobiiGazeDeviceManager();
+    @Getter
+    private final ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
     @Getter
     private final Configuration configuration = new Configuration();
     @Getter
@@ -26,10 +30,10 @@ public class GraphicalMenus {
 
     public NamedProcess process = new NamedProcess();
 
-    public GraphicalMenus(Stage primaryStage) {
+    public GraphicalMenus(Stage primaryStage, Main main) {
         this.primaryStage = primaryStage;
         UpdateManager updateManager = new UpdateManager();
-        this.homeScreen = new HomeScreen(this, updateManager);
+        this.homeScreen = new HomeScreen(this, updateManager,main);
         this.optionsMenu = new OptionsMenu(this);
         this.updateMenu = new UpdateMenu(this, updateManager);
         this.contactUs = new ContactUs(this);

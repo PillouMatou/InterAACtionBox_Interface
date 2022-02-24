@@ -77,6 +77,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'uk.org.lidalia:sysout-over-slf4j:1.0.2'
     compile 'javax.media:jmf:2.1.1e'
+    compile 'commons-io:commons-io:2.5'
     implementation 'org.json:json:20090211'
     compile 'ws.schild:jave-all-deps:2.5.0'
     compile 'ws.schild:jave-core:2.5.0'
