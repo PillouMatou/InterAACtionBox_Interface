@@ -58,10 +58,17 @@ public class PositionPollerRunnable implements Runnable {
 
         if (configuration.waitForUserMove()) {
 
-            final Point2D point = new Point2D(positionX + offsetX, positionY + offsetY);
-            robot.mouseMove((int) point.getX(), (int) point.getY());
-            configuration.currentPoint.add(new Point2D(MouseInfo.getPointerInfo().getLocation().getX(),
-                    MouseInfo.getPointerInfo().getLocation().getY()));
+            if(xRatio != 0.5 && yRatio != 0.5) {
+                final Point2D point = new Point2D(positionX + offsetX, positionY + offsetY);
+                robot.mouseMove((int) point.getX(), (int) point.getY());
+                configuration.currentPoint.add(new Point2D(MouseInfo.getPointerInfo().getLocation().getX(),
+                        MouseInfo.getPointerInfo().getLocation().getY()));
+            }else{
+                final Point2D point = new Point2D(MouseInfo.getPointerInfo().getLocation().getX(), MouseInfo.getPointerInfo().getLocation().getY());
+                robot.mouseMove((int) point.getX(), (int) point.getY());
+                configuration.currentPoint.add(new Point2D(MouseInfo.getPointerInfo().getLocation().getX(),
+                        MouseInfo.getPointerInfo().getLocation().getY()));
+            }
         } else {
             configuration.updateLastPositions();
         }

@@ -25,7 +25,7 @@ import main.utils.UtilsUI;
 @Slf4j
 public class ProgressDoubleClickedButton extends StackPane {
 
-    private static final int FIXATION_LENGTH = 500;
+    private static final int FIXATION_LENGTH = 3000;
 
     @Getter
     private final Button button;
