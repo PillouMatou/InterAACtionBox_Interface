@@ -137,7 +137,7 @@ public class UtilsUI {
     }
 
 
-    public static Button createButton(String text, String imagePath, EventHandler eventhandler) {
+    public static Button createButtonI18N(Translator translator,String text, String imagePath, EventHandler eventhandler) {
         DoubleClickedButton optionButton = new DoubleClickedButton(text);
         optionButton.setPrefHeight(50);
         optionButton.setMaxHeight(50);

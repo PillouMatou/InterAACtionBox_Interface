@@ -70,13 +70,13 @@ public class HomeScreen extends BorderPane {
             graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu());
         };
 
-        Button optionButton = createTopBarButton(
+        I18NButton optionButton = createTopBarButtonI18N(
                 "Options",
                 "images/settings_white.png",
                 (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu())
         );
 
-        Button updateButton = createTopBarButton(
+        I18NButton updateButton = createTopBarButtonI18N(
                 "Votre syst\u00e8me est \u00e0 jour",
                 "images/refresh.png",
                 goToUpdateMenu
@@ -123,7 +123,7 @@ public class HomeScreen extends BorderPane {
         );
 
 
-        ProgressDoubleClickedButton exitButton = createExitTopBarButton(
+        ProgressDoubleClickedButtonI18N exitButton = createExitTopBarButton(
                 "Exit",
                 "images/on-off-button_white.png",
                 (e) -> {
@@ -214,9 +214,9 @@ public class HomeScreen extends BorderPane {
         return (I18NButton) UtilsUI.getDoubleClickedButtonI18N(translator,text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
-    ProgressDoubleClickedButton createExitTopBarButton(String text, String imagePath, EventHandler eventhandler) {
+    ProgressDoubleClickedButtonI18N createExitTopBarButton(String text, String imagePath, EventHandler eventhandler) {
 
-        return new ProgressDoubleClickedButton(text, imagePath, eventhandler, graphicalMenus.primaryStage);
+        return new ProgressDoubleClickedButtonI18N(translator, text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
     private HBox createMenuBar() {

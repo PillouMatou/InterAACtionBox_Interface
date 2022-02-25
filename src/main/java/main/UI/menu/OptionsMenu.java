@@ -14,7 +14,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import lombok.extern.slf4j.Slf4j;
 import main.Configuration;
+import main.Main;
 import main.UI.DoubleClickedButton;
+import main.UI.I18NLabel;
+import main.UI.Translator;
 import main.process.GnomeControlCenterNamedProcessCreator;
 import main.process.TeamviewerNamedProcessCreator;
 import main.utils.StageUtils;
@@ -27,8 +30,13 @@ public class OptionsMenu extends BorderPane {
 
     public String langage = "Francais";
 
-    public OptionsMenu(GraphicalMenus graphicalMenus) {
+    private final Translator translator;
+
+
+    public OptionsMenu(GraphicalMenus graphicalMenus, Main main) {
         super();
+
+        translator = main.getTranslator();
 
         this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 
@@ -71,18 +79,18 @@ public class OptionsMenu extends BorderPane {
             settings.add(useEyeTrackerCheckBox, 1, 1);
         }
 
-        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 2);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 3);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 4);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 5);
+        createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 2);
+        createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 3);
+        createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 4);
+        createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 5);
         createGnomeControlCenterButtonLang(settings);
 
         {
 
-            Label userInformationLabel = new Label("Une id\u00e9e ? Besoin d'aide ? ");
+            Label userInformationLabel = new I18NLabel(translator,"Une id\u00e9e ? Besoin d'aide ? ");
             userInformationLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
-            Button userInformationButton = UtilsUI.createButton(
+            Button userInformationButton = UtilsUI.createButtonI18N(translator,
                     "Contactez-nous>",
                     "images/contact.png",
                     (e) -> {
@@ -98,11 +106,11 @@ public class OptionsMenu extends BorderPane {
         }
 
         {
-            Label changePasswordLabel = new Label("Mot de Passe");
+            Label changePasswordLabel = new I18NLabel(translator,"Mot de Passe");
             changePasswordLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em");
 
 
-            Button changePasswordButton = UtilsUI.createButton(
+            Button changePasswordButton = UtilsUI.createButtonI18N(translator,
                     "Changer>",
                     "images/user_white.png",
                     (e) -> {
@@ -126,7 +134,7 @@ public class OptionsMenu extends BorderPane {
             Label teamviewerLabel = new Label("Lancer TeamViewer:");
             teamviewerLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
-            Button teamViewerButton = UtilsUI.createButton(
+            Button teamViewerButton = UtilsUI.createButtonI18N(translator,
                     "Ouvrir>",
                     "images/teamviewer.png",
                     (e) -> {
@@ -150,11 +158,11 @@ public class OptionsMenu extends BorderPane {
         this.setBottom(new Label(Configuration.VERSION));
     }
 
-    void createGnomeControlCenterButton(GraphicalMenus graphicalMenus, GridPane settings, String label, String imageName, String panelToOpen, int row) {
-        Label displayedLabel = new Label(label);
+    void createGnomeControlCenterButtonI18N(Translator translator,GraphicalMenus graphicalMenus, GridPane settings, String label, String imageName, String panelToOpen, int row) {
+        Label displayedLabel = new I18NLabel(translator,label);
         displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em");
 
-        Button button = UtilsUI.createButton(
+        Button button = UtilsUI.createButtonI18N(translator,
                 "Ouvrir>",
                 imageName,
                 (e) -> {

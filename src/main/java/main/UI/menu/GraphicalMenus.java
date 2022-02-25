@@ -34,7 +34,7 @@ public class GraphicalMenus {
         this.primaryStage = primaryStage;
         UpdateManager updateManager = new UpdateManager();
         this.homeScreen = new HomeScreen(this, updateManager,main);
-        this.optionsMenu = new OptionsMenu(this);
+        this.optionsMenu = new OptionsMenu(this,main);
         this.updateMenu = new UpdateMenu(this, updateManager);
         this.contactUs = new ContactUs(this);
     }
