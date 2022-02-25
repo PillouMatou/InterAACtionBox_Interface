@@ -36,7 +36,7 @@ public class ProgressDoubleClickedButtonI18N extends StackPane {
         super();
         timelineProgressBar = new Timeline();
 
-        button = UtilsUI.getDoubleClickedButtonI18N(translator,name, imagePath, eventhandler, primaryStage);
+        button = UtilsUI.getDoubleClickedI18NButton(translator,name, imagePath, eventhandler, primaryStage);
 
         ImageView image = new ImageView();
         image.setPreserveRatio(true);

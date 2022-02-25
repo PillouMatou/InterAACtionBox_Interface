@@ -37,12 +37,12 @@ public class UpdateMenu extends BorderPane {
     Button installAllButton;
     GraphicalMenus graphicalMenus;
 
-    private final Translator translator;
+    //private final Translator translator;
 
     public UpdateMenu(GraphicalMenus graphicalMenus, UpdateManager updateManager, Main main) {
         super();
 
-        translator = main.getTranslator();
+        Translator translator = main.getTranslator();
 
         this.updateManager = updateManager;
         this.graphicalMenus = graphicalMenus;
@@ -66,7 +66,7 @@ public class UpdateMenu extends BorderPane {
         downloadEverythin.setAlignment(Pos.CENTER);
         downloadEverythin.setSpacing(20);
 
-        installAllButton = createTopBarButton("Mettre \u00e0 jour tous les logiciels", (event) -> {
+        installAllButton = createTopBarI18NButton(translator, "Mettre \u00e0 jour tous les logiciels", (event) -> {
             if (updateManager.anyUpdateNeeded.getValue()) {
                 startUpdateAll();
             }
@@ -98,11 +98,11 @@ public class UpdateMenu extends BorderPane {
         settings.setHgap(20);
         settings.setVgap(graphicalMenus.primaryStage.getHeight() / 30);
 
-        createGnomeControlCenterButton(settings, UpdateService.SYSTEME);
-        createGnomeControlCenterButton(settings, UpdateService.AUGCOM);
-        createGnomeControlCenterButton(settings, UpdateService.INTERAACTION_SCENE);
-        createGnomeControlCenterButton(settings, UpdateService.GAZEPLAY);
-        createGnomeControlCenterButton(settings, UpdateService.INTERAACTION_PLAYER);
+        createGnomeControlCenterButton(translator, settings, UpdateService.SYSTEME);
+        createGnomeControlCenterButton(translator, settings, UpdateService.AUGCOM);
+        createGnomeControlCenterButton(translator, settings, UpdateService.INTERAACTION_SCENE);
+        createGnomeControlCenterButton(translator, settings, UpdateService.GAZEPLAY);
+        createGnomeControlCenterButton(translator, settings, UpdateService.INTERAACTION_PLAYER);
 
         settings.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(settings, Pos.CENTER);
@@ -419,12 +419,12 @@ public class UpdateMenu extends BorderPane {
         t.start();
     }
 
-    void createGnomeControlCenterButton(GridPane settings, int serviceIndex) {
+    void createGnomeControlCenterButton(Translator translator,GridPane settings, int serviceIndex) {
         Label displayedLabel = new Label(updateManager.updateServices[serviceIndex].getName() + ":");
         displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 2.5em");
         displayedLabel.setTextFill(Color.web("#cd2653"));
 
-        Button button = createTopBarButton(
+        Button button = createTopBarI18NButton(translator,
                 "Le logiciel est \u00e0 jour",
                 (event) -> {
                     if (updateManager.updateServices[serviceIndex].getUpdateProperty().getValue()) {
@@ -505,8 +505,8 @@ public class UpdateMenu extends BorderPane {
         });
     }
 
-    Button createTopBarButton(String text, EventHandler eventhandler, String imagePath) {
-        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, graphicalMenus.primaryStage);
+    Button createTopBarI18NButton(Translator translator,String text, EventHandler eventhandler, String imagePath) {
+        return UtilsUI.getDoubleClickedI18NButton(translator,text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
 

@@ -21,6 +21,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
+import main.Configuration;
 import main.Main;
 import main.UI.*;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
@@ -46,7 +47,7 @@ public class HomeScreen extends BorderPane {
     InterAACtionGazeNamedProcessCreator interAACtionGazeNamedProcessCreator = new InterAACtionGazeNamedProcessCreator();
 
 
-    public HomeScreen(GraphicalMenus graphicalMenus, UpdateManager updateManager, Main main) {
+    public HomeScreen(GraphicalMenus graphicalMenus, UpdateManager updateManager, Main main, Configuration configuration) {
         super();
         this.graphicalMenus = graphicalMenus;
         this.updateManager = updateManager;
@@ -70,19 +71,19 @@ public class HomeScreen extends BorderPane {
             graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu());
         };
 
-        I18NButton optionButton = createTopBarButtonI18N(
+        I18NButton optionButton = createTopBarI18NButton(
                 "Options",
                 "images/settings_white.png",
                 (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu())
         );
 
-        I18NButton updateButton = createTopBarButtonI18N(
+        I18NButton updateButton = createTopBarI18NButton(
                 "Votre syst\u00e8me est \u00e0 jour",
                 "images/refresh.png",
                 goToUpdateMenu
         );
 
-        checkUpdatesAndAdjustButton(updateButton);
+        checkUpdatesAndAdjustButton(updateButton,configuration);
 
         HBox menuBar = createMenuBar();
 
@@ -103,9 +104,8 @@ public class HomeScreen extends BorderPane {
                     showCloseProcessButtonIfProcessNotNull();
                 }
         );*/
-        //I18NButton tobiiButton2 = new I18NButton(translator,"Calibration");
 
-        I18NButton tobiiButton2 = createTopBarButtonI18N(
+        I18NButton tobiiButton2 = createTopBarI18NButton(
                 "Calibration",
                 "images/eye-tracking_white.png",
                 (e) -> {
@@ -179,13 +179,17 @@ public class HomeScreen extends BorderPane {
         return titlePane;
     }
 
-    private void checkUpdatesAndAdjustButton(Button updateButton) {
+    private void checkUpdatesAndAdjustButton(Button updateButton, Configuration configuration) {
         updateManager.anyUpdateNeeded.addListener((obs, oldval, newval) -> {
             Platform.runLater(() -> {
                 if (UtilsOS.isConnectedToInternet()) {
                     if (newval) {
                         updateButton.setOpacity(1);
-                        updateButton.setText("Mise \u00e0 jour disponible !");
+                        if(configuration.getLanguage().equals("fra")){
+                            updateButton.setText("Mise \u00e0 jour disponible !");
+                        }else{
+                            updateButton.setText("Update available!");
+                        }
                         updateButton.setDisable(false);
                         Timeline t = new Timeline();
                         t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
@@ -194,24 +198,28 @@ public class HomeScreen extends BorderPane {
                         t.play();
                     } else {
                         updateButton.setOpacity(1);
-                        updateButton.setText("Votre syst\u00e8me est \u00e0 jour");
+                        if(configuration.getLanguage().equals("fra")) {
+                            updateButton.setText("Votre syst\u00e8me est \u00e0 jour");
+                        }else{
+                            updateButton.setText("Your system is up to date");
+                        }
                         updateButton.setDisable(false);
                     }
                 } else {
                     updateButton.setOpacity(0.5);
-                    updateButton.setText("Connection Introuvable");
+                    if(configuration.getLanguage().equals("fra")) {
+                        updateButton.setText("Connection Introuvable");
+                    }else{
+                        updateButton.setText("Connection Not Found");
+                    }
                     updateButton.setDisable(true);
                 }
             });
         });
     }
 
-    Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
-        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, graphicalMenus.primaryStage);
-    }
-
-    I18NButton createTopBarButtonI18N(String text, String imagePath, EventHandler eventhandler) {
-        return (I18NButton) UtilsUI.getDoubleClickedButtonI18N(translator,text, imagePath, eventhandler, graphicalMenus.primaryStage);
+    I18NButton createTopBarI18NButton(String text, String imagePath, EventHandler eventhandler) {
+        return (I18NButton) UtilsUI.getDoubleClickedI18NButton(translator,text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
     ProgressDoubleClickedButtonI18N createExitTopBarButton(String text, String imagePath, EventHandler eventhandler) {

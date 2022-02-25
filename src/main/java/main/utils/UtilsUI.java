@@ -49,7 +49,7 @@ public class UtilsUI {
         return optionButton;
     }
 
-    public static Button getDoubleClickedButtonI18N(Translator translator,String text, String imagePath, EventHandler eventhandler, Stage primaryStage) {
+    public static Button getDoubleClickedI18NButton(Translator translator, String text, String imagePath, EventHandler eventhandler, Stage primaryStage) {
         I18NButton optionButton = new I18NButton(translator,text);
         // optionButton.setMaxHeight(50);
         optionButton.setStyle(
@@ -91,7 +91,7 @@ public class UtilsUI {
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setFill(Color.web("#cd2653"));
 
-        Button back = UtilsUI.getDoubleClickedButtonI18N(translator,"Retour", "images/back.png", (e) -> graphicalMenus.getConfiguration().scene.setRoot(parent), graphicalMenus.primaryStage);
+        Button back = UtilsUI.getDoubleClickedI18NButton(translator,"Retour", "images/back.png", (e) -> graphicalMenus.getConfiguration().scene.setRoot(parent), graphicalMenus.primaryStage);
         back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
 
         Label title = new I18NLabel(translator,label);

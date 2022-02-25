@@ -32,9 +32,9 @@ public class GraphicalMenus {
 
     public GraphicalMenus(Stage primaryStage, Main main) {
         this.primaryStage = primaryStage;
-        UpdateManager updateManager = new UpdateManager();
-        this.homeScreen = new HomeScreen(this, updateManager,main);
-        this.optionsMenu = new OptionsMenu(this,main);
+        UpdateManager updateManager = new UpdateManager(configuration);
+        this.homeScreen = new HomeScreen(this, updateManager,main,configuration);
+        this.optionsMenu = new OptionsMenu(this,main,configuration);
         this.updateMenu = new UpdateMenu(this, updateManager, main);
         this.contactUs = new ContactUs(this,main);
     }
