@@ -1,21 +1,13 @@
 package main.UI.menu;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import lombok.extern.slf4j.Slf4j;
 import main.Configuration;
 import main.Main;
-import main.UI.DoubleClickedButton;
 import main.UI.I18NLabel;
 import main.UI.Translator;
 import main.process.GnomeControlCenterNamedProcessCreator;
@@ -43,7 +35,7 @@ public class OptionsMenu extends BorderPane {
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        this.setTop(UtilsUI.createTopBar(graphicalMenus.getHomeScreen(), graphicalMenus, "Options"));
+        this.setTop(UtilsUI.createTopBar(translator,graphicalMenus.getHomeScreen(), graphicalMenus, "Options"));
 
         GridPane settings = new GridPane();
         settings.setHgap(20);
@@ -90,7 +82,7 @@ public class OptionsMenu extends BorderPane {
             Label userInformationLabel = new I18NLabel(translator,"Une id\u00e9e ? Besoin d'aide ? ");
             userInformationLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
-            Button userInformationButton = UtilsUI.createButtonI18N(translator,
+            Button userInformationButton = UtilsUI.createI18NButton(translator,
                     "Contactez-nous>",
                     "images/contact.png",
                     (e) -> {
@@ -110,7 +102,7 @@ public class OptionsMenu extends BorderPane {
             changePasswordLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em");
 
 
-            Button changePasswordButton = UtilsUI.createButtonI18N(translator,
+            Button changePasswordButton = UtilsUI.createI18NButton(translator,
                     "Changer>",
                     "images/user_white.png",
                     (e) -> {
@@ -131,10 +123,10 @@ public class OptionsMenu extends BorderPane {
 
         {
 
-            Label teamviewerLabel = new Label("Lancer TeamViewer:");
+            Label teamviewerLabel = new I18NLabel(translator,"Lancer TeamViewer:");
             teamviewerLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
-            Button teamViewerButton = UtilsUI.createButtonI18N(translator,
+            Button teamViewerButton = UtilsUI.createI18NButton(translator,
                     "Ouvrir>",
                     "images/teamviewer.png",
                     (e) -> {
@@ -162,7 +154,7 @@ public class OptionsMenu extends BorderPane {
         Label displayedLabel = new I18NLabel(translator,label);
         displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em");
 
-        Button button = UtilsUI.createButtonI18N(translator,
+        Button button = UtilsUI.createI18NButton(translator,
                 "Ouvrir>",
                 imageName,
                 (e) -> {
@@ -180,7 +172,7 @@ public class OptionsMenu extends BorderPane {
     }
 
     void createGnomeControlCenterButtonLang(GridPane settings) {
-        Label displayedLabel = new Label("Choisir une langue:");
+        Label displayedLabel = new I18NLabel(translator,"Choisir une langue:");
         displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
         displayedLabel.setTextFill(Color.web("#cd2653"));
 

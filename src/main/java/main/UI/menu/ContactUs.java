@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import lombok.extern.slf4j.Slf4j;
+import main.Main;
+import main.UI.Translator;
 import main.utils.UtilsMail;
 import main.utils.UtilsUI;
 
@@ -18,14 +20,18 @@ public class ContactUs extends BorderPane {
 
     Label errorLabel = new Label();
 
-    public ContactUs(GraphicalMenus graphicalMenus) {
+    private final Translator translator;
+
+    public ContactUs(GraphicalMenus graphicalMenus, Main main) {
+
+        translator = main.getTranslator();
 
         this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        this.setTop(UtilsUI.createTopBar(graphicalMenus.getOptionsMenu(), graphicalMenus, "Contact"));
+        this.setTop(UtilsUI.createTopBar(translator, graphicalMenus.getOptionsMenu(), graphicalMenus, "Contact"));
 
         GridPane settings = new GridPane();
         settings.setHgap(20);

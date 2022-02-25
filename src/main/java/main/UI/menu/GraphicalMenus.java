@@ -35,8 +35,8 @@ public class GraphicalMenus {
         UpdateManager updateManager = new UpdateManager();
         this.homeScreen = new HomeScreen(this, updateManager,main);
         this.optionsMenu = new OptionsMenu(this,main);
-        this.updateMenu = new UpdateMenu(this, updateManager);
-        this.contactUs = new ContactUs(this);
+        this.updateMenu = new UpdateMenu(this, updateManager, main);
+        this.contactUs = new ContactUs(this,main);
     }
 
 }

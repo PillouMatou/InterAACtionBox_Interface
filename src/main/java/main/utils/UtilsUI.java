@@ -19,10 +19,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import main.UI.DoubleClickedButton;
-import main.UI.I18NButton;
-import main.UI.ProgressButton;
-import main.UI.Translator;
+import main.UI.*;
 import main.UI.menu.GraphicalMenus;
 
 import java.awt.image.BufferedImage;
@@ -87,17 +84,17 @@ public class UtilsUI {
         return downnloadImageView;
     }
 
-    public static StackPane createTopBar(Parent parent, GraphicalMenus graphicalMenus, String label) {
+    public static StackPane createTopBar(Translator translator, Parent parent, GraphicalMenus graphicalMenus, String label) {
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, graphicalMenus.primaryStage.getWidth(), graphicalMenus.primaryStage.getHeight() / 10);
         backgroundForTitle.heightProperty().bind(graphicalMenus.primaryStage.heightProperty().divide(10));
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setFill(Color.web("#cd2653"));
 
-        Button back = UtilsUI.getDoubleClickedButton("Retour", "images/back.png", (e) -> graphicalMenus.getConfiguration().scene.setRoot(parent), graphicalMenus.primaryStage);
+        Button back = UtilsUI.getDoubleClickedButtonI18N(translator,"Retour", "images/back.png", (e) -> graphicalMenus.getConfiguration().scene.setRoot(parent), graphicalMenus.primaryStage);
         back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
 
-        Label title = new Label(label);
+        Label title = new I18NLabel(translator,label);
         title.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em");
         title.setTextFill(Color.web("#faeaed"));
         BorderPane titleBox = new BorderPane();
@@ -137,8 +134,8 @@ public class UtilsUI {
     }
 
 
-    public static Button createButtonI18N(Translator translator,String text, String imagePath, EventHandler eventhandler) {
-        DoubleClickedButton optionButton = new DoubleClickedButton(text);
+    public static Button createI18NButton(Translator translator, String text, String imagePath, EventHandler eventhandler) {
+        DoubleClickedI18NButton optionButton = new DoubleClickedI18NButton(translator,text);
         optionButton.setPrefHeight(50);
         optionButton.setMaxHeight(50);
         String style = "-fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; -fx-background-color: transparent; " +

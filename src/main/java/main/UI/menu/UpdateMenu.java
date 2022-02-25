@@ -19,6 +19,8 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import main.Configuration;
+import main.Main;
+import main.UI.Translator;
 import main.utils.UpdateManager;
 import main.utils.UpdateService;
 import main.utils.UtilsUI;
@@ -35,8 +37,12 @@ public class UpdateMenu extends BorderPane {
     Button installAllButton;
     GraphicalMenus graphicalMenus;
 
-    public UpdateMenu(GraphicalMenus graphicalMenus, UpdateManager updateManager) {
+    private final Translator translator;
+
+    public UpdateMenu(GraphicalMenus graphicalMenus, UpdateManager updateManager, Main main) {
         super();
+
+        translator = main.getTranslator();
 
         this.updateManager = updateManager;
         this.graphicalMenus = graphicalMenus;
@@ -50,7 +56,7 @@ public class UpdateMenu extends BorderPane {
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        this.setTop(UtilsUI.createTopBar(graphicalMenus.getHomeScreen(), graphicalMenus, "Mises \u00e0 jour"));
+        this.setTop(UtilsUI.createTopBar(translator,graphicalMenus.getHomeScreen(), graphicalMenus, "Mises \u00e0 jour"));
 
 
         VBox menu = new VBox();
