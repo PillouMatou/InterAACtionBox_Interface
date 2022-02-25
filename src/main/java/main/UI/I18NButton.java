@@ -1,5 +1,6 @@
 package main.UI;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
 public class I18NButton extends Button implements Translator.LanguageChangeListener {
@@ -28,6 +29,12 @@ public class I18NButton extends Button implements Translator.LanguageChangeListe
         if (textKeys != null) {
             this.setText(translator.translate(textKeys));
         }
+    }
+
+    public void assignHandler(EventHandler eventhandler) {
+        this.setOnAction((e) -> {
+            eventhandler.handle(null);
+        });
     }
 
 }

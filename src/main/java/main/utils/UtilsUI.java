@@ -20,7 +20,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import main.UI.DoubleClickedButton;
+import main.UI.I18NButton;
 import main.UI.ProgressButton;
+import main.UI.Translator;
 import main.UI.menu.GraphicalMenus;
 
 import java.awt.image.BufferedImage;
@@ -29,6 +31,29 @@ public class UtilsUI {
 
     public static Button getDoubleClickedButton(String text, String imagePath, EventHandler eventhandler, Stage primaryStage) {
         DoubleClickedButton optionButton = new DoubleClickedButton(text);
+        // optionButton.setMaxHeight(50);
+        optionButton.setStyle(
+                "-fx-border-color: transparent; " +
+                        "-fx-border-width: 0; " +
+                        "-fx-background-radius: 0; " +
+                        "-fx-background-color: transparent; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-font-family: Helvetica; " +
+                        "-fx-text-fill: #faeaed;" +
+                        "-fx-font-size: 2em;"
+        );
+        if (imagePath != null) {
+            ImageView graphic = new ImageView(imagePath);
+            graphic.setPreserveRatio(true);
+            graphic.setFitHeight((primaryStage.getHeight() / 10) * 0.7);
+            optionButton.setGraphic(graphic);
+        }
+        optionButton.assignHandler(eventhandler);
+        return optionButton;
+    }
+
+    public static Button getDoubleClickedButtonI18N(Translator translator,String text, String imagePath, EventHandler eventhandler, Stage primaryStage) {
+        I18NButton optionButton = new I18NButton(translator,text);
         // optionButton.setMaxHeight(50);
         optionButton.setStyle(
                 "-fx-border-color: transparent; " +

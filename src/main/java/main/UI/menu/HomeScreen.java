@@ -41,6 +41,7 @@ public class HomeScreen extends BorderPane {
     private final VBox centerMenu;
     private final EventHandler goToUpdateMenu;
     private UpdateManager updateManager;
+    private final Translator translator;
 
     InterAACtionGazeNamedProcessCreator interAACtionGazeNamedProcessCreator = new InterAACtionGazeNamedProcessCreator();
 
@@ -50,7 +51,7 @@ public class HomeScreen extends BorderPane {
         this.graphicalMenus = graphicalMenus;
         this.updateManager = updateManager;
 
-        final Translator translator = main.getTranslator();
+        translator = main.getTranslator();
 
         this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 
@@ -102,9 +103,9 @@ public class HomeScreen extends BorderPane {
                     showCloseProcessButtonIfProcessNotNull();
                 }
         );*/
-        I18NButton tobiiButton2 = new I18NButton(translator,"Calibration");
-/*
-        Button tobiiButton2 = createTopBarButton(
+        //I18NButton tobiiButton2 = new I18NButton(translator,"Calibration");
+
+        I18NButton tobiiButton2 = createTopBarButtonI18N(
                 "Calibration",
                 "images/eye-tracking_white.png",
                 (e) -> {
@@ -120,7 +121,7 @@ public class HomeScreen extends BorderPane {
                     }
                 }
         );
-         */
+
 
         ProgressDoubleClickedButton exitButton = createExitTopBarButton(
                 "Exit",
@@ -207,6 +208,10 @@ public class HomeScreen extends BorderPane {
 
     Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
         return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, graphicalMenus.primaryStage);
+    }
+
+    I18NButton createTopBarButtonI18N(String text, String imagePath, EventHandler eventhandler) {
+        return (I18NButton) UtilsUI.getDoubleClickedButtonI18N(translator,text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
     ProgressDoubleClickedButton createExitTopBarButton(String text, String imagePath, EventHandler eventhandler) {
