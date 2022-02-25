@@ -37,7 +37,7 @@ import java.util.Arrays;
 public class HomeScreen extends BorderPane {
 
     private final GraphicalMenus graphicalMenus;
-    private final ProgressButton closeMenuButton;
+    private final I18NProgressButton closeMenuButton;
     private final VBox centerMenu;
     private final EventHandler goToUpdateMenu;
     private UpdateManager updateManager;
@@ -127,11 +127,11 @@ public class HomeScreen extends BorderPane {
                 "Exit",
                 "images/on-off-button_white.png",
                 (e) -> {
-                    this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus));
+                    this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main));
                 }
         );
         exitButton.assignIndicator((e) -> {
-            this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus));
+            this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main));
         });
         exitButton.start();
 
@@ -234,7 +234,7 @@ public class HomeScreen extends BorderPane {
     }
 
     private StackPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL) {
-        ProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus);
+        I18NProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus);
         processButton.getLabel().setText(name);
         processButton.getLabel().setFont(new Font(20));
         processButton.getButton().setStroke(Color.web("#cd2653"));
@@ -269,7 +269,7 @@ public class HomeScreen extends BorderPane {
         return borderPaneLauncher;
     }
 
-    private void updateLaunchButtonIfExist(StackPane borderPaneLauncher, ProgressButton processButton, ImageView downnloadImageView, boolean needsUpdate) {
+    private void updateLaunchButtonIfExist(StackPane borderPaneLauncher, I18NProgressButton processButton, ImageView downnloadImageView, boolean needsUpdate) {
 
         if (needsUpdate) {
             Platform.runLater(() -> {
@@ -343,8 +343,8 @@ public class HomeScreen extends BorderPane {
         t.start();
     }
 
-    public ProgressButton createCloseMenuButton() {
-        ProgressButton closeButton = new ProgressButton();
+    public I18NProgressButton createCloseMenuButton() {
+        I18NProgressButton closeButton = new I18NProgressButton();
         closeButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 15);
         closeButton.getButton().setStroke(Color.web("#cd2653"));
         closeButton.getButton().setStrokeWidth(3);

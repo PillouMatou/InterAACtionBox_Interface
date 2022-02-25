@@ -72,7 +72,7 @@ public class UtilsUI {
         return optionButton;
     }
 
-    public static ImageView getDownloadImageView(ProgressButton processButton) {
+    public static ImageView getDownloadImageView(I18NProgressButton processButton) {
         Image download = new Image("images/download-arrow.png");
         ImageView downnloadImageView = new ImageView(download);
         downnloadImageView.setPreserveRatio(true);

@@ -10,6 +10,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import lombok.extern.slf4j.Slf4j;
 import main.Main;
+import main.UI.I18NButton;
+import main.UI.I18NLabel;
+import main.UI.I18NText;
 import main.UI.Translator;
 import main.utils.UtilsMail;
 import main.utils.UtilsUI;
@@ -39,7 +42,7 @@ public class ContactUs extends BorderPane {
         settings.prefWidthProperty().bind(this.prefWidthProperty());
 
 
-        Label firstNameLabel = new Label("Nom*:");
+        Label firstNameLabel = new I18NLabel(translator,"Nom*:");
         TextField firstName = new TextField();
         firstName.setPromptText("Dupont");
         firstName.minWidthProperty().bind(settings.prefWidthProperty().divide(8));
@@ -47,7 +50,7 @@ public class ContactUs extends BorderPane {
         firstName.maxWidthProperty().bind(settings.prefWidthProperty().divide(8));
 
 
-        Label lastNameLabel = new Label("Pr\u00e9nom*:");
+        Label lastNameLabel = new I18NLabel(translator,"Pr\u00e9nom*:");
         TextField lastName = new TextField();
         lastName.setPromptText("Martin");
         lastName.minWidthProperty().bind(settings.prefWidthProperty().divide(8));
@@ -55,7 +58,7 @@ public class ContactUs extends BorderPane {
         lastName.maxWidthProperty().bind(settings.prefWidthProperty().divide(8));
 
 
-        Label mailLabel = new Label("E-mail*:");
+        Label mailLabel = new I18NLabel(translator,"E-mail*:");
         TextField email = new TextField();
         email.setPromptText("Martin.Dupont@email.fr");
         email.minWidthProperty().bind(settings.prefWidthProperty().divide(4));
@@ -63,16 +66,18 @@ public class ContactUs extends BorderPane {
         email.maxWidthProperty().bind(settings.prefWidthProperty().divide(4));
 
 
-        Label objectLabel = new Label("Objet*:");
+        Label objectLabel = new I18NLabel(translator,"Objet*:");
         TextField object = new TextField();
-        object.setPromptText("Objet du message");
+        I18NText objectPromptText = new I18NText(translator,"Objet du message");
+        object.setPromptText(objectPromptText.textProperty().getValue());
         object.minWidthProperty().bind(settings.prefWidthProperty().divide(4));
         object.prefWidthProperty().bind(settings.prefWidthProperty().divide(4));
         object.maxWidthProperty().bind(settings.prefWidthProperty().divide(4));
 
-        Label messageLabel = new Label("Message*:");
+        Label messageLabel = new I18NLabel(translator,"Message*:");
         TextArea message = new TextArea();
-        message.setPromptText("Un probl\u00e8me, Une id\u00e9e, vous voulez travailler avec nous ? Dites-nous tout ! ");
+        I18NText messagePromptText = new I18NText(translator,"Un probl\u00e8me, Une id\u00e9e, vous voulez travailler avec nous ? Dites-nous tout ! ");
+        message.setPromptText(messagePromptText.textProperty().getValue());
         message.setWrapText(true);
         message.minWidthProperty().bind(settings.prefWidthProperty().divide(3));
         message.prefWidthProperty().bind(settings.prefWidthProperty().divide(3));
@@ -82,7 +87,7 @@ public class ContactUs extends BorderPane {
         message.prefHeightProperty().bind(this.prefHeightProperty().divide(3));
         message.maxHeightProperty().bind(this.prefHeightProperty().divide(3));
 
-        Button ok = new Button("Envoyer");
+        Button ok = new I18NButton(translator,"Envoyer");
         ok.setOnAction((event) -> {
             send(errorLabel, firstName.getText(), lastName.getText(), email.getText(), object.getText(), message.getText());
         });

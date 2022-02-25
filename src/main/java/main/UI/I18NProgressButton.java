@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ProgressButton extends StackPane {
+public class I18NProgressButton extends StackPane {
 
     private static final int FIXATION_LENGTH = 3000;
 
@@ -36,7 +36,7 @@ public class ProgressButton extends StackPane {
 
     private boolean started = false;
 
-    public ProgressButton() {
+    public I18NProgressButton() {
         super();
         timelineProgressBar = new Timeline();
 
@@ -139,7 +139,7 @@ public class ProgressButton extends StackPane {
                 timelineProgressBar.getKeyFrames().clear();
                 timelineProgressBar.setDelay(new Duration(500));
                 timelineProgressBar.getKeyFrames().add(
-                        new KeyFrame(new Duration(ProgressButton.FIXATION_LENGTH), new KeyValue(indicator.progressProperty(), 1)));
+                        new KeyFrame(new Duration(I18NProgressButton.FIXATION_LENGTH), new KeyValue(indicator.progressProperty(), 1)));
 
                 timelineProgressBar.onFinishedProperty().set(actionEvent -> {
                     indicator.setOpacity(0);

@@ -49,10 +49,10 @@ public class I18N {
                 while ((ligne = br.readLine()) != null) {
                     if (firstline) {
                         // Retourner la ligne dans un tableau
-                        languages = ligne.split(",");
+                        languages = ligne.split(";");
                         firstline = false;
                     } else {
-                        data = ligne.split(",");
+                        data = ligne.split(";");
                         String key = data[0];
                         for (int i = 1; i < data.length; i++) {
 

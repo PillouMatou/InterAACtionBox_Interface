@@ -25,7 +25,7 @@ public class Configuration {
     boolean userIsMoving = false;
     @Getter
     @Setter
-    public String language = "eng";
+    public String language = "fra";
 
     public Configuration() {
     }

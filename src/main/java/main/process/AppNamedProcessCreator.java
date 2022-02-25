@@ -3,7 +3,7 @@ package main.process;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import main.UI.ProgressButton;
+import main.UI.I18NProgressButton;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.XdotoolProcessCreator;
 import main.utils.NamedProcess;
@@ -85,8 +85,8 @@ public interface AppNamedProcessCreator {
 
     void setUpProcessBuilder();
 
-    default ProgressButton createButton(Image image, GraphicalMenus graphicalMenus) {
-        ProgressButton progressButton = new ProgressButton();
+    default I18NProgressButton createButton(Image image, GraphicalMenus graphicalMenus) {
+        I18NProgressButton progressButton = new I18NProgressButton();
         progressButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 10);
 
         ImageView logo = new ImageView(image);

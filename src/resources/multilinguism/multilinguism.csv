@@ -1,34 +1,47 @@
-,fra,eng,deu,spa
-Calibration,Calibration,Calibrate,,
-Options,Options,Settings,,
-Mise à jour disponible,Mise à jour disponible,Update available,
-Calibration,Calibration,Calibrate,,
-Exit,Quitter,Exit,
-Choisir une langue:,Choisir une langue:,Choose a language:,,
-Eye Tracker,Eye Tracker,Eye Tracker,,
-Gestionnaire Wifi:,Gestionnaire Wifi:,Wifi Manager:,,
-Gestionnaire Bluetooth:,Gestionnaire Bluetooth:,Bluetooth Manager:,,
-Paramètres D'Affichage:,Paramètres D'Affichage:,Display Settings:,,
-Paramètres de Batterie:,Paramètres de Batterie:,Battery Settings:,,
-Lancer TeamViewer:,Lancer TeamViewer:,Start TeamViewer:,,
-Mot de Passe,Mot de Passe,Password,,
-Une idée ? Besoin d'aide ? ,Une idée ? Besoin d'aide ? ,Have an idea ? Do you need help ? ,,
-Activé,Activé,Enable,,
-Désactivé,Désactivé,Disable,,
-Ouvrir,Ouvrir,Open,,
-Changer,Changer,Change,,
-Contactez-nous,Contactez-nous,Contact us,,
-Non annuler,Non annuler,No cancel,,
-Non aller vers Ubuntu,Non aller vers Ubuntu,No go to Ubuntu,,
-Oui éteindre,Oui éteindre,Yes turn off,,
-Voulez vous vraiment éteindre la box,Voulez vous vraiment éteindre la box,Do you really want to turn off the box,,
-Mettre à jour tous les logiciels,Mettre à jour tous les logiciels,Update all software,,
-Système,Système,System,,
-Le logiciel est à jour,Le logiciel est à jour,The software is up to date,,
-Mise à jour,Mise à jour,Update,,
-disponible,disponible,available,,
-Votre système est à jour,Votre système est à jour,Your system is up to date,,
-Ouvrir>,Ouvrir>,Open>,,
-Changer>,Changer>,Change>,,
-Contactez-nous>,Contactez-nous>,Contact-us>,,
-Retour,Retour,Return,,
+;fra;eng;deu;spa
+Calibration;Calibration;Calibrate;;
+Options;Options;Settings;;
+Mise à jour disponible;Mise à jour disponible;Update available;
+Calibration;Calibration;Calibrate;;
+Exit;Quitter;Exit;
+Choisir une langue:;Choisir une langue:;Choose a language:;;
+Eye Tracker;Eye Tracker;Eye Tracker;;
+Gestionnaire Wifi:;Gestionnaire Wifi:;Wifi Manager:;;
+Gestionnaire Bluetooth:;Gestionnaire Bluetooth:;Bluetooth Manager:;;
+Paramètres D'Affichage:;Paramètres D'Affichage:;Display Settings:;;
+Paramètres de Batterie:;Paramètres de Batterie:;Battery Settings:;;
+Lancer TeamViewer:;Lancer TeamViewer:;Start TeamViewer:;;
+Mot de Passe;Mot de Passe;Password;;
+Une idée ? Besoin d'aide ? ;Une idée ? Besoin d'aide ? ;Have an idea ? Do you need help ? ;;
+Activé;Activé;Enable;;
+Désactivé;Désactivé;Disable;;
+Ouvrir;Ouvrir;Open;;
+Changer;Changer;Change;;
+Contactez-nous;Contactez-nous;Contact us;;
+Non annuler;Non annuler;No cancel;;
+Non aller vers Ubuntu;Non aller vers Ubuntu;No go to Ubuntu;;
+Oui éteindre;Oui éteindre;Yes turn off;;
+Voulez vous vraiment éteindre la box;Voulez vous vraiment éteindre la box;Do you really want to turn off the box;;
+Mettre à jour tous les logiciels;Mettre à jour tous les logiciels;Update all software;;
+Système;Système;System;;
+Le logiciel est à jour;Le logiciel est à jour;The software is up to date;;
+Mise à jour;Mise à jour;Update;;
+disponible;disponible;available;;
+Votre système est à jour;Votre système est à jour;Your system is up to date;;
+Ouvrir>;Ouvrir>;Open>;;
+Changer>;Changer>;Change>;;
+Contactez-nous>;Contactez-nous>;Contact-us>;;
+Retour;Retour;Return;;
+Contact;Contact;Contact;;
+Nom*:;Nom*:;Last name*:;;
+Prénom*:;Prénom*:;First name;;
+E-mail*:;E-mail*:;E-mail*:;;
+Objet*:;Objet*:;Object*:;;
+Message*:;Message*:;Message*:;;
+Envoyer;Envoyer;Send;;
+Un problème, Une idée, vous voulez travailler avec nous ? Dites-nous tout ! ;Un problème, Une idée, vous voulez travailler avec nous ? Dites-nous tout ! ;A problem, an idea, you want to work with us? Tell us all about it! ;;
+Objet du message;Objet du message;Subject of the message;;
+Non, annuler;Non, annuler;No cancel;;
+Non, aller vers Ubuntu;Non, aller vers Ubuntu;No, go to Ubuntu;;
+Oui, éteindre;Oui, éteindre;Yes, turn off;;
+Voulez vous vraiment éteindre la box ?;Voulez vous vraiment éteindre la box ?;Do you really want to turn off the box?;;
