@@ -40,6 +40,7 @@ public class Main extends Application {
         Scene scene = new Scene(new Pane(new Rectangle(0,0,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight())), Color.TRANSPARENT);
 
         final Configuration config = ConfigurationBuilder.createFromPropertiesResource().build();
+        config.language = ConfigurationBuilder.createFromPropertiesResource().language;
         final Multilinguism multilinguism = Multilinguism.getSingleton();
 
         translator = new DefaultTranslator(config, multilinguism);

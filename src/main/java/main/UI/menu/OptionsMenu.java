@@ -7,6 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import lombok.extern.slf4j.Slf4j;
 import main.Configuration;
+import main.ConfigurationBuilder;
 import main.Main;
 import main.UI.I18NLabel;
 import main.UI.Translator;
@@ -16,20 +17,19 @@ import main.utils.StageUtils;
 import main.utils.UtilsUI;
 
 import java.io.IOException;
-import java.util.Objects;
 
 @Slf4j
 public class OptionsMenu extends BorderPane {
 
     public String langage = "Francais";
 
-    private final Translator translator;
+    //private final Translator translator;
 
 
     public OptionsMenu(GraphicalMenus graphicalMenus, Main main, Configuration configuration) {
         super();
 
-        translator = main.getTranslator();
+        Translator translator = main.getTranslator();
 
         this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 
@@ -76,7 +76,7 @@ public class OptionsMenu extends BorderPane {
         createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 3);
         createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 4);
         createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 5);
-        createGnomeControlCenterButtonLang(settings, configuration);
+        createGnomeControlCenterButtonLang(translator, settings, configuration);
 
         {
 
@@ -172,7 +172,7 @@ public class OptionsMenu extends BorderPane {
         settings.add(button, 1, row);
     }
 
-    void createGnomeControlCenterButtonLang(GridPane settings, Configuration configuration) {
+    void createGnomeControlCenterButtonLang(Translator translator, GridPane settings, Configuration configuration) {
         Label displayedLabel = new I18NLabel(translator,"Choisir une langue:");
         displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
         displayedLabel.setTextFill(Color.web("#cd2653"));
@@ -183,11 +183,8 @@ public class OptionsMenu extends BorderPane {
         MenuButton menuButton = new MenuButton(langage);
 
         menuItemFR.setOnAction(eventMenuLanguages -> {
-            if(langage.equals("Francais")){
-                configuration.setLanguage("fra");
-            }else{
-                configuration.setLanguage("eng");
-            }
+            configuration.setLanguage("fra");
+            ConfigurationBuilder.createFromPropertiesResource().withLanguage(configuration.getLanguage()).saveConfigIgnoringExceptions();
             langage = menuItemFR.getText();
             menuButton.setText(langage);
             translator.notifyLanguageChanged();
@@ -195,11 +192,8 @@ public class OptionsMenu extends BorderPane {
             log.info("configuration langage : {}",configuration.getLanguage());
         });
         menuItemEN.setOnAction(eventMenuLanguages -> {
-            if(langage.equals("English")){
-                configuration.setLanguage("eng");
-            }else{
-                configuration.setLanguage("fra");
-            }
+            configuration.setLanguage("eng");
+            ConfigurationBuilder.createFromPropertiesResource().withLanguage(configuration.getLanguage()).saveConfigIgnoringExceptions();
             langage = menuItemEN.getText();
             menuButton.setText(langage);
             translator.notifyLanguageChanged();

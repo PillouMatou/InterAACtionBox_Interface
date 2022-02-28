@@ -23,11 +23,11 @@ public class ContactUs extends BorderPane {
 
     Label errorLabel = new Label();
 
-    private final Translator translator;
+    //private final Translator translator;
 
     public ContactUs(GraphicalMenus graphicalMenus, Main main) {
 
-        translator = main.getTranslator();
+        Translator translator = main.getTranslator();
 
         this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 

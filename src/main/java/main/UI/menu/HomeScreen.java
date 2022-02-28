@@ -42,7 +42,7 @@ public class HomeScreen extends BorderPane {
     private final VBox centerMenu;
     private final EventHandler goToUpdateMenu;
     private UpdateManager updateManager;
-    private final Translator translator;
+    //private final Translator translator;
 
     InterAACtionGazeNamedProcessCreator interAACtionGazeNamedProcessCreator = new InterAACtionGazeNamedProcessCreator();
 
@@ -52,7 +52,7 @@ public class HomeScreen extends BorderPane {
         this.graphicalMenus = graphicalMenus;
         this.updateManager = updateManager;
 
-        translator = main.getTranslator();
+        Translator translator = main.getTranslator();
 
         this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 
@@ -72,12 +72,14 @@ public class HomeScreen extends BorderPane {
         };
 
         I18NButton optionButton = createTopBarI18NButton(
+                translator,
                 "Options",
                 "images/settings_white.png",
                 (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu())
         );
 
         I18NButton updateButton = createTopBarI18NButton(
+                translator,
                 "Votre syst\u00e8me est \u00e0 jour",
                 "images/refresh.png",
                 goToUpdateMenu
@@ -105,7 +107,7 @@ public class HomeScreen extends BorderPane {
                 }
         );*/
 
-        I18NButton tobiiButton2 = createTopBarI18NButton(
+        I18NButton tobiiButton2 = createTopBarI18NButton(translator,
                 "Calibration",
                 "images/eye-tracking_white.png",
                 (e) -> {
@@ -124,6 +126,7 @@ public class HomeScreen extends BorderPane {
 
 
         ProgressDoubleClickedButtonI18N exitButton = createExitTopBarButton(
+                translator,
                 "Exit",
                 "images/on-off-button_white.png",
                 (e) -> {
@@ -218,11 +221,11 @@ public class HomeScreen extends BorderPane {
         });
     }
 
-    I18NButton createTopBarI18NButton(String text, String imagePath, EventHandler eventhandler) {
+    I18NButton createTopBarI18NButton(Translator translator, String text, String imagePath, EventHandler eventhandler) {
         return (I18NButton) UtilsUI.getDoubleClickedI18NButton(translator,text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
-    ProgressDoubleClickedButtonI18N createExitTopBarButton(String text, String imagePath, EventHandler eventhandler) {
+    ProgressDoubleClickedButtonI18N createExitTopBarButton(Translator translator,String text, String imagePath, EventHandler eventhandler) {
 
         return new ProgressDoubleClickedButtonI18N(translator, text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }

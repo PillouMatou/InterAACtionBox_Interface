@@ -23,9 +23,10 @@ public class Configuration {
     public LinkedList<Point2D> currentPoint = new LinkedList<>();
     IntegerProperty selectionMode = new SimpleIntegerProperty(Configuration.MOUSE_INTERACTION);
     boolean userIsMoving = false;
+
     @Getter
     @Setter
-    public String language = "eng";
+    public String language = "fra";
 
     public Configuration() {
     }

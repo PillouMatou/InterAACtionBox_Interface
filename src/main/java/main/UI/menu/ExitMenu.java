@@ -27,13 +27,13 @@ import java.io.IOException;
 
 public class ExitMenu extends BorderPane {
 
-    private final Translator translator;
+    //private final Translator translator;
 
     private GraphicalMenus graphicalMenus;
 
     public ExitMenu(GraphicalMenus graphicalMenus, Main main) {
 
-        translator = main.getTranslator();
+        Translator translator = main.getTranslator();
 
         this.graphicalMenus = graphicalMenus;
         Rectangle r = new Rectangle();
@@ -46,7 +46,7 @@ public class ExitMenu extends BorderPane {
         this.getChildren().add(r);
 
 
-        StackPane shutdownButton = createAppI18NButtonLauncher(
+        StackPane shutdownButton = createAppI18NButtonLauncher(translator,
                 (e) -> {
                     if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
@@ -64,7 +64,7 @@ public class ExitMenu extends BorderPane {
                 "images/on-off-button.png"
         );
 
-        StackPane exitButton = createAppI18NButtonLauncher(
+        StackPane exitButton = createAppI18NButtonLauncher(translator,
                 (e) -> {
                     if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
@@ -77,7 +77,7 @@ public class ExitMenu extends BorderPane {
                 "images/exit.png"
         );
 
-        StackPane cancelButton = createAppI18NButtonLauncher(
+        StackPane cancelButton = createAppI18NButtonLauncher(translator,
                 (e) -> {
                     graphicalMenus.primaryStage.getScene().setRoot(graphicalMenus.getHomeScreen());
                 },
@@ -120,7 +120,7 @@ public class ExitMenu extends BorderPane {
         System.exit(0);
     }
 
-    private StackPane createAppI18NButtonLauncher(EventHandler eventHandler, String name, String imageURL) {
+    private StackPane createAppI18NButtonLauncher(Translator translator, EventHandler eventHandler, String name, String imageURL) {
 
         I18NProgressButton progressButton = new I18NProgressButton();
         progressButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 10);

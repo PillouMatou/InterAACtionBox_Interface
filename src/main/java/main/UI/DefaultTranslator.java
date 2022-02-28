@@ -1,5 +1,6 @@
 package main.UI;
 
+import lombok.extern.slf4j.Slf4j;
 import main.Configuration;
 import main.ConfigurationBuilder;
 import main.utils.multilinguism.Multilinguism;
@@ -7,6 +8,7 @@ import main.utils.multilinguism.Multilinguism;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+@Slf4j
 public class DefaultTranslator implements Translator {
 
     private final Multilinguism multilinguism;
@@ -46,6 +48,7 @@ public class DefaultTranslator implements Translator {
     }
 
     private void notifyAllListeners() {
+        log.info("languageChangeListeners {}",languageChangeListeners);
         for (LanguageChangeListener l : languageChangeListeners) {
             l.languageChanged();
         }
