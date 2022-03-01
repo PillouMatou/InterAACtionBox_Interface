@@ -16,6 +16,7 @@ import main.process.GnomeControlCenterNamedProcessCreator;
 import main.process.TeamviewerNamedProcessCreator;
 import main.utils.StageUtils;
 import main.utils.UtilsUI;
+import tobii.Tobii;
 
 import java.io.IOException;
 
@@ -44,7 +45,11 @@ public class OptionsMenu extends BorderPane {
             Label useEyeTracker = new Label("Eye Tracker:");
             useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
+            Label errorEyeTracker = new Label("");
+            errorEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 1em ; -fx-text-fill: #cd2653");
+
             I18NCheckbox useEyeTrackerCheckBox = new I18NCheckbox(translator,"Activ\u00e9");
+
             String style = "-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 2.5em; ";
             useEyeTrackerCheckBox.setStyle(style);
             useEyeTrackerCheckBox.hoverProperty().addListener((obs, oldval, newval) -> {
@@ -57,6 +62,13 @@ public class OptionsMenu extends BorderPane {
             useEyeTrackerCheckBox.selectedProperty().addListener((obj, oldval, newval) -> {
                 if (newval) {
                     graphicalMenus.getConfiguration().setMode(Configuration.GAZE_INTERACTION);
+                    if(testCoordEyeTracker()){
+                        graphicalMenus.getConfiguration().setMode(Configuration.MOUSE_INTERACTION);
+                        errorEyeTracker.setText("Pas de eye tracker connect\u00e9 ou de premi\u00e8re calibration faite !");
+                        useEyeTrackerCheckBox.setSelected(false);
+                    }else {
+                        errorEyeTracker.setText("");
+                    }
                 } else {
                     graphicalMenus.getConfiguration().setMode(Configuration.MOUSE_INTERACTION);
                 }
@@ -68,6 +80,7 @@ public class OptionsMenu extends BorderPane {
 
             settings.add(useEyeTracker, 0, 1);
             settings.add(useEyeTrackerCheckBox, 1, 1);
+            settings.add(errorEyeTracker, 2, 1);
         }
 
         createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 2);
@@ -202,5 +215,12 @@ public class OptionsMenu extends BorderPane {
         settings.add(menuButton,1, 0);
     }
 
+    public boolean testCoordEyeTracker(){
+        final float[] pointAsFloatArray = Tobii.gazePosition();
 
+        final float xRatio = pointAsFloatArray[0];
+        final float yRatio = pointAsFloatArray[1];
+
+        return xRatio == 0.5 && yRatio == 0.5;
+    }
 }
