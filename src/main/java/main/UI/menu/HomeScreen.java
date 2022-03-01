@@ -222,7 +222,7 @@ public class HomeScreen extends BorderPane {
     }
 
     I18NButton createTopBarI18NButton(Translator translator, String text, String imagePath, EventHandler eventhandler) {
-        return (I18NButton) UtilsUI.getDoubleClickedI18NButton(translator,text, imagePath, eventhandler, graphicalMenus.primaryStage);
+        return UtilsUI.getDoubleClickedI18NButton(translator,text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
     ProgressDoubleClickedButtonI18N createExitTopBarButton(Translator translator,String text, String imagePath, EventHandler eventhandler) {

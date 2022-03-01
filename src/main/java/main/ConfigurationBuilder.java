@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import main.utils.Utils;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 @Slf4j
@@ -33,7 +36,13 @@ public class ConfigurationBuilder implements Cloneable {
 
     public static ConfigurationBuilder createFromPropertiesResource() {
         Properties properties;
+        Path path = Paths.get(Utils.getInterfaceFolder());
         try {
+            if(!Files.exists(path)){
+                Files.createDirectories(path);
+                File f = new File(CONFIGPATH);
+                f.createNewFile();
+            }
             properties = loadProperties();
         } catch (FileNotFoundException e) {
             log.warn("Config file not found : {}", CONFIGPATH);

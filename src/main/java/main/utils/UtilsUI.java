@@ -49,7 +49,7 @@ public class UtilsUI {
         return optionButton;
     }
 
-    public static Button getDoubleClickedI18NButton(Translator translator, String text, String imagePath, EventHandler eventhandler, Stage primaryStage) {
+    public static I18NButton getDoubleClickedI18NButton(Translator translator, String text, String imagePath, EventHandler eventhandler, Stage primaryStage) {
         I18NButton optionButton = new I18NButton(translator,text);
         // optionButton.setMaxHeight(50);
         optionButton.setStyle(

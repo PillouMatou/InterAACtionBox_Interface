@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import main.Configuration;
 import main.ConfigurationBuilder;
 import main.Main;
+import main.UI.I18NCheckbox;
 import main.UI.I18NLabel;
 import main.UI.Translator;
 import main.process.GnomeControlCenterNamedProcessCreator;
@@ -22,9 +23,6 @@ import java.io.IOException;
 public class OptionsMenu extends BorderPane {
 
     public String langage = "Francais";
-
-    //private final Translator translator;
-
 
     public OptionsMenu(GraphicalMenus graphicalMenus, Main main, Configuration configuration) {
         super();
@@ -46,7 +44,7 @@ public class OptionsMenu extends BorderPane {
             Label useEyeTracker = new Label("Eye Tracker:");
             useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
-            CheckBox useEyeTrackerCheckBox = new CheckBox("Activ\u00e9");
+            I18NCheckbox useEyeTrackerCheckBox = new I18NCheckbox(translator,"Activ\u00e9");
             String style = "-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 2.5em; ";
             useEyeTrackerCheckBox.setStyle(style);
             useEyeTrackerCheckBox.hoverProperty().addListener((obs, oldval, newval) -> {
