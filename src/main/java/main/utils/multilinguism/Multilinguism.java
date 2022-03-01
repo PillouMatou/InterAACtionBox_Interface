@@ -31,6 +31,7 @@ public class Multilinguism {
         this.i18n = i18n;
     }
 
+    //search the traduction in the file multilinguism.csv and apply it if found, otherwise return "untranslated"
     public String getTrad(String key, String language) {
         String translate = i18n.translate(key, language);
         if (translate == null) {

@@ -121,6 +121,7 @@ public class ConfigurationBuilder implements Cloneable {
         return new Configuration();
     }
 
+    //save properties in the file Interface.properties
     public void saveConfig() throws IOException {
         Properties properties = toProperties();
         try (FileOutputStream fileOutputStream = new FileOutputStream(CONFIGPATH)) {

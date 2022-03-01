@@ -36,17 +36,20 @@ public class DefaultTranslator implements Translator {
         return textBuilder.toString();
     }
 
+    //add to the list the listener (I18N)
     @Override
     public void registerLanguageChangeListener(LanguageChangeListener listener) {
         languageChangeListeners.add(listener);
     }
 
+    //notify all listener to change the language
     @Override
     public void notifyLanguageChanged() {
         // config = ConfigurationBuilder.createFromPropertiesResource().build();
         this.notifyAllListeners();
     }
 
+    //set the config language to the language specified
     @Override
     public void changeLanguage(String language) {
         config.setLanguage(language);
