@@ -40,5 +40,4 @@ public class Multilinguism {
         }
         return translate;
     }
-
 }
