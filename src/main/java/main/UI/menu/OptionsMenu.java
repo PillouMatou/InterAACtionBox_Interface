@@ -187,18 +187,16 @@ public class OptionsMenu extends BorderPane {
             ConfigurationBuilder.createFromPropertiesResource().withLanguage(configuration.getLanguage()).saveConfigIgnoringExceptions();
             langage = menuItemFR.getText();
             menuButton.setText(langage);
+            translator.changeLanguage(configuration.getLanguage());
             translator.notifyLanguageChanged();
-            log.info("langage : {}",langage);
-            log.info("configuration langage : {}",configuration.getLanguage());
         });
         menuItemEN.setOnAction(eventMenuLanguages -> {
             configuration.setLanguage("eng");
             ConfigurationBuilder.createFromPropertiesResource().withLanguage(configuration.getLanguage()).saveConfigIgnoringExceptions();
             langage = menuItemEN.getText();
             menuButton.setText(langage);
+            translator.changeLanguage(configuration.getLanguage());
             translator.notifyLanguageChanged();
-            log.info("langage : {}",langage);
-            log.info("configuration langage : {}",configuration.getLanguage());
         });
         menuButton.getItems().addAll(menuItemEN,menuItemFR);
 

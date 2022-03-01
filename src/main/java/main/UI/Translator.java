@@ -16,4 +16,6 @@ public interface Translator {
 
     void notifyLanguageChanged();
 
+    void changeLanguage(String language);
+
 }

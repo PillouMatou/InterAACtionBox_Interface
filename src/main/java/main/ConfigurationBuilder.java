@@ -16,7 +16,7 @@ public class ConfigurationBuilder implements Cloneable {
 
     private static final String DEFAULT_VALUE_LANGUAGE = "fra";
 
-    protected String language = DEFAULT_VALUE_LANGUAGE;
+    public String language = DEFAULT_VALUE_LANGUAGE;
     protected String filedir = getFileDirectoryDefaultValue();
 
     private static String getFileDirectoryDefaultValue() {
@@ -49,10 +49,6 @@ public class ConfigurationBuilder implements Cloneable {
         }
         return builder;
     }
-
-
-
-    // protected String filedir = getFileDirectoryDefaultValue();
 
     public ConfigurationBuilder() {
 

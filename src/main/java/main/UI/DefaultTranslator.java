@@ -43,11 +43,17 @@ public class DefaultTranslator implements Translator {
 
     @Override
     public void notifyLanguageChanged() {
-        config = ConfigurationBuilder.createFromPropertiesResource().build();
+        // config = ConfigurationBuilder.createFromPropertiesResource().build();
         this.notifyAllListeners();
     }
 
+    @Override
+    public void changeLanguage(String language) {
+        config.setLanguage(language);
+    }
+
     private void notifyAllListeners() {
+        log.info("config defaultTrans {}",config.getLanguage());
         log.info("languageChangeListeners {}",languageChangeListeners);
         for (LanguageChangeListener l : languageChangeListeners) {
             l.languageChanged();
