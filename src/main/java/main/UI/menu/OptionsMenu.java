@@ -19,6 +19,7 @@ import main.utils.UtilsUI;
 import tobii.Tobii;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Slf4j
 public class OptionsMenu extends BorderPane {
@@ -64,7 +65,11 @@ public class OptionsMenu extends BorderPane {
                     graphicalMenus.getConfiguration().setMode(Configuration.GAZE_INTERACTION);
                     if(testCoordEyeTracker()){
                         graphicalMenus.getConfiguration().setMode(Configuration.MOUSE_INTERACTION);
-                        errorEyeTracker.setText("Pas de eye tracker connect\u00e9 ou de premi\u00e8re calibration faite !");
+                        if(Objects.equals(configuration.getLanguage(), "fra")){
+                            errorEyeTracker.setText("Pas de eye tracker connect\u00e9 ou de premi\u00e8re calibration faite !");
+                        }else{
+                            errorEyeTracker.setText("No connected eye tracker or first calibration done!");
+                        }
                         useEyeTrackerCheckBox.setSelected(false);
                     }else {
                         errorEyeTracker.setText("");
