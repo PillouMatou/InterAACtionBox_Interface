@@ -12,18 +12,23 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import main.UI.menu.ContactUs;
+import lombok.Getter;
+import main.UI.DefaultTranslator;
+import main.UI.Translator;
 import main.UI.menu.GraphicalMenus;
 import main.utils.StageUtils;
-import main.utils.UtilsOS;
-
-import java.util.List;
+import main.utils.multilinguism.Multilinguism;
 
 public class Main extends Application {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    @Getter
+    private static Main instance;
+
+    @Getter
+    private Translator translator;
+
+    public static void main(String[] args) {instance = getInstance();
+        launch(args);}
 
     @Override
     public void start(Stage primaryStage) {
@@ -34,7 +39,13 @@ public class Main extends Application {
         primaryStage.setHeight(Screen.getPrimary().getBounds().getHeight());
         Scene scene = new Scene(new Pane(new Rectangle(0,0,Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight())), Color.TRANSPARENT);
 
-        GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage);
+        final Configuration config = ConfigurationBuilder.createFromPropertiesResource().build();
+        config.language = ConfigurationBuilder.createFromPropertiesResource().language;
+        final Multilinguism multilinguism = Multilinguism.getSingleton();
+
+        translator = new DefaultTranslator(config, multilinguism);
+
+        GraphicalMenus graphicalMenus = new GraphicalMenus(primaryStage, this);
         scene.setRoot(graphicalMenus.getHomeScreen());
         graphicalMenus.getConfiguration().setScene(scene);
 

@@ -4,6 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
@@ -22,6 +23,10 @@ public class Configuration {
     public LinkedList<Point2D> currentPoint = new LinkedList<>();
     IntegerProperty selectionMode = new SimpleIntegerProperty(Configuration.MOUSE_INTERACTION);
     boolean userIsMoving = false;
+
+    @Getter
+    @Setter
+    public String language = "fra";
 
     public Configuration() {
     }

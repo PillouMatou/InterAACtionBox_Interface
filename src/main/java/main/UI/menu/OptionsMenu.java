@@ -1,20 +1,17 @@
 package main.UI.menu;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import lombok.extern.slf4j.Slf4j;
 import main.Configuration;
-import main.UI.DoubleClickedButton;
+import main.ConfigurationBuilder;
+import main.Main;
+import main.UI.I18NCheckbox;
+import main.UI.I18NLabel;
+import main.UI.Translator;
 import main.process.GnomeControlCenterNamedProcessCreator;
 import main.process.TeamviewerNamedProcessCreator;
 import main.utils.StageUtils;
@@ -22,21 +19,24 @@ import main.utils.UtilsUI;
 import tobii.Tobii;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Slf4j
 public class OptionsMenu extends BorderPane {
 
     public String langage = "Francais";
 
-    public OptionsMenu(GraphicalMenus graphicalMenus) {
+    public OptionsMenu(GraphicalMenus graphicalMenus, Main main, Configuration configuration) {
         super();
+
+        Translator translator = main.getTranslator();
 
         this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 
         this.prefWidthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         this.prefHeightProperty().bind(graphicalMenus.primaryStage.heightProperty());
 
-        this.setTop(UtilsUI.createTopBar(graphicalMenus.getHomeScreen(), graphicalMenus, "Options"));
+        this.setTop(UtilsUI.createTopBar(translator,graphicalMenus.getHomeScreen(), graphicalMenus, "Options"));
 
         GridPane settings = new GridPane();
         settings.setHgap(20);
@@ -49,7 +49,8 @@ public class OptionsMenu extends BorderPane {
             Label errorEyeTracker = new Label("");
             errorEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 1em ; -fx-text-fill: #cd2653");
 
-            CheckBox useEyeTrackerCheckBox = new CheckBox("Activ\u00e9");
+            I18NCheckbox useEyeTrackerCheckBox = new I18NCheckbox(translator,"Activ\u00e9");
+
             String style = "-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 2.5em; ";
             useEyeTrackerCheckBox.setStyle(style);
             useEyeTrackerCheckBox.hoverProperty().addListener((obs, oldval, newval) -> {
@@ -64,7 +65,11 @@ public class OptionsMenu extends BorderPane {
                     graphicalMenus.getConfiguration().setMode(Configuration.GAZE_INTERACTION);
                     if(testCoordEyeTracker()){
                         graphicalMenus.getConfiguration().setMode(Configuration.MOUSE_INTERACTION);
-                        errorEyeTracker.setText("Pas de eye tracker connect\u00e9 ou de premi\u00e8re calibration faite !");
+                        if(Objects.equals(configuration.getLanguage(), "fra")){
+                            errorEyeTracker.setText("Pas de eye tracker connect\u00e9 ou de premi\u00e8re calibration faite !");
+                        }else{
+                            errorEyeTracker.setText("No connected eye tracker or first calibration done!");
+                        }
                         useEyeTrackerCheckBox.setSelected(false);
                     }else {
                         errorEyeTracker.setText("");
@@ -83,18 +88,18 @@ public class OptionsMenu extends BorderPane {
             settings.add(errorEyeTracker, 2, 1);
         }
 
-        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 2);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 3);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 4);
-        createGnomeControlCenterButton(graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 5);
-        createGnomeControlCenterButtonLang(settings);
+        createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Gestionnaire Wifi:", "images/wi-fi_white.png", "wifi", 2);
+        createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Gestionnaire Bluetooth:", "images/bluetooth.png", "bluetooth", 3);
+        createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Param\u00e8tres D'Affichage:", "images/notebook.png", "display", 4);
+        createGnomeControlCenterButtonI18N(translator, graphicalMenus, settings, "Param\u00e8tres de Batterie:", "images/battery.png", "power", 5);
+        createGnomeControlCenterButtonLang(translator, settings, configuration);
 
         {
 
-            Label userInformationLabel = new Label("Une id\u00e9e ? Besoin d'aide ? ");
+            Label userInformationLabel = new I18NLabel(translator,"Une id\u00e9e ? Besoin d'aide ? ");
             userInformationLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
-            Button userInformationButton = UtilsUI.createButton(
+            Button userInformationButton = UtilsUI.createI18NButton(translator,
                     "Contactez-nous>",
                     "images/contact.png",
                     (e) -> {
@@ -110,11 +115,11 @@ public class OptionsMenu extends BorderPane {
         }
 
         {
-            Label changePasswordLabel = new Label("Mot de Passe");
+            Label changePasswordLabel = new I18NLabel(translator,"Mot de Passe");
             changePasswordLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em");
 
 
-            Button changePasswordButton = UtilsUI.createButton(
+            Button changePasswordButton = UtilsUI.createI18NButton(translator,
                     "Changer>",
                     "images/user_white.png",
                     (e) -> {
@@ -135,10 +140,10 @@ public class OptionsMenu extends BorderPane {
 
         {
 
-            Label teamviewerLabel = new Label("Lancer TeamViewer:");
+            Label teamviewerLabel = new I18NLabel(translator,"Lancer TeamViewer:");
             teamviewerLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
-            Button teamViewerButton = UtilsUI.createButton(
+            Button teamViewerButton = UtilsUI.createI18NButton(translator,
                     "Ouvrir>",
                     "images/teamviewer.png",
                     (e) -> {
@@ -162,11 +167,11 @@ public class OptionsMenu extends BorderPane {
         this.setBottom(new Label(Configuration.VERSION));
     }
 
-    void createGnomeControlCenterButton(GraphicalMenus graphicalMenus, GridPane settings, String label, String imageName, String panelToOpen, int row) {
-        Label displayedLabel = new Label(label);
+    void createGnomeControlCenterButtonI18N(Translator translator,GraphicalMenus graphicalMenus, GridPane settings, String label, String imageName, String panelToOpen, int row) {
+        Label displayedLabel = new I18NLabel(translator,label);
         displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-text-fill: #cd2653; -fx-font-size: 3em");
 
-        Button button = UtilsUI.createButton(
+        Button button = UtilsUI.createI18NButton(translator,
                 "Ouvrir>",
                 imageName,
                 (e) -> {
@@ -183,8 +188,8 @@ public class OptionsMenu extends BorderPane {
         settings.add(button, 1, row);
     }
 
-    void createGnomeControlCenterButtonLang(GridPane settings) {
-        Label displayedLabel = new Label("Choisir une langue:");
+    void createGnomeControlCenterButtonLang(Translator translator, GridPane settings, Configuration configuration) {
+        Label displayedLabel = new I18NLabel(translator,"Choisir une langue:");
         displayedLabel.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
         displayedLabel.setTextFill(Color.web("#cd2653"));
 
@@ -194,12 +199,20 @@ public class OptionsMenu extends BorderPane {
         MenuButton menuButton = new MenuButton(langage);
 
         menuItemFR.setOnAction(eventMenuLanguages -> {
+            configuration.setLanguage("fra");
+            ConfigurationBuilder.createFromPropertiesResource().withLanguage(configuration.getLanguage()).saveConfigIgnoringExceptions();
             langage = menuItemFR.getText();
             menuButton.setText(langage);
+            translator.changeLanguage(configuration.getLanguage());
+            translator.notifyLanguageChanged();
         });
         menuItemEN.setOnAction(eventMenuLanguages -> {
+            configuration.setLanguage("eng");
+            ConfigurationBuilder.createFromPropertiesResource().withLanguage(configuration.getLanguage()).saveConfigIgnoringExceptions();
             langage = menuItemEN.getText();
             menuButton.setText(langage);
+            translator.changeLanguage(configuration.getLanguage());
+            translator.notifyLanguageChanged();
         });
         menuButton.getItems().addAll(menuItemEN,menuItemFR);
 

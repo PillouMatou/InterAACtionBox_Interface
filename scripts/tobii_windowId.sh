@@ -13,7 +13,7 @@ else
 
 	yad --question \
   		--title="InterAACtionBox" \
-  		--text="Avez-vous brancher votre Eye Tracker ?" \
+  		--text="Avez-vous branché votre Eye Tracker ?" \
   		--geometry=300x100+810+200 \
   		--button="Oui" \
   		--button="Non"
@@ -22,7 +22,7 @@ else
   	then
   		yad --info \
   		--title="InterAACtionBox" \
-  		--text="Veuillez brancher votre Eye Tracker !" \
+  		--text="Veuillez branché votre Eye Tracker !" \
   		--geometry=300x100+810+200 \
   		--button="Oui" \
   		--button="Non"

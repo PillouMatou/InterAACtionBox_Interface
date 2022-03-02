@@ -16,16 +16,25 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import main.UI.ProgressButton;
+import main.Main;
+import main.UI.I18NLabel;
+import main.UI.I18NProgressButton;
+import main.UI.I18NText;
+import main.UI.Translator;
 import main.utils.UtilsOS;
 
 import java.io.IOException;
 
 public class ExitMenu extends BorderPane {
 
+    //private final Translator translator;
+
     private GraphicalMenus graphicalMenus;
 
-    public ExitMenu(GraphicalMenus graphicalMenus) {
+    public ExitMenu(GraphicalMenus graphicalMenus, Main main) {
+
+        Translator translator = main.getTranslator();
+
         this.graphicalMenus = graphicalMenus;
         Rectangle r = new Rectangle();
         r.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
@@ -37,7 +46,7 @@ public class ExitMenu extends BorderPane {
         this.getChildren().add(r);
 
 
-        StackPane shutdownButton = createAppButtonLauncher(
+        StackPane shutdownButton = createAppI18NButtonLauncher(translator,
                 (e) -> {
                     if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
@@ -55,7 +64,7 @@ public class ExitMenu extends BorderPane {
                 "images/on-off-button.png"
         );
 
-        StackPane exitButton = createAppButtonLauncher(
+        StackPane exitButton = createAppI18NButtonLauncher(translator,
                 (e) -> {
                     if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
@@ -68,7 +77,7 @@ public class ExitMenu extends BorderPane {
                 "images/exit.png"
         );
 
-        StackPane cancelButton = createAppButtonLauncher(
+        StackPane cancelButton = createAppI18NButtonLauncher(translator,
                 (e) -> {
                     graphicalMenus.primaryStage.getScene().setRoot(graphicalMenus.getHomeScreen());
                 },
@@ -81,8 +90,7 @@ public class ExitMenu extends BorderPane {
         BorderPane.setAlignment(hbox, Pos.CENTER);
         hbox.spacingProperty().bind(this.widthProperty().divide(20));
 
-        Label exitPrompt = new Label();
-        exitPrompt.setText("Voulez vous vraiment \u00e9teindre la box ?");
+        I18NLabel exitPrompt = new I18NLabel(translator,"Voulez vous vraiment \u00e9teindre la box ?");
         exitPrompt.setFont(new Font(60));
         exitPrompt.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica");
         exitPrompt.setTextFill(Color.BLACK);
@@ -112,9 +120,9 @@ public class ExitMenu extends BorderPane {
         System.exit(0);
     }
 
-    private StackPane createAppButtonLauncher(EventHandler eventHandler, String name, String imageURL) {
+    private StackPane createAppI18NButtonLauncher(Translator translator, EventHandler eventHandler, String name, String imageURL) {
 
-        ProgressButton progressButton = new ProgressButton();
+        I18NProgressButton progressButton = new I18NProgressButton();
         progressButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 10);
         progressButton.getButton().setStroke(Color.BLACK);
 
@@ -129,7 +137,8 @@ public class ExitMenu extends BorderPane {
 
         progressButton.assignIndicator(eventHandler);
 
-        progressButton.getLabel().setText(name);
+        I18NText tradName = new I18NText(translator,name);
+        progressButton.getLabel().setText(tradName.getText());
         progressButton.getLabel().setTextFill(Color.BLACK);
         progressButton.getLabel().setFont(new Font(20));
         progressButton.getButton().setStrokeWidth(3);

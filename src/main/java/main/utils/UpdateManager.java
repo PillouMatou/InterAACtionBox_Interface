@@ -3,6 +3,7 @@ package main.utils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import lombok.extern.slf4j.Slf4j;
+import main.Configuration;
 
 import java.time.Duration;
 
@@ -20,7 +21,7 @@ public class UpdateManager {
 
     };
 
-    public UpdateManager() {
+    public UpdateManager(Configuration configuration) {
         anyUpdateNeeded.bind(
                         updateServices[UpdateService.SYSTEME].getUpdateProperty().or(
                         updateServices[UpdateService.AUGCOM].getUpdateProperty()).or(

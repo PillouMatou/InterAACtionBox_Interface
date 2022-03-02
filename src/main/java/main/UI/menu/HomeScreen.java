@@ -21,8 +21,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
-import main.UI.ProgressButton;
-import main.UI.ProgressDoubleClickedButton;
+import main.Configuration;
+import main.Main;
+import main.UI.*;
 import main.gaze.devicemanager.TobiiGazeDeviceManager;
 import main.process.*;
 import main.process.xdotoolProcess.ActivateMainWindowProcess;
@@ -37,18 +38,21 @@ import java.util.Arrays;
 public class HomeScreen extends BorderPane {
 
     private final GraphicalMenus graphicalMenus;
-    private final ProgressButton closeMenuButton;
+    private final I18NProgressButton closeMenuButton;
     private final VBox centerMenu;
     private final EventHandler goToUpdateMenu;
     private UpdateManager updateManager;
+    //private final Translator translator;
 
     InterAACtionGazeNamedProcessCreator interAACtionGazeNamedProcessCreator = new InterAACtionGazeNamedProcessCreator();
 
 
-    public HomeScreen(GraphicalMenus graphicalMenus, UpdateManager updateManager) {
+    public HomeScreen(GraphicalMenus graphicalMenus, UpdateManager updateManager, Main main, Configuration configuration) {
         super();
         this.graphicalMenus = graphicalMenus;
         this.updateManager = updateManager;
+
+        Translator translator = main.getTranslator();
 
         this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 
@@ -67,19 +71,21 @@ public class HomeScreen extends BorderPane {
             graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu());
         };
 
-        Button optionButton = createTopBarButton(
+        I18NButton optionButton = createTopBarI18NButton(
+                translator,
                 "Options",
                 "images/settings_white.png",
                 (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu())
         );
 
-        Button updateButton = createTopBarButton(
+        I18NButton updateButton = createTopBarI18NButton(
+                translator,
                 "Votre syst\u00e8me est \u00e0 jour",
                 "images/refresh.png",
                 goToUpdateMenu
         );
 
-        checkUpdatesAndAdjustButton(updateButton);
+        checkUpdatesAndAdjustButton(updateButton,configuration);
 
         HBox menuBar = createMenuBar();
 
@@ -101,7 +107,7 @@ public class HomeScreen extends BorderPane {
                 }
         );*/
 
-        Button tobiiButton2 = createTopBarButton(
+        I18NButton tobiiButton2 = createTopBarI18NButton(translator,
                 "Calibration",
                 "images/eye-tracking_white.png",
                 (e) -> {
@@ -118,15 +124,17 @@ public class HomeScreen extends BorderPane {
                 }
         );
 
-        ProgressDoubleClickedButton exitButton = createExitTopBarButton(
+
+        ProgressDoubleClickedButtonI18N exitButton = createExitTopBarButton(
+                translator,
                 "Exit",
                 "images/on-off-button_white.png",
                 (e) -> {
-                    this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus));
+                    this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main));
                 }
         );
         exitButton.assignIndicator((e) -> {
-            this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus));
+            this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main));
         });
         exitButton.start();
 
@@ -174,13 +182,17 @@ public class HomeScreen extends BorderPane {
         return titlePane;
     }
 
-    private void checkUpdatesAndAdjustButton(Button updateButton) {
+    private void checkUpdatesAndAdjustButton(Button updateButton, Configuration configuration) {
         updateManager.anyUpdateNeeded.addListener((obs, oldval, newval) -> {
             Platform.runLater(() -> {
                 if (UtilsOS.isConnectedToInternet()) {
                     if (newval) {
                         updateButton.setOpacity(1);
-                        updateButton.setText("Mise \u00e0 jour disponible !");
+                        if(configuration.getLanguage().equals("fra")){
+                            updateButton.setText("Mise \u00e0 jour disponible !");
+                        }else{
+                            updateButton.setText("Update available!");
+                        }
                         updateButton.setDisable(false);
                         Timeline t = new Timeline();
                         t.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(updateButton.opacityProperty(), 0.2)));
@@ -189,25 +201,33 @@ public class HomeScreen extends BorderPane {
                         t.play();
                     } else {
                         updateButton.setOpacity(1);
-                        updateButton.setText("Votre syst\u00e8me est \u00e0 jour");
+                        if(configuration.getLanguage().equals("fra")) {
+                            updateButton.setText("Votre syst\u00e8me est \u00e0 jour");
+                        }else{
+                            updateButton.setText("Your system is up to date");
+                        }
                         updateButton.setDisable(false);
                     }
                 } else {
                     updateButton.setOpacity(0.5);
-                    updateButton.setText("Connection Introuvable");
+                    if(configuration.getLanguage().equals("fra")) {
+                        updateButton.setText("Connection Introuvable");
+                    }else{
+                        updateButton.setText("Connection Not Found");
+                    }
                     updateButton.setDisable(true);
                 }
             });
         });
     }
 
-    Button createTopBarButton(String text, String imagePath, EventHandler eventhandler) {
-        return UtilsUI.getDoubleClickedButton(text, imagePath, eventhandler, graphicalMenus.primaryStage);
+    I18NButton createTopBarI18NButton(Translator translator, String text, String imagePath, EventHandler eventhandler) {
+        return UtilsUI.getDoubleClickedI18NButton(translator,text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
-    ProgressDoubleClickedButton createExitTopBarButton(String text, String imagePath, EventHandler eventhandler) {
+    ProgressDoubleClickedButtonI18N createExitTopBarButton(Translator translator,String text, String imagePath, EventHandler eventhandler) {
 
-        return new ProgressDoubleClickedButton(text, imagePath, eventhandler, graphicalMenus.primaryStage);
+        return new ProgressDoubleClickedButtonI18N(translator, text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
     private HBox createMenuBar() {
@@ -225,7 +245,7 @@ public class HomeScreen extends BorderPane {
     }
 
     private StackPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL) {
-        ProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus);
+        I18NProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus);
         processButton.getLabel().setText(name);
         processButton.getLabel().setFont(new Font(20));
         processButton.getButton().setStroke(Color.web("#cd2653"));
@@ -260,7 +280,7 @@ public class HomeScreen extends BorderPane {
         return borderPaneLauncher;
     }
 
-    private void updateLaunchButtonIfExist(StackPane borderPaneLauncher, ProgressButton processButton, ImageView downnloadImageView, boolean needsUpdate) {
+    private void updateLaunchButtonIfExist(StackPane borderPaneLauncher, I18NProgressButton processButton, ImageView downnloadImageView, boolean needsUpdate) {
 
         if (needsUpdate) {
             Platform.runLater(() -> {
@@ -334,8 +354,8 @@ public class HomeScreen extends BorderPane {
         t.start();
     }
 
-    public ProgressButton createCloseMenuButton() {
-        ProgressButton closeButton = new ProgressButton();
+    public I18NProgressButton createCloseMenuButton() {
+        I18NProgressButton closeButton = new I18NProgressButton();
         closeButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 15);
         closeButton.getButton().setStroke(Color.web("#cd2653"));
         closeButton.getButton().setStrokeWidth(3);
