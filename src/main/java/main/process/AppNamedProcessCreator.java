@@ -3,6 +3,7 @@ package main.process;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import main.Configuration;
 import main.UI.I18NProgressButton;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.XdotoolProcessCreator;
@@ -85,7 +86,7 @@ public interface AppNamedProcessCreator {
 
     void setUpProcessBuilder();
 
-    default I18NProgressButton createButton(Image image, GraphicalMenus graphicalMenus) {
+    default I18NProgressButton createButton(Image image, GraphicalMenus graphicalMenus, Configuration configuration) {
         I18NProgressButton progressButton = new I18NProgressButton();
         progressButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 10);
 
@@ -99,10 +100,12 @@ public interface AppNamedProcessCreator {
         progressButton.setImage(logo);
 
         setUpProcessBuilder();
-        progressButton.assignIndicator((e) -> {
-            StageUtils.killRunningProcess(graphicalMenus);
-            graphicalMenus.process = start(graphicalMenus);
-        });
+        if(configuration.isGazeInteraction()) {
+            progressButton.assignIndicator((e) -> {
+                StageUtils.killRunningProcess(graphicalMenus);
+                graphicalMenus.process = start(graphicalMenus);
+            });
+        }
         progressButton.setOnMouseClicked((e) -> {
             StageUtils.killRunningProcess(graphicalMenus);
             graphicalMenus.process = start(graphicalMenus);

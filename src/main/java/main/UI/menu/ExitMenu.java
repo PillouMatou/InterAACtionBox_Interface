@@ -17,6 +17,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import main.Configuration;
 import main.Main;
 import main.UI.I18NLabel;
 import main.UI.I18NProgressButton;
@@ -30,7 +31,7 @@ public class ExitMenu extends BorderPane {
 
     private GraphicalMenus graphicalMenus;
 
-    public ExitMenu(GraphicalMenus graphicalMenus, Main main) {
+    public ExitMenu(GraphicalMenus graphicalMenus, Main main, Configuration configuration) {
 
         Translator translator = main.getTranslator();
 
@@ -60,7 +61,8 @@ public class ExitMenu extends BorderPane {
                     System.exit(0);
                 },
                 "Oui, \u00e9teindre",
-                "images/on-off-button.png"
+                "images/on-off-button.png",
+                configuration
         );
 
         StackPane exitButton = createAppI18NButtonLauncher(translator,
@@ -73,7 +75,8 @@ public class ExitMenu extends BorderPane {
                     System.exit(0);
                 },
                 "Non, aller vers Ubuntu",
-                "images/exit.png"
+                "images/exit.png",
+                configuration
         );
 
         StackPane cancelButton = createAppI18NButtonLauncher(translator,
@@ -81,7 +84,8 @@ public class ExitMenu extends BorderPane {
                     graphicalMenus.primaryStage.getScene().setRoot(graphicalMenus.getHomeScreen());
                 },
                 "Non, annuler",
-                "images/cross.png"
+                "images/cross.png",
+                configuration
         );
 
         HBox hbox = new HBox(cancelButton, exitButton, shutdownButton);
@@ -119,7 +123,7 @@ public class ExitMenu extends BorderPane {
         System.exit(0);
     }
 
-    private StackPane createAppI18NButtonLauncher(Translator translator, EventHandler eventHandler, String name, String imageURL) {
+    private StackPane createAppI18NButtonLauncher(Translator translator, EventHandler eventHandler, String name, String imageURL, Configuration configuration) {
 
         I18NProgressButton progressButton = new I18NProgressButton();
         progressButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 10);
@@ -134,7 +138,9 @@ public class ExitMenu extends BorderPane {
 
         progressButton.setImage(logo);
 
-        progressButton.assignIndicator(eventHandler);
+        if(configuration.isGazeInteraction()){
+            progressButton.assignIndicator(eventHandler);
+        }
 
         I18NText tradName = new I18NText(translator,name);
         progressButton.getLabel().setText(tradName.getText());
