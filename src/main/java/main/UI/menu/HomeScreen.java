@@ -42,7 +42,6 @@ public class HomeScreen extends BorderPane {
     private final VBox centerMenu;
     private final EventHandler goToUpdateMenu;
     private UpdateManager updateManager;
-    //private final Translator translator;
 
     InterAACtionGazeNamedProcessCreator interAACtionGazeNamedProcessCreator = new InterAACtionGazeNamedProcessCreator();
 
@@ -275,6 +274,7 @@ public class HomeScreen extends BorderPane {
             updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getExistProperty().addListener((obj, oldval, newval) -> {
                 updateLaunchButtonIfExist(borderPaneLauncher, processButton, downnloadImageView, newval);
             });
+            startMouseListener();
         }
 
         return borderPaneLauncher;

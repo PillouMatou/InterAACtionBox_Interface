@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -26,8 +27,6 @@ import main.utils.UtilsOS;
 import java.io.IOException;
 
 public class ExitMenu extends BorderPane {
-
-    //private final Translator translator;
 
     private GraphicalMenus graphicalMenus;
 
@@ -142,6 +141,8 @@ public class ExitMenu extends BorderPane {
         progressButton.getLabel().setTextFill(Color.BLACK);
         progressButton.getLabel().setFont(new Font(20));
         progressButton.getButton().setStrokeWidth(3);
+
+        progressButton.setOnMouseClicked(eventHandler);
 
         progressButton.start();
         return progressButton;

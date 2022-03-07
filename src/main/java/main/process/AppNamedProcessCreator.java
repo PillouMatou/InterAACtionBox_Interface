@@ -103,6 +103,10 @@ public interface AppNamedProcessCreator {
             StageUtils.killRunningProcess(graphicalMenus);
             graphicalMenus.process = start(graphicalMenus);
         });
+        progressButton.setOnMouseClicked((e) -> {
+            StageUtils.killRunningProcess(graphicalMenus);
+            graphicalMenus.process = start(graphicalMenus);
+        });
         return progressButton;
     }
 }
