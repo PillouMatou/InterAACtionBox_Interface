@@ -118,11 +118,12 @@ public class HomeScreen extends BorderPane {
                 "images/on-off-button_white.png",
                 (e) -> {
                     this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main,configuration));
-                }
+                },
+                configuration
         );
-        exitButton.assignIndicator((e) -> {
-            this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main,configuration));
-        });
+
+        exitButton.assignIndicator((e) -> this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main,configuration)));
+
         exitButton.start();
 
         StackPane optionBar = createOptionBar(optionButton, updateButton,tobiiButton2, exitButton);
@@ -212,9 +213,9 @@ public class HomeScreen extends BorderPane {
         return UtilsUI.getDoubleClickedI18NButton(translator,text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
-    ProgressDoubleClickedButtonI18N createExitTopBarButton(Translator translator,String text, String imagePath, EventHandler eventhandler) {
+    ProgressDoubleClickedButtonI18N createExitTopBarButton(Translator translator,String text, String imagePath, EventHandler eventhandler, Configuration configuration) {
 
-        return new ProgressDoubleClickedButtonI18N(translator, text, imagePath, eventhandler, graphicalMenus.primaryStage);
+        return new ProgressDoubleClickedButtonI18N(translator, text, imagePath, eventhandler, graphicalMenus.primaryStage, configuration);
     }
 
     private HBox createMenuBar(Configuration configuration) {

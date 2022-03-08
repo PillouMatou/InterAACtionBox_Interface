@@ -19,6 +19,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import main.Configuration;
 import main.UI.*;
 import main.UI.menu.GraphicalMenus;
 

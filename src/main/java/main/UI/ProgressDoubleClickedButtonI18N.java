@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import main.Configuration;
 import main.utils.UtilsUI;
 
 @Slf4j
@@ -32,7 +33,7 @@ public class ProgressDoubleClickedButtonI18N extends StackPane {
 
     private boolean started = false;
 
-    public ProgressDoubleClickedButtonI18N(Translator translator, String name, String imagePath, EventHandler eventhandler, Stage primaryStage) {
+    public ProgressDoubleClickedButtonI18N(Translator translator, String name, String imagePath, EventHandler eventhandler, Stage primaryStage, Configuration configuration) {
         super();
         timelineProgressBar = new Timeline();
 
@@ -46,7 +47,13 @@ public class ProgressDoubleClickedButtonI18N extends StackPane {
         indicator.setMouseTransparent(true);
         indicator.setOpacity(0);
 
-        this.getChildren().addAll(button, indicator);
+        this.getChildren().addAll(button);
+
+        if(configuration.isGazeInteraction()){
+            this.getChildren().addAll(indicator);
+        }else{
+            this.getChildren().removeAll(indicator);
+        }
 
         button.heightProperty().addListener((obs, oldVal, newVal) -> {
             indicator.setMinHeight(newVal.doubleValue());
