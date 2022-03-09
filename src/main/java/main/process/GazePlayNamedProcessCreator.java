@@ -55,10 +55,7 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
         if (UtilsOS.isWindows()) {
             return "C:/Program Files (x86)/GazePlay";
         } else {
-            String text = "../../ GazePlay-AFSR 1.9.7";
-            log.info("InterAACtionGaze directory is: " + text);
-            return text;
-            /*String configFilePath = System.getProperty("user.home") + "/interaactionBox_Interface-linux/bin/configuration.conf";
+            String configFilePath = "/etc/skel/interaactionBox_Interface-linux/bin/configuration.conf";
             try {
                 BufferedReader brTest = new BufferedReader(new FileReader(configFilePath));
                 String text = brTest.readLine();
@@ -67,7 +64,7 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
             } catch (IOException e) {
                 log.info("configuration.conf non trouvé");
                 return "";
-            }*/
+            }
         }
     }
 
