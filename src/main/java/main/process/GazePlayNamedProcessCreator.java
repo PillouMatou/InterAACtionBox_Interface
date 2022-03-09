@@ -36,7 +36,7 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
             }
             String classpath = gazePlayInstallationRepo + "/lib/*";
 
-            LinkedList<String> commands = new LinkedList<>(Arrays.asList(javaBin, "-cp", classpath, "-Djdk.gtk.version=2", "net.gazeplay.GazePlayLauncher", "--user", UtilsOS.getUserNameFromOSForGazePlay()));
+            LinkedList<String> commands = new LinkedList<>(Arrays.asList(javaBin, "-cp", classpath, "-Djdk.gtk.version=2", "net.gazeplay.GazePlayLauncher", "--afsrgazeplay", "--user", UtilsOS.getUserNameFromOSForGazePlay()));
 
             return new ProcessBuilder(commands);
         } else {
