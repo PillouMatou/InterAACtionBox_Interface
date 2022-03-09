@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -42,7 +43,6 @@ public class HomeScreen extends BorderPane {
     private final VBox centerMenu;
     private final EventHandler goToUpdateMenu;
     private UpdateManager updateManager;
-    //private final Translator translator;
 
     InterAACtionGazeNamedProcessCreator interAACtionGazeNamedProcessCreator = new InterAACtionGazeNamedProcessCreator();
 
@@ -67,6 +67,7 @@ public class HomeScreen extends BorderPane {
         centerMenu.setTranslateY(rest / 3);
 
         goToUpdateMenu = (e) -> {
+            setCursor(Cursor.DEFAULT);
             updateManager.checkUpdates();
             graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu());
         };
@@ -75,7 +76,9 @@ public class HomeScreen extends BorderPane {
                 translator,
                 "Options",
                 "images/settings_white.png",
-                (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu())
+                (e) -> {
+                    setCursor(Cursor.DEFAULT);
+                    graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu());}
         );
 
         I18NButton updateButton = createTopBarI18NButton(
@@ -95,23 +98,11 @@ public class HomeScreen extends BorderPane {
 
         showCloseProcessButtonIfProcessNotNull();
 
-        /*Button tobiiButton = createTopBarButton(
-                "Eye-Tracker Manager",
-                "images/eye-tracking_white.png",
-                (e) -> {
-                    StageUtils.killRunningProcess(graphicalMenus);
-                    TobiiManagerNamedProcessCreator tobiiManagerProcess = new TobiiManagerNamedProcessCreator();
-                    tobiiManagerProcess.setUpProcessBuilder();
-                    graphicalMenus.process = tobiiManagerProcess.start(graphicalMenus);
-                    showCloseProcessButtonIfProcessNotNull();
-                }
-        );*/
-
         I18NButton tobiiButton2 = createTopBarI18NButton(translator,
                 "Calibration",
                 "images/eye-tracking_white.png",
                 (e) -> {
-
+                    setCursor(Cursor.WAIT);
                     if (Arrays.toString(Tobii.gazePosition()).equals(tobiiNotConnected)){
                         StageUtils.killRunningProcess(graphicalMenus);
                         TobiiManagerNamedProcessCreator tobiiManagerProcess = new TobiiManagerNamedProcessCreator();
@@ -130,10 +121,12 @@ public class HomeScreen extends BorderPane {
                 "Exit",
                 "images/on-off-button_white.png",
                 (e) -> {
+                    setCursor(Cursor.DEFAULT);
                     this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main));
                 }
         );
         exitButton.assignIndicator((e) -> {
+            setCursor(Cursor.DEFAULT);
             this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main));
         });
         exitButton.start();
@@ -361,6 +354,7 @@ public class HomeScreen extends BorderPane {
         closeButton.getButton().setStrokeWidth(3);
 
         closeButton.assignIndicator((e) -> {
+            setCursor(Cursor.DEFAULT);
             graphicalMenus.primaryStage.hide();
         });
 
