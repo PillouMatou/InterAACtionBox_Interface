@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import lombok.extern.slf4j.Slf4j;
+import main.Configuration;
 import main.Main;
 import main.UI.I18NButton;
 import main.UI.I18NLabel;
@@ -23,9 +24,7 @@ public class ContactUs extends BorderPane {
 
     Label errorLabel = new Label();
 
-    //private final Translator translator;
-
-    public ContactUs(GraphicalMenus graphicalMenus, Main main) {
+    public ContactUs(GraphicalMenus graphicalMenus, Main main, Configuration configuration) {
 
         Translator translator = main.getTranslator();
 

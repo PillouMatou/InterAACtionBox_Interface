@@ -42,7 +42,6 @@ public class HomeScreen extends BorderPane {
     private final VBox centerMenu;
     private final EventHandler goToUpdateMenu;
     private UpdateManager updateManager;
-    //private final Translator translator;
 
     InterAACtionGazeNamedProcessCreator interAACtionGazeNamedProcessCreator = new InterAACtionGazeNamedProcessCreator();
 
@@ -87,25 +86,13 @@ public class HomeScreen extends BorderPane {
 
         checkUpdatesAndAdjustButton(updateButton,configuration);
 
-        HBox menuBar = createMenuBar();
+        HBox menuBar = createMenuBar(configuration);
 
         closeMenuButton = createCloseMenuButton();
         centerMenu.getChildren().addAll(closeMenuButton, menuBar);
         this.setCenter(centerMenu);
 
         showCloseProcessButtonIfProcessNotNull();
-
-        /*Button tobiiButton = createTopBarButton(
-                "Eye-Tracker Manager",
-                "images/eye-tracking_white.png",
-                (e) -> {
-                    StageUtils.killRunningProcess(graphicalMenus);
-                    TobiiManagerNamedProcessCreator tobiiManagerProcess = new TobiiManagerNamedProcessCreator();
-                    tobiiManagerProcess.setUpProcessBuilder();
-                    graphicalMenus.process = tobiiManagerProcess.start(graphicalMenus);
-                    showCloseProcessButtonIfProcessNotNull();
-                }
-        );*/
 
         I18NButton tobiiButton2 = createTopBarI18NButton(translator,
                 "Calibration",
@@ -130,12 +117,21 @@ public class HomeScreen extends BorderPane {
                 "Exit",
                 "images/on-off-button_white.png",
                 (e) -> {
-                    this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main));
-                }
+                    this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main,configuration));
+                },
+                configuration
         );
-        exitButton.assignIndicator((e) -> {
-            this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main));
+
+        exitButton.setOnMouseEntered(e -> {
+            if(configuration.isGazeInteraction()){
+                exitButton.assignIndicator((ev) -> this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main,configuration)));
+            }else{
+                exitButton.deactivate();
+            }
         });
+
+        //exitButton.assignIndicator((e) -> this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main,configuration)));
+
         exitButton.start();
 
         StackPane optionBar = createOptionBar(optionButton, updateButton,tobiiButton2, exitButton);
@@ -225,17 +221,17 @@ public class HomeScreen extends BorderPane {
         return UtilsUI.getDoubleClickedI18NButton(translator,text, imagePath, eventhandler, graphicalMenus.primaryStage);
     }
 
-    ProgressDoubleClickedButtonI18N createExitTopBarButton(Translator translator,String text, String imagePath, EventHandler eventhandler) {
+    ProgressDoubleClickedButtonI18N createExitTopBarButton(Translator translator,String text, String imagePath, EventHandler eventhandler, Configuration configuration) {
 
-        return new ProgressDoubleClickedButtonI18N(translator, text, imagePath, eventhandler, graphicalMenus.primaryStage);
+        return new ProgressDoubleClickedButtonI18N(translator, text, imagePath, eventhandler, graphicalMenus.primaryStage, configuration);
     }
 
-    private HBox createMenuBar() {
+    private HBox createMenuBar(Configuration configuration) {
         HBox menuBar = new HBox(
-                createAppButtonLauncher(new AugComNamedProcessCreator(), "AugCom", "images/Logos_AugCom.png"),
-                createAppButtonLauncher(new InterAACtionSceneNamedProcessCreator(), "InterAACtionScene", "images/VisuelSceneDisplay.png"),
-                createAppButtonLauncher(new GazePlayNamedProcessCreator(), "GazePlay", "images/gazeplayicon.png"),
-                createAppButtonLauncher(new InterAACtionPlayerNamedProcessCreator(), "InterAACtionPlayer", "images/gazeMediaPlayer.png")
+                createAppButtonLauncher(new AugComNamedProcessCreator(), "AugCom", "images/Logos_AugCom.png", configuration),
+                createAppButtonLauncher(new InterAACtionSceneNamedProcessCreator(), "InterAACtionScene", "images/VisuelSceneDisplay.png", configuration),
+                createAppButtonLauncher(new GazePlayNamedProcessCreator(), "GazePlay", "images/gazeplayicon.png", configuration),
+                createAppButtonLauncher(new InterAACtionPlayerNamedProcessCreator(), "InterAACtionPlayer", "images/gazeMediaPlayer.png", configuration)
         );
 
         menuBar.setAlignment(Pos.CENTER);
@@ -244,8 +240,8 @@ public class HomeScreen extends BorderPane {
         return menuBar;
     }
 
-    private StackPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL) {
-        I18NProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus);
+    private StackPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL,Configuration configuration) {
+        I18NProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus,configuration);
         processButton.getLabel().setText(name);
         processButton.getLabel().setFont(new Font(20));
         processButton.getButton().setStroke(Color.web("#cd2653"));
@@ -275,6 +271,7 @@ public class HomeScreen extends BorderPane {
             updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getExistProperty().addListener((obj, oldval, newval) -> {
                 updateLaunchButtonIfExist(borderPaneLauncher, processButton, downnloadImageView, newval);
             });
+            startMouseListener();
         }
 
         return borderPaneLauncher;

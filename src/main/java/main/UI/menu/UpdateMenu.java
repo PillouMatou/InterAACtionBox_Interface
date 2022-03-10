@@ -37,9 +37,7 @@ public class UpdateMenu extends BorderPane {
     Button installAllButton;
     GraphicalMenus graphicalMenus;
 
-    //private final Translator translator;
-
-    public UpdateMenu(GraphicalMenus graphicalMenus, UpdateManager updateManager, Main main) {
+    public UpdateMenu(GraphicalMenus graphicalMenus, UpdateManager updateManager, Main main, Configuration configuration) {
         super();
 
         Translator translator = main.getTranslator();
