@@ -33,6 +33,8 @@ import tobii.Tobii;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.Scanner;
 
 @Slf4j
 public class HomeScreen extends BorderPane {
@@ -98,8 +100,7 @@ public class HomeScreen extends BorderPane {
                 "Calibration",
                 "images/eye-tracking_white.png",
                 (e) -> {
-
-                    if (Arrays.toString(Tobii.gazePosition()).equals(tobiiNotConnected)){
+                    if (Objects.equals(firstCalibration(), "true")){
                         StageUtils.killRunningProcess(graphicalMenus);
                         TobiiManagerNamedProcessCreator tobiiManagerProcess = new TobiiManagerNamedProcessCreator();
                         tobiiManagerProcess.setUpProcessBuilder();
@@ -386,4 +387,14 @@ public class HomeScreen extends BorderPane {
         centerMenu.getChildren().remove(closeMenuButton);
     }
 
+    public String firstCalibration(){
+
+        try {
+            Scanner myReader = new Scanner("~/InterAACtionGaze/bin/args.txt");
+            return myReader.nextLine();
+        } catch (Exception e) {
+            return "true";
+        }
+
+    }
 }
