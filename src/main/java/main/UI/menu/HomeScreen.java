@@ -122,7 +122,15 @@ public class HomeScreen extends BorderPane {
                 configuration
         );
 
-        exitButton.assignIndicator((e) -> this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main,configuration)));
+        exitButton.setOnMouseEntered(e -> {
+            if(configuration.isGazeInteraction()){
+                exitButton.assignIndicator((ev) -> this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main,configuration)));
+            }else{
+                exitButton.deactivate();
+            }
+        });
+
+        //exitButton.assignIndicator((e) -> this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main,configuration)));
 
         exitButton.start();
 

@@ -47,13 +47,7 @@ public class ProgressDoubleClickedButtonI18N extends StackPane {
         indicator.setMouseTransparent(true);
         indicator.setOpacity(0);
 
-        this.getChildren().addAll(button);
-
-        if(configuration.isGazeInteraction()){
-            this.getChildren().addAll(indicator);
-        }else{
-            this.getChildren().removeAll(indicator);
-        }
+        this.getChildren().addAll(button,indicator);
 
         button.heightProperty().addListener((obs, oldVal, newVal) -> {
             indicator.setMinHeight(newVal.doubleValue());
@@ -65,6 +59,11 @@ public class ProgressDoubleClickedButtonI18N extends StackPane {
         enable();
         this.button.addEventFilter(MouseEvent.MOUSE_ENTERED, enterButtonHandler);
         this.button.addEventFilter(MouseEvent.MOUSE_EXITED, exitButtonHandler);
+    }
+
+    public void deactivate(){
+        this.button.removeEventFilter(MouseEvent.MOUSE_ENTERED, enterButtonHandler);
+        this.button.removeEventFilter(MouseEvent.MOUSE_EXITED, exitButtonHandler);
     }
 
     private void enable() {
