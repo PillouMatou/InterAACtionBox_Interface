@@ -55,7 +55,7 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
         if (UtilsOS.isWindows()) {
             return "C:/Program Files (x86)/GazePlay";
         } else {
-            String configFilePath = "/etc/skel/interaactionBox_Interface-linux/bin/configuration.conf";
+            String configFilePath = "/etc/skel/InteraactionBox_Interface-linux/bin/configuration.conf";
             try {
                 BufferedReader brTest = new BufferedReader(new FileReader(configFilePath));
                 String text = brTest.readLine();
