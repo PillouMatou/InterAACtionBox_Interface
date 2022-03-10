@@ -88,7 +88,7 @@ public class HomeScreen extends BorderPane {
 
         HBox menuBar = createMenuBar(configuration);
 
-        closeMenuButton = createCloseMenuButton();
+        closeMenuButton = createCloseMenuButton(configuration);
         centerMenu.getChildren().addAll(closeMenuButton, menuBar);
         this.setCenter(centerMenu);
 
@@ -351,15 +351,21 @@ public class HomeScreen extends BorderPane {
         t.start();
     }
 
-    public I18NProgressButton createCloseMenuButton() {
+    public I18NProgressButton createCloseMenuButton(Configuration configuration) {
         I18NProgressButton closeButton = new I18NProgressButton();
         closeButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 15);
         closeButton.getButton().setStroke(Color.web("#cd2653"));
         closeButton.getButton().setStrokeWidth(3);
 
-        closeButton.assignIndicator((e) -> {
+        if(configuration.isGazeInteraction()){
+            closeButton.assignIndicator((e) -> {
+                graphicalMenus.primaryStage.hide();
+            });
+        }
+        closeButton.setOnMouseClicked((e) -> {
             graphicalMenus.primaryStage.hide();
         });
+
 
         closeButton.start();
         graphicalMenus.getGazeDeviceManager().addEventFilter(closeButton.getButton());
