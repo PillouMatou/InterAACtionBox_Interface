@@ -27,9 +27,10 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
 
     private ProcessBuilder createGazePlayBuilder() {
 
-            LinkedList<String> commands = new LinkedList<>(Arrays.asList("~/Launcher/./gazeplayAfsrLauncher"));
-
-            return new ProcessBuilder(commands);
+            return new ProcessBuilder(
+                    "sh",
+                    "../../Launcher/gazeplayAfsrLauncher.sh"
+            );
     }
 
     @Override

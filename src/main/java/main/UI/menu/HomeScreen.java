@@ -32,6 +32,7 @@ import tobii.Tobii;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
@@ -396,8 +397,11 @@ public class HomeScreen extends BorderPane {
     public String firstCalibration(){
 
         try {
-            Scanner myReader = new Scanner("~/InterAACtionGaze/bin/args.txt");
-            return myReader.nextLine();
+            File myFile = new File("../../InterAACtionGaze/bin/args.txt");
+            Scanner myReader = new Scanner(myFile);
+            String data = myReader.nextLine();
+            log.info("Value of data -> " + data);
+            return data;
         } catch (Exception e) {
             return "true";
         }
