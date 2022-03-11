@@ -26,46 +26,15 @@ public class GazePlayNamedProcessCreator implements AppNamedProcessCreator {
     }
 
     private ProcessBuilder createGazePlayBuilder() {
-        String javaBin;
-        String gazePlayInstallationRepo = getGazePlayRepo();
-        if (!gazePlayInstallationRepo.equals("")) {
-            if (UtilsOS.isWindows()) {
-                javaBin = gazePlayInstallationRepo + "/lib/jre/bin/java.exe";
-            } else {
-                javaBin = gazePlayInstallationRepo + "/lib/jre/bin/java";
-            }
-            String classpath = gazePlayInstallationRepo + "/lib/*";
 
-            LinkedList<String> commands = new LinkedList<>(Arrays.asList(javaBin, "-cp", classpath, "-Djdk.gtk.version=2", "net.gazeplay.GazePlayLauncher", "--afsrgazeplay", "--user", UtilsOS.getUserNameFromOSForGazePlay()));
+            LinkedList<String> commands = new LinkedList<>(Arrays.asList("~/Launcher/./gazeplayAfsrLauncher"));
 
             return new ProcessBuilder(commands);
-        } else {
-            return new ProcessBuilder();
-        }
     }
 
     @Override
     public NamedProcess start(GraphicalMenus graphicalMenus) {
         processBuilder = createGazePlayBuilder();
         return AppNamedProcessCreator.createProcress(new GazePlayXdotoolProcessCreator(), processBuilder, graphicalMenus, "GazePlay");
-
     }
-
-    private String getGazePlayRepo() {
-        if (UtilsOS.isWindows()) {
-            return "C:/Program Files (x86)/GazePlay";
-        } else {
-            String configFilePath = "/etc/skel/InteraactionBox_Interface-linux/bin/configuration.conf";
-            try {
-                BufferedReader brTest = new BufferedReader(new FileReader(configFilePath));
-                String text = brTest.readLine();
-                log.info("GazePlay directory is: " + text);
-                return text;
-            } catch (IOException e) {
-                log.info("configuration.conf non trouvé");
-                return "";
-            }
-        }
-    }
-
 }
