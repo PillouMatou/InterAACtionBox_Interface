@@ -12,6 +12,7 @@ import main.utils.StageUtils;
 import main.utils.UtilsOS;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public interface AppNamedProcessCreator {
 
@@ -102,13 +103,27 @@ public interface AppNamedProcessCreator {
         setUpProcessBuilder();
         if(configuration.isGazeInteraction()) {
             progressButton.assignIndicator((e) -> {
+                progressButton.stop();
                 StageUtils.killRunningProcess(graphicalMenus);
                 graphicalMenus.process = start(graphicalMenus);
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                    progressButton.start();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             });
         }
         progressButton.setOnMouseClicked((e) -> {
+            progressButton.stop();
             StageUtils.killRunningProcess(graphicalMenus);
             graphicalMenus.process = start(graphicalMenus);
+            try {
+                TimeUnit.SECONDS.sleep(5);
+                progressButton.start();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
         });
         return progressButton;
     }
