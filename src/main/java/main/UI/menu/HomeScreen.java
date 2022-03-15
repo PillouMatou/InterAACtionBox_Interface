@@ -101,15 +101,7 @@ public class HomeScreen extends BorderPane {
                 "Calibration",
                 "images/eye-tracking_white.png",
                 (e) -> {
-                    if (Objects.equals(firstCalibration(), "true")){
-                        StageUtils.killRunningProcess(graphicalMenus);
-                        TobiiManagerNamedProcessCreator tobiiManagerProcess = new TobiiManagerNamedProcessCreator();
-                        tobiiManagerProcess.setUpProcessBuilder();
-                        graphicalMenus.process = tobiiManagerProcess.start(graphicalMenus);
-                    }
-                    else {
-                        interAACtionGazeNamedProcessCreator.start();
-                    }
+                    interAACtionGazeNamedProcessCreator.start();
                 }
         );
 
@@ -394,17 +386,4 @@ public class HomeScreen extends BorderPane {
         centerMenu.getChildren().remove(closeMenuButton);
     }
 
-    public String firstCalibration(){
-
-        try {
-            File myFile = new File("../../InterAACtionGaze/bin/args.txt");
-            Scanner myReader = new Scanner(myFile);
-            String data = myReader.nextLine();
-            log.info("Value of data -> " + data);
-            return data;
-        } catch (Exception e) {
-            return "true";
-        }
-
-    }
 }
