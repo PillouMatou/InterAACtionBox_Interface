@@ -43,7 +43,7 @@ public class OptionsMenu extends BorderPane {
         settings.setVgap(graphicalMenus.primaryStage.getHeight() / 30);
 
         {
-            Label useEyeTracker = new Label("Eye Tracker:");
+            I18NLabel useEyeTracker = new I18NLabel(translator,"Eye Tracker:");
             useEyeTracker.setStyle("-fx-font-weight: bold; -fx-font-family: Helvetica; -fx-font-size: 3em ; -fx-text-fill: #cd2653");
 
             Label errorEyeTracker = new Label("");
