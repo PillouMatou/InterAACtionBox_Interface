@@ -98,11 +98,19 @@ public class HomeScreen extends BorderPane {
 
         showCloseProcessButtonIfProcessNotNull();
 
-        I18NButton tobiiButton2 = createTopBarI18NButton(translator,
+        I18NButton gazeButton = createTopBarI18NButton(translator,
+                "Gaze",
+                "images/eye_white.png",
+                (e) -> {
+                    interAACtionGazeNamedProcessCreator.start();
+                }
+        );
+
+        I18NButton calibrationButton = createTopBarI18NButton(translator,
                 "Calibration",
                 "images/eye-tracking_white.png",
                 (e) -> {
-                    interAACtionGazeNamedProcessCreator.start();
+                    interAACtionGazeNamedProcessCreator.calibration();
                 }
         );
 
@@ -129,7 +137,7 @@ public class HomeScreen extends BorderPane {
 
         exitButton.start();
 
-        StackPane optionBar = createOptionBar(optionButton, updateButton,tobiiButton2, exitButton);
+        StackPane optionBar = createOptionBar(optionButton, updateButton, gazeButton, calibrationButton, exitButton);
         this.setTop(optionBar);
 
         ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
@@ -138,7 +146,7 @@ public class HomeScreen extends BorderPane {
     }
 
 
-    private StackPane createOptionBar(Button optionButton, Button updateButton,Button tobiiButton2, StackPane exitButton) {
+    private StackPane createOptionBar(Button optionButton, Button updateButton, Button gazeButton, Button calibrationButton, StackPane exitButton) {
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
         backgroundForTitle.setHeight(graphicalMenus.primaryStage.getHeight() / 10);
@@ -148,7 +156,8 @@ public class HomeScreen extends BorderPane {
 
         optionButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
         updateButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
-        tobiiButton2.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
+        gazeButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
+        calibrationButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
         exitButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
 
 
@@ -166,7 +175,7 @@ public class HomeScreen extends BorderPane {
 
 
         titleBox.setLeft(new HBox(optionButton, updateButton));
-        titleBox.setRight(new HBox(tobiiButton2, exitButton));
+        titleBox.setRight(new HBox(gazeButton, calibrationButton, exitButton));
 
         BorderPane.setAlignment(titlePane, Pos.CENTER_LEFT);
 

@@ -3,6 +3,7 @@ package main.process;
 import lombok.extern.slf4j.Slf4j;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.InteraactionGazeXdotoolProcessCreator;
+import main.process.xdotoolProcess.InteraactionGazeCalibrationXdotoolProcessCreator;
 import main.utils.NamedProcess;
 import main.utils.UtilsOS;
 
@@ -51,6 +52,11 @@ public class InterAACtionGazeNamedProcessCreator {
     public void start() {
             InteraactionGazeXdotoolProcessCreator interaactionGazeXdotoolProcessCreator = new InteraactionGazeXdotoolProcessCreator();
             interaactionGazeXdotoolProcessCreator.start();
+    }
+
+    public void calibration() {
+            InteraactionGazeCalibrationXdotoolProcessCreator interaactionGazeCalibrationXdotoolProcessCreator = new InteraactionGazeCalibrationXdotoolProcessCreator();
+            interaactionGazeCalibrationXdotoolProcessCreator.start();
     }
 
     private String getInterAACtionGazeRepo() {
