@@ -1,25 +1,18 @@
 package main.utils;
 
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import lombok.extern.slf4j.Slf4j;
-import main.Configuration;
-import main.ConfigurationBuilder;
+import org.apache.commons.io.IOUtils;
 
-import javax.activation.MimetypesFileTypeMap;
-import java.io.*;
-import java.net.URL;
+import jakarta.activation.MimetypesFileTypeMap;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
-import org.apache.commons.io.IOUtils;
 
 /**
  * Created by schwab on 23/12/2016.

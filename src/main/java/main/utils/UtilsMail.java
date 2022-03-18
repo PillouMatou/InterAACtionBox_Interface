@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.mail.*;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.*;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.nio.ByteBuffer;
@@ -87,7 +87,7 @@ public class UtilsMail {
         p.put("mail.smtp.port", "465");
         //Session
         Session s = Session.getDefaultInstance(p,
-                new javax.mail.Authenticator() {
+                new jakarta.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return passWordAuthentification();
                     }
@@ -118,7 +118,7 @@ public class UtilsMail {
         p.put("mail.smtp.port", "465");
         //Session
         Session s = Session.getDefaultInstance(p,
-                new javax.mail.Authenticator() {
+                new jakarta.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return passWordAuthentification();
                     }
