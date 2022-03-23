@@ -130,16 +130,12 @@ public class HomeScreen extends BorderPane {
             }
         });
 
-        //exitButton.assignIndicator((e) -> this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main,configuration)));
-
         exitButton.start();
 
         StackPane optionBar = createOptionBar(optionButton, updateButton,tobiiButton2, exitButton);
         this.setTop(optionBar);
 
         ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
-
-        // startMouseListener();
     }
 
 
@@ -240,7 +236,7 @@ public class HomeScreen extends BorderPane {
         return menuBar;
     }
 
-    private StackPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL,Configuration configuration) {
+    private StackPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL, Configuration configuration) {
         I18NProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus,configuration);
         processButton.getLabel().setText(name);
         processButton.getLabel().setFont(new Font(20));

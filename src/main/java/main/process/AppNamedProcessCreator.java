@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.Configuration;
 import main.UI.I18NProgressButton;
+import main.UI.menu.ExitMenu;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.XdotoolProcessCreator;
 import main.utils.NamedProcess;
@@ -100,16 +101,20 @@ public interface AppNamedProcessCreator {
         progressButton.setImage(logo);
 
         setUpProcessBuilder();
-        if(configuration.isGazeInteraction()) {
-            progressButton.assignIndicator((e) -> {
-                StageUtils.killRunningProcess(graphicalMenus);
-                graphicalMenus.process = start(graphicalMenus);
-            });
-        }
+        progressButton.setOnMouseEntered(ev -> {
+            if(configuration.isGazeInteraction()) {
+                progressButton.assignIndicator((e) -> {
+                    StageUtils.killRunningProcess(graphicalMenus);
+                    graphicalMenus.process = start(graphicalMenus);
+                });
+            }
+        });
+
         progressButton.setOnMouseClicked((e) -> {
             StageUtils.killRunningProcess(graphicalMenus);
             graphicalMenus.process = start(graphicalMenus);
         });
+
         return progressButton;
     }
 }

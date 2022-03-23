@@ -63,6 +63,7 @@ public class OptionsMenu extends BorderPane {
             useEyeTrackerCheckBox.selectedProperty().addListener((obj, oldval, newval) -> {
                 if (newval) {
                     graphicalMenus.getConfiguration().setMode(Configuration.GAZE_INTERACTION);
+                    log.info("Configuration.GAZE_INTERACTION : {}", configuration.isGazeInteraction());
                     if(testCoordEyeTracker()){
                         graphicalMenus.getConfiguration().setMode(Configuration.MOUSE_INTERACTION);
                         if(Objects.equals(configuration.getLanguage(), "fra")){
@@ -76,6 +77,7 @@ public class OptionsMenu extends BorderPane {
                     }
                 } else {
                     graphicalMenus.getConfiguration().setMode(Configuration.MOUSE_INTERACTION);
+                    log.info("Configuration.GAZE_INTERACTION : {}", configuration.isGazeInteraction());
                 }
             });
 
