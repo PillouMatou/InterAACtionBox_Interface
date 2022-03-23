@@ -9,11 +9,11 @@ public class SendMailXdotoolProcessCreator {
 
     ProcessBuilder processBuilder;
 
-    public SendMailXdotoolProcessCreator(String firstname, String lastname, String email, String object, String text){
-        setUpProcessBuilder(firstname, lastname, email, object, text);
+    public SendMailXdotoolProcessCreator(String firstname, String lastname, String email, String object, String text, String password){
+        setUpProcessBuilder(firstname, lastname, email, object, text, password);
     }
 
-    public void setUpProcessBuilder(String firstname, String lastname, String email, String object, String text) {
+    public void setUpProcessBuilder(String firstname, String lastname, String email, String object, String text, String password) {
         processBuilder = new ProcessBuilder(
                 "sh",
                 "./scripts/sendMail.sh",
@@ -21,7 +21,8 @@ public class SendMailXdotoolProcessCreator {
                 lastname,
                 text,
                 object,
-                email
+                email,
+                password
         );
     }
 

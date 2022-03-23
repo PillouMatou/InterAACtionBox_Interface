@@ -28,7 +28,7 @@ public class UtilsMail {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
             keyGenerator.init(128); // block size is 128bits
             LinkedList<Integer> byteList = new LinkedList<>();
-            BufferedReader buffReader = new BufferedReader(new FileReader("~/.email/crypted_key.txt"));
+            BufferedReader buffReader = new BufferedReader(new FileReader("../../.email/crypted_key.txt"));
             String[] stringbyteArray = buffReader.readLine().split(",");
             byte[] realBytesArray = new byte[stringbyteArray.length];
             for (int i = 0; i < stringbyteArray.length; i++) {
@@ -52,7 +52,7 @@ public class UtilsMail {
             };
             cipher = Cipher.getInstance("AES");
 
-            BufferedReader buffReaderpass = new BufferedReader(new FileReader("~/.email/crypted_pass.txt"));
+            BufferedReader buffReaderpass = new BufferedReader(new FileReader("../../.email/crypted_pass.txt"));
             return decrypt(buffReaderpass.readLine(), secretKey);
         } catch (Exception e) {
             return "";
@@ -68,8 +68,9 @@ public class UtilsMail {
             errorLabel.setText("Renseignez l'objet de votre demande et donnez nous les d\u00e9tails dans votre message");
         } else {
             try {
+                String password = letMeSendIt();
                 SendMailNamedProcessCreator SendMailNamedProcessCreator = new SendMailNamedProcessCreator();
-                SendMailNamedProcessCreator.start(firstname, lastname, email, object, text);
+                SendMailNamedProcessCreator.start(firstname, lastname, email, object, text, password);
             } catch (Exception e) {
                 errorLabel.setText("Service temporairement indisponible");
             }finally {
