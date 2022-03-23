@@ -1,5 +1,6 @@
 package main;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
@@ -21,7 +22,7 @@ public class Configuration {
     public int numberOfLastPositionsToCheck = 7;
     public LinkedList<Point2D> lastPositions = new LinkedList<>();
     public LinkedList<Point2D> currentPoint = new LinkedList<>();
-    IntegerProperty selectionMode = new SimpleIntegerProperty(Configuration.MOUSE_INTERACTION);
+    public IntegerProperty selectionMode = new SimpleIntegerProperty(Configuration.MOUSE_INTERACTION);
     boolean userIsMoving = false;
 
     @Getter
