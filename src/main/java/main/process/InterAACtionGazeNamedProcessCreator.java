@@ -1,15 +1,12 @@
 package main.process;
 
 import lombok.extern.slf4j.Slf4j;
-import main.UI.menu.GraphicalMenus;
+import main.process.xdotoolProcess.InteraactionGazeCloseXdotoolProcessCreator;
+import main.process.xdotoolProcess.InteraactionGazeReOpenXdotoolProcessCreator;
 import main.process.xdotoolProcess.InteraactionGazeXdotoolProcessCreator;
 import main.process.xdotoolProcess.InteraactionGazeCalibrationXdotoolProcessCreator;
-import main.utils.NamedProcess;
 import main.utils.UtilsOS;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -50,13 +47,23 @@ public class InterAACtionGazeNamedProcessCreator {
     }
 
     public void start() {
-            InteraactionGazeXdotoolProcessCreator interaactionGazeXdotoolProcessCreator = new InteraactionGazeXdotoolProcessCreator();
-            interaactionGazeXdotoolProcessCreator.start();
+        InteraactionGazeXdotoolProcessCreator interaactionGazeXdotoolProcessCreator = new InteraactionGazeXdotoolProcessCreator();
+        interaactionGazeXdotoolProcessCreator.start();
     }
 
     public void calibration() {
-            InteraactionGazeCalibrationXdotoolProcessCreator interaactionGazeCalibrationXdotoolProcessCreator = new InteraactionGazeCalibrationXdotoolProcessCreator();
-            interaactionGazeCalibrationXdotoolProcessCreator.start();
+        InteraactionGazeCalibrationXdotoolProcessCreator interaactionGazeCalibrationXdotoolProcessCreator = new InteraactionGazeCalibrationXdotoolProcessCreator();
+        interaactionGazeCalibrationXdotoolProcessCreator.start();
+    }
+
+    public void close(){
+        InteraactionGazeCloseXdotoolProcessCreator interaactionGazeCloseXdotoolProcessCreator = new InteraactionGazeCloseXdotoolProcessCreator();
+        interaactionGazeCloseXdotoolProcessCreator.start();
+    }
+
+    public void reOpen(){
+        InteraactionGazeReOpenXdotoolProcessCreator interaactionGazeReOpenXdotoolProcessCreator = new InteraactionGazeReOpenXdotoolProcessCreator();
+        interaactionGazeReOpenXdotoolProcessCreator.start();
     }
 
     private String getInterAACtionGazeRepo() {
