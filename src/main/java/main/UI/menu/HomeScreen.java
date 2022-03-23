@@ -32,7 +32,11 @@ import tobii.Tobii;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class HomeScreen extends BorderPane {
@@ -88,26 +92,25 @@ public class HomeScreen extends BorderPane {
 
         HBox menuBar = createMenuBar(configuration);
 
-        closeMenuButton = createCloseMenuButton();
+        closeMenuButton = createCloseMenuButton(configuration);
         centerMenu.getChildren().addAll(closeMenuButton, menuBar);
         this.setCenter(centerMenu);
 
         showCloseProcessButtonIfProcessNotNull();
 
-        I18NButton tobiiButton2 = createTopBarI18NButton(translator,
+        I18NButton gazeButton = createTopBarI18NButton(translator,
+                "Gaze",
+                "images/eye_white.png",
+                (e) -> {
+                    interAACtionGazeNamedProcessCreator.start();
+                }
+        );
+
+        I18NButton calibrationButton = createTopBarI18NButton(translator,
                 "Calibration",
                 "images/eye-tracking_white.png",
                 (e) -> {
-
-                    if (Arrays.toString(Tobii.gazePosition()).equals(tobiiNotConnected)){
-                        StageUtils.killRunningProcess(graphicalMenus);
-                        TobiiManagerNamedProcessCreator tobiiManagerProcess = new TobiiManagerNamedProcessCreator();
-                        tobiiManagerProcess.setUpProcessBuilder();
-                        graphicalMenus.process = tobiiManagerProcess.start(graphicalMenus);
-                    }
-                    else {
-                        interAACtionGazeNamedProcessCreator.start();
-                    }
+                    interAACtionGazeNamedProcessCreator.calibration();
                 }
         );
 
@@ -132,14 +135,14 @@ public class HomeScreen extends BorderPane {
 
         exitButton.start();
 
-        StackPane optionBar = createOptionBar(optionButton, updateButton,tobiiButton2, exitButton);
+        StackPane optionBar = createOptionBar(optionButton, updateButton, gazeButton, calibrationButton, exitButton);
         this.setTop(optionBar);
 
         ((TobiiGazeDeviceManager) graphicalMenus.getGazeDeviceManager()).init(graphicalMenus.getConfiguration());
     }
 
 
-    private StackPane createOptionBar(Button optionButton, Button updateButton,Button tobiiButton2, StackPane exitButton) {
+    private StackPane createOptionBar(Button optionButton, Button updateButton, Button gazeButton, Button calibrationButton, StackPane exitButton) {
         StackPane titlePane = new StackPane();
         Rectangle backgroundForTitle = new Rectangle(0, 0, 600, 50);
         backgroundForTitle.setHeight(graphicalMenus.primaryStage.getHeight() / 10);
@@ -149,7 +152,8 @@ public class HomeScreen extends BorderPane {
 
         optionButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
         updateButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
-        tobiiButton2.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
+        gazeButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
+        calibrationButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
         exitButton.setPrefHeight(graphicalMenus.primaryStage.getHeight() / 10);
 
 
@@ -167,7 +171,7 @@ public class HomeScreen extends BorderPane {
 
 
         titleBox.setLeft(new HBox(optionButton, updateButton));
-        titleBox.setRight(new HBox(tobiiButton2, exitButton));
+        titleBox.setRight(new HBox(gazeButton, calibrationButton, exitButton));
 
         BorderPane.setAlignment(titlePane, Pos.CENTER_LEFT);
 
@@ -347,15 +351,21 @@ public class HomeScreen extends BorderPane {
         t.start();
     }
 
-    public I18NProgressButton createCloseMenuButton() {
+    public I18NProgressButton createCloseMenuButton(Configuration configuration) {
         I18NProgressButton closeButton = new I18NProgressButton();
         closeButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 15);
         closeButton.getButton().setStroke(Color.web("#cd2653"));
         closeButton.getButton().setStrokeWidth(3);
 
-        closeButton.assignIndicator((e) -> {
+        if(configuration.isGazeInteraction()){
+            closeButton.assignIndicator((e) -> {
+                graphicalMenus.primaryStage.hide();
+            });
+        }
+        closeButton.setOnMouseClicked((e) -> {
             graphicalMenus.primaryStage.hide();
         });
+
 
         closeButton.start();
         graphicalMenus.getGazeDeviceManager().addEventFilter(closeButton.getButton());

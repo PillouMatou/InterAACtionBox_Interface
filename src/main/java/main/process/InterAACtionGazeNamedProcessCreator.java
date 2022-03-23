@@ -3,6 +3,7 @@ package main.process;
 import lombok.extern.slf4j.Slf4j;
 import main.UI.menu.GraphicalMenus;
 import main.process.xdotoolProcess.InteraactionGazeXdotoolProcessCreator;
+import main.process.xdotoolProcess.InteraactionGazeCalibrationXdotoolProcessCreator;
 import main.utils.NamedProcess;
 import main.utils.UtilsOS;
 
@@ -27,16 +28,16 @@ public class InterAACtionGazeNamedProcessCreator {
 
     private ProcessBuilder createInterAACtionGazeBuilder() {
         String javaBin;
-        String gazePlayInstallationRepo = getInterAACtionGazeRepo();
-        if (!gazePlayInstallationRepo.equals("")) {
+        String gazeInstallationRepo = getInterAACtionGazeRepo();
+        if (!gazeInstallationRepo.equals("")) {
             if (UtilsOS.isWindows()) {
-                javaBin = gazePlayInstallationRepo + "/lib/jre/bin/java.exe";
+                javaBin = gazeInstallationRepo + "/lib/jre/bin/java.exe";
             } else {
-                javaBin = gazePlayInstallationRepo + "/lib/jre/bin/java";
+                javaBin = gazeInstallationRepo + "/lib/jre/bin/java";
             }
-            String classpath = gazePlayInstallationRepo + "/lib/*";
+            String classpath = gazeInstallationRepo + "/lib/*";
 
-            LinkedList<String> commands = new LinkedList<>(Arrays.asList(javaBin, "-cp", classpath, "-Djdk.gtk.version=2", "-jar", gazePlayInstallationRepo+"/lib/untitled.jar"));
+            LinkedList<String> commands = new LinkedList<>(Arrays.asList(javaBin, "-cp", classpath, "-Djdk.gtk.version=2", "-jar", gazeInstallationRepo+"/lib/untitled.jar"));
 
             for(String command:commands){
                 log.info(command);
@@ -53,23 +54,18 @@ public class InterAACtionGazeNamedProcessCreator {
             interaactionGazeXdotoolProcessCreator.start();
     }
 
+    public void calibration() {
+            InteraactionGazeCalibrationXdotoolProcessCreator interaactionGazeCalibrationXdotoolProcessCreator = new InteraactionGazeCalibrationXdotoolProcessCreator();
+            interaactionGazeCalibrationXdotoolProcessCreator.start();
+    }
+
     private String getInterAACtionGazeRepo() {
         if (UtilsOS.isWindows()) {
             return "C:/Program Files (x86)/InteraactionGaze";
         } else {
-            String text = "../../ GazePlay-AFSR 1.9.7";
+            String text = "../../InterAACtionGaze";
             log.info("InterAACtionGaze directory is: " + text);
             return text;
-            /*String configFilePath = System.getProperty("user.home") + "/interaactionBox_Interface-linux/bin/configuration.conf";
-            try {
-                BufferedReader brTest = new BufferedReader(new FileReader(configFilePath));
-                String text = brTest.readLine();
-                log.info("InterAACtionGaze directory is: " + text);
-                return text;
-            } catch (IOException e) {
-                log.info("configuration.conf non trouvé");
-                return "";
-            }*/
         }
     }
 }

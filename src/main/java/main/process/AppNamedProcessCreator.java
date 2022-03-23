@@ -102,6 +102,7 @@ public interface AppNamedProcessCreator {
         progressButton.setImage(logo);
 
         setUpProcessBuilder();
+
         progressButton.setOnMouseEntered(ev -> {
             if(configuration.isGazeInteraction()) {
                 progressButton.assignIndicator((e) -> {
@@ -118,6 +119,7 @@ public interface AppNamedProcessCreator {
         });
 
         progressButton.setOnMouseClicked((e) -> {
+            progressButton.stop();
             StageUtils.killRunningProcess(graphicalMenus);
             graphicalMenus.process = start(graphicalMenus);
             try {

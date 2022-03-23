@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import main.Configuration;
 import main.ConfigurationBuilder;
 
-import javax.activation.MimetypesFileTypeMap;
+import jakarta.activation.MimetypesFileTypeMap;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;

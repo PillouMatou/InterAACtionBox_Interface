@@ -83,8 +83,8 @@ dependencies {
     compile 'ws.schild:jave-core:2.5.0'
     runtime 'org.slf4j:jcl-over-slf4j:1.7.25'
     runtime 'org.slf4j:log4j-over-slf4j:1.7.25'
-    compile group: 'javax.mail', name: 'mail', version: '1.4.5'
-    compile group: 'javax.activation', name: 'activation', version: '1.1.1'
+    implementation group: 'com.sun.mail', name: 'jakarta.mail', version: '2.0.1'
+    implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.0'
 }
 
 
@@ -127,6 +127,9 @@ distributions {
             }
             from("scripts") {
                 into 'bin/scripts'
+            }
+            from("images") {
+                into 'bin/images'
             }
         }
     }
