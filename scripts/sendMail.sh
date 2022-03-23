@@ -6,6 +6,8 @@ data=$3
 subject=$4
 to=$5
 
+sed -i "s/password	xxxxx/password	$6/" ~/.msmtprc
+
 #Send message to user to tell him that we have received his message
 echo "Bonjour,
 	
@@ -22,5 +24,7 @@ echo "Nom de l'utilisateur : $2
 Prénom de l'utilisateur : $1
 Mail de l'utilisateur : $5
 Message : $3" | mail -s "$4" "contact.interaactionBox@gmail.com"
+
+sed -i "s/password	$6/password	xxxxx/" ~/.msmtprc
 
 exit
