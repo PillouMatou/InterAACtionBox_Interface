@@ -45,10 +45,10 @@ public class HomeScreen extends BorderPane {
     private final I18NProgressButton closeMenuButton;
     private final VBox centerMenu;
     private final EventHandler goToUpdateMenu;
+    private final EventHandler goToOptionMenu;
     private UpdateManager updateManager;
 
     InterAACtionGazeNamedProcessCreator interAACtionGazeNamedProcessCreator = new InterAACtionGazeNamedProcessCreator();
-
 
     public HomeScreen(GraphicalMenus graphicalMenus, UpdateManager updateManager, Main main, Configuration configuration) {
         super();
@@ -74,11 +74,16 @@ public class HomeScreen extends BorderPane {
             graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu());
         };
 
+        goToOptionMenu = (e) -> {
+            interAACtionGazeNamedProcessCreator.close();
+            graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu());
+        };
+
         I18NButton optionButton = createTopBarI18NButton(
                 translator,
                 "Options",
                 "images/settings_white.png",
-                (e) -> graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu())
+                goToOptionMenu
         );
 
         I18NButton updateButton = createTopBarI18NButton(

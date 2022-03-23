@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import main.Configuration;
 import main.UI.*;
 import main.UI.menu.GraphicalMenus;
+import main.process.InterAACtionGazeNamedProcessCreator;
 
 import java.awt.image.BufferedImage;
 
@@ -92,7 +93,13 @@ public class UtilsUI {
         backgroundForTitle.widthProperty().bind(graphicalMenus.primaryStage.widthProperty());
         backgroundForTitle.setFill(Color.web("#cd2653"));
 
-        Button back = UtilsUI.getDoubleClickedI18NButton(translator,"Retour", "images/back.png", (e) -> graphicalMenus.getConfiguration().scene.setRoot(parent), graphicalMenus.primaryStage);
+        EventHandler goToHomeMenu = (e) -> {
+            InterAACtionGazeNamedProcessCreator interAACtionGazeNamedProcessCreator = new InterAACtionGazeNamedProcessCreator();
+            interAACtionGazeNamedProcessCreator.reOpen();
+            graphicalMenus.getConfiguration().scene.setRoot(parent);
+        };
+
+        Button back = UtilsUI.getDoubleClickedI18NButton(translator,"Retour", "images/back.png", goToHomeMenu, graphicalMenus.primaryStage);
         back.prefHeightProperty().bind(backgroundForTitle.heightProperty());
 
         Label title = new I18NLabel(translator,label);
