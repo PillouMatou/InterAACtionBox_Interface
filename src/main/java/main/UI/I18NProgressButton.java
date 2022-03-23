@@ -163,4 +163,8 @@ public class I18NProgressButton extends StackPane {
         activate();
     }
 
+    public void deactivate(){
+        this.button.removeEventFilter(MouseEvent.MOUSE_ENTERED, enterButtonHandler);
+        this.button.removeEventFilter(MouseEvent.MOUSE_EXITED, exitButtonHandler);
+    }
 }
