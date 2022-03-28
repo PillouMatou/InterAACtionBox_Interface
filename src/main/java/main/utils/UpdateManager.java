@@ -18,7 +18,8 @@ public class UpdateManager {
             new UpdateService("InterAACtionScene", "https://api.github.com/repos/AFSR/InteraactionScene-AFSR/releases/latest"),
             new UpdateService("GazePlay", "https://api.github.com/repos/AFSR/GazePlay-AFSR/releases/latest"),
             new UpdateService("InterAACtionPlayer", "https://api.github.com/repos/AFSR/InteraactionPlayer-AFSR/releases/latest"),
-
+            new UpdateService("InterAACtionGaze","https://api.github.com/repos/InteraactionGroup/interaactionGaze/releases/latest"),
+            new UpdateService("InterAACtionBox_Interface-linux","https://api.github.com/repos/InteraactionGroup/InterAACtionBox_Interface/releases/latest")
     };
 
     public UpdateManager(Configuration configuration) {
@@ -27,7 +28,10 @@ public class UpdateManager {
                         updateServices[UpdateService.AUGCOM].getUpdateProperty()).or(
                         updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty()).or(
                         updateServices[UpdateService.GAZEPLAY].getUpdateProperty()).or(
-                        updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty()
+                        updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().or(
+                        updateServices[UpdateService.INTERAACTION_GAZE].getUpdateProperty()).or(
+                        updateServices[UpdateService.INTERAACTION_INTERFACE].getUpdateProperty()
+                        )
                 ));
         Thread updateChecker = new Thread(()->{
             while (true) {

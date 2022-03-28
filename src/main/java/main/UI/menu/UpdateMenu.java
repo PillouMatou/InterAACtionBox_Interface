@@ -33,7 +33,7 @@ import java.io.InputStreamReader;
 public class UpdateMenu extends BorderPane {
 
     UpdateManager updateManager;
-    ProgressBar[] progressBars = new ProgressBar[6];
+    ProgressBar[] progressBars = new ProgressBar[8];
     Button installAllButton;
     GraphicalMenus graphicalMenus;
 
@@ -44,7 +44,7 @@ public class UpdateMenu extends BorderPane {
 
         this.updateManager = updateManager;
         this.graphicalMenus = graphicalMenus;
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i <= 7; i++) {
             progressBars[i] = new ProgressBar();
             progressBars[i].setProgress(0);
         }
@@ -101,6 +101,8 @@ public class UpdateMenu extends BorderPane {
         createGnomeControlCenterButton(translator, settings, UpdateService.INTERAACTION_SCENE);
         createGnomeControlCenterButton(translator, settings, UpdateService.GAZEPLAY);
         createGnomeControlCenterButton(translator, settings, UpdateService.INTERAACTION_PLAYER);
+        createGnomeControlCenterButton(translator, settings, UpdateService.INTERAACTION_GAZE);
+        createGnomeControlCenterButton(translator, settings, UpdateService.INTERAACTION_INTERFACE);
 
         settings.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(settings, Pos.CENTER);
@@ -112,7 +114,9 @@ public class UpdateMenu extends BorderPane {
                         progressBars[2].visibleProperty()).or(
                         progressBars[3].visibleProperty()).or(
                         progressBars[4].visibleProperty()).or(
-                        progressBars[5].visibleProperty()
+                        progressBars[5].visibleProperty()).or(
+                        progressBars[6].visibleProperty()).or(
+                        progressBars[7].visibleProperty()
                 )
         );
         menu.getChildren().addAll(downloadEverythin, progressBars[0], settings);
@@ -129,11 +133,13 @@ public class UpdateMenu extends BorderPane {
                 }
                 double systemCoeff = updateManager.updateServices[UpdateService.SYSTEME].getUpdateProperty().get() ? 1 : 0;
                 double augcomCoeff = updateManager.updateServices[UpdateService.AUGCOM].getUpdateProperty().get() ? 1 : 0;
-                double interaactionSceneCoef = updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get() ? 1 : 0;
+                double interaactionSceneCoeff = updateManager.updateServices[UpdateService.INTERAACTION_SCENE].getUpdateProperty().get() ? 1 : 0;
                 double gazeplayCoeff = updateManager.updateServices[UpdateService.GAZEPLAY].getUpdateProperty().get() ? 1 : 0;
                 double interaactionPlayerCoeff = updateManager.updateServices[UpdateService.INTERAACTION_PLAYER].getUpdateProperty().get() ? 1 : 0;
+                double interaactionGazeCoeff = updateManager.updateServices[UpdateService.INTERAACTION_GAZE].getUpdateProperty().get() ? 1 : 0;
+                double interaactionInterfaceCoeff = updateManager.updateServices[UpdateService.INTERAACTION_INTERFACE].getUpdateProperty().get() ? 1 : 0;
 
-                double coeff = 1 / (systemCoeff + augcomCoeff + interaactionSceneCoef + gazeplayCoeff + interaactionPlayerCoeff);
+                double coeff = 1 / (systemCoeff + augcomCoeff + interaactionSceneCoeff + gazeplayCoeff + interaactionPlayerCoeff + interaactionGazeCoeff + interaactionInterfaceCoeff);
 
                 while (progressBars[0].getProgress() < 1) {
                     progressBars[0].setProgress(
@@ -141,7 +147,9 @@ public class UpdateMenu extends BorderPane {
                                     progressBars[2].getProgress() * coeff +
                                     progressBars[3].getProgress() * coeff +
                                     progressBars[4].getProgress() * coeff +
-                                    progressBars[5].getProgress() * coeff
+                                    progressBars[5].getProgress() * coeff +
+                                    progressBars[6].getProgress() * coeff +
+                                    progressBars[7].getProgress() * coeff
                     );
                 }
             }
@@ -311,14 +319,14 @@ public class UpdateMenu extends BorderPane {
                         progressBars[UpdateService.GAZEPLAY + 1].setVisible(false);
                         updateManager.updateServices[UpdateService.GAZEPLAY].getOutput().setValue("");
                     });
-                    updateManager.checkUpdates();
+                    startUpdateInterAACtionGaze();
                 });
                 progressPercent(p, 4);
             } catch (IOException ex) {
                 ex.printStackTrace(System.err);
             }
         } else {
-            updateManager.checkUpdates();
+            startUpdateInterAACtionGaze();
         }
     }
 
@@ -387,6 +395,92 @@ public class UpdateMenu extends BorderPane {
         }
     }
 
+    void startUpdateInterAACtionGaze(){
+        if (updateManager.updateServices[UpdateService.INTERAACTION_GAZE].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionGazeUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.INTERAACTION_GAZE + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.INTERAACTION_GAZE].getOutput().setValue("");
+                    });
+                    startUpdateInterAACtionInterface();
+                });
+                progressPercent(p, 6);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+        }else{
+            startUpdateInterAACtionInterface();
+        }
+    }
+
+    void startUpdateOnlyInterAACtionGaze(){
+        if (updateManager.updateServices[UpdateService.INTERAACTION_GAZE].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionGazeUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.INTERAACTION_GAZE + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.INTERAACTION_GAZE].getOutput().setValue("");
+                    });
+                });
+                progressPercent(p, 6);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+        }
+    }
+
+    void startUpdateInterAACtionInterface(){
+        if (updateManager.updateServices[UpdateService.INTERAACTION_INTERFACE].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionBoxInterfaceUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.INTERAACTION_INTERFACE + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.INTERAACTION_INTERFACE].getOutput().setValue("");
+                    });
+                    updateManager.checkUpdates();
+                });
+                progressPercent(p, 7);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+        }else {
+            updateManager.checkUpdates();
+        }
+    }
+
+    void startUpdateOnlyInterAACtionInterface(){
+        if (updateManager.updateServices[UpdateService.INTERAACTION_INTERFACE].getUpdateProperty().get()) {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("sh", "../../Update/interAACtionBoxInterfaceUpdate.sh");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                p.onExit().thenRun(() -> {
+                    closeProcessStream(p);
+                    Platform.runLater(() -> {
+                        progressBars[UpdateService.INTERAACTION_INTERFACE + 1].setVisible(false);
+                        updateManager.updateServices[UpdateService.INTERAACTION_INTERFACE].getOutput().setValue("");
+                    });
+                });
+                progressPercent(p, 7);
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+        }
+    }
+
     void progressPercent(Process p, int index) {
         Thread t = new Thread(() -> {
             String s;
@@ -441,6 +535,12 @@ public class UpdateMenu extends BorderPane {
                                 break;
                             case UpdateService.INTERAACTION_PLAYER:
                                 startUpdateOnlyInterAACtionPlayer();
+                                break;
+                            case UpdateService.INTERAACTION_GAZE:
+                                startUpdateOnlyInterAACtionGaze();
+                                break;
+                            case UpdateService.INTERAACTION_INTERFACE:
+                                startUpdateOnlyInterAACtionInterface();
                                 break;
                             default:
                                 break;
