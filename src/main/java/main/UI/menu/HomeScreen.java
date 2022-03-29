@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.Cursor;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.util.Duration;
@@ -70,11 +71,13 @@ public class HomeScreen extends BorderPane {
         centerMenu.setTranslateY(rest / 3);
 
         goToUpdateMenu = (e) -> {
+            setCursor(Cursor.DEFAULT);
             updateManager.checkUpdates();
             graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu());
         };
 
         goToOptionMenu = (e) -> {
+            setCursor(Cursor.DEFAULT);
             interAACtionGazeNamedProcessCreator.close();
             graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getOptionsMenu());
         };
@@ -108,6 +111,7 @@ public class HomeScreen extends BorderPane {
                 "images/eye_white.png",
                 (e) -> {
                     interAACtionGazeNamedProcessCreator.start();
+                    setCursor(Cursor.DEFAULT);
                 }
         );
 
@@ -116,6 +120,7 @@ public class HomeScreen extends BorderPane {
                 "images/eye-tracking_white.png",
                 (e) -> {
                     interAACtionGazeNamedProcessCreator.calibration();
+                    setCursor(Cursor.DEFAULT);
                 }
         );
 
@@ -126,6 +131,7 @@ public class HomeScreen extends BorderPane {
                 "images/on-off-button_white.png",
                 (e) -> {
                     this.graphicalMenus.primaryStage.getScene().setRoot(new ExitMenu(graphicalMenus,main,configuration));
+                    setCursor(Cursor.DEFAULT);
                 },
                 configuration
         );
@@ -246,7 +252,7 @@ public class HomeScreen extends BorderPane {
     }
 
     private StackPane createAppButtonLauncher(AppNamedProcessCreator processCreator, String name, String imageURL, Configuration configuration) {
-        I18NProgressButton processButton = processCreator.createButton(new Image(imageURL), graphicalMenus,configuration);
+        I18NProgressButton processButton = processCreator.createButton(name,new Image(imageURL), graphicalMenus,configuration);
         processButton.getLabel().setText(name);
         processButton.getLabel().setFont(new Font(20));
         processButton.getButton().setStroke(Color.web("#cd2653"));
@@ -364,10 +370,12 @@ public class HomeScreen extends BorderPane {
 
         if(configuration.isGazeInteraction()){
             closeButton.assignIndicator((e) -> {
+                setCursor(Cursor.DEFAULT);
                 graphicalMenus.primaryStage.hide();
             });
         }
         closeButton.setOnMouseClicked((e) -> {
+            setCursor(Cursor.DEFAULT);
             graphicalMenus.primaryStage.hide();
         });
 

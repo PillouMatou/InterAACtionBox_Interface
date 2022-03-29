@@ -1,6 +1,7 @@
 package main.process;
 
 import javafx.application.Platform;
+import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.Configuration;
@@ -88,7 +89,7 @@ public interface AppNamedProcessCreator {
 
     void setUpProcessBuilder();
 
-    default I18NProgressButton createButton(Image image, GraphicalMenus graphicalMenus, Configuration configuration) {
+    default I18NProgressButton createButton(String name, Image image, GraphicalMenus graphicalMenus, Configuration configuration) {
         I18NProgressButton progressButton = new I18NProgressButton();
         progressButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 10);
 
@@ -106,6 +107,9 @@ public interface AppNamedProcessCreator {
         progressButton.setOnMouseEntered(ev -> {
             if(configuration.isGazeInteraction()) {
                 progressButton.assignIndicator((e) -> {
+                    if(name.equals("GazePlay")){
+                        graphicalMenus.getHomeScreen().setCursor(Cursor.WAIT);
+                    }
                     StageUtils.killRunningProcess(graphicalMenus);
                     graphicalMenus.process = start(graphicalMenus);
                     try {
@@ -119,15 +123,21 @@ public interface AppNamedProcessCreator {
         });
 
         progressButton.setOnMouseClicked((e) -> {
+            if(name.equals("GazePlay")){
+                graphicalMenus.getHomeScreen().setCursor(Cursor.WAIT);
+            }
             progressButton.stop();
             StageUtils.killRunningProcess(graphicalMenus);
             graphicalMenus.process = start(graphicalMenus);
+            progressButton.start();
+            /*
             try {
                 TimeUnit.SECONDS.sleep(5);
                 progressButton.start();
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
+             */
         });
 
         return progressButton;
