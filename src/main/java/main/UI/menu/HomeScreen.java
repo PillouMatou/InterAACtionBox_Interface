@@ -71,7 +71,7 @@ public class HomeScreen extends BorderPane {
         centerMenu.setTranslateY(rest / 3);
 
         goToUpdateMenu = (e) -> {
-            setCursor(Cursor.DEFAULT);
+            interAACtionGazeNamedProcessCreator.close();
             updateManager.checkUpdates();
             graphicalMenus.getConfiguration().scene.setRoot(graphicalMenus.getUpdateMenu());
         };

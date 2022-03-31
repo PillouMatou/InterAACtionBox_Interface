@@ -21,6 +21,8 @@ public class UpdateService {
     public static final int INTERAACTION_SCENE = 2;
     public static final int GAZEPLAY = 3;
     public static final int INTERAACTION_PLAYER = 4;
+    public static final int INTERAACTION_GAZE = 5;
+    public static final int INTERAACTION_INTERFACE = 6;
     @Getter
     final BooleanProperty updateProperty;
     @Getter
@@ -45,7 +47,7 @@ public class UpdateService {
     public void checkUpdate(boolean testBool) {
         if (!updateURL.equals("") && testBool) {
             try {
-                if (name.equals("GazePlay")) {
+                if (name.equals("GazePlay") || name.equals("InterAACtionGaze") || name.equals("InterAACtionBox_Interface-linux")) {
                     JSONObject softwareJson = JsonReader.readJsonFromUrl(updateURL);
                     if (softwareJson != null) {
                         File directory = new File(System.getProperty("user.home") + "/" + softwareJson.get("name"));
@@ -79,6 +81,9 @@ public class UpdateService {
     public void checkExist() {
         if (name.equals("GazePlay")) {
             File[] directories = new File(System.getProperty("user.home")).listFiles(file -> file.isDirectory() && file.getName().toLowerCase().contains(name.toLowerCase() + "-afsr"));
+            existProperty.set(directories == null || directories.length == 0);
+        } else if (name.equals("InterAACtionGaze") || name.equals("InterAACtionBox_Interface-linux")){
+            File[] directories = new File(System.getProperty("user.home")).listFiles(file -> file.isDirectory() && file.getName().toLowerCase().contains(name.toLowerCase()));
             existProperty.set(directories == null || directories.length == 0);
         } else {
             File[] directories = new File(System.getProperty("user.home") + "/dist").listFiles(file -> file.isDirectory() && file.getName().toLowerCase().contains(name.toLowerCase()));
