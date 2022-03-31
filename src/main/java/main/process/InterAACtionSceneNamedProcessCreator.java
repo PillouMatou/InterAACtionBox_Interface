@@ -18,6 +18,7 @@ public class InterAACtionSceneNamedProcessCreator implements AppNamedProcessCrea
                 "--disable-component-update",
                 "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'",
                 "--disable-features=Translate",
+                "--autoplay-policy=no-user-gesture-required",
                 "http://localhost:4201/#/fr/connect/" + UtilsOS.getUserNameFromOSForPWA());
 
     }
