@@ -1,11 +1,5 @@
 package main.process;
 
-import main.UI.menu.GraphicalMenus;
-import main.process.xdotoolProcess.GoogleChromeXdotoolProcessCreator;
-import main.process.xdotoolProcess.XdotoolProcessCreator;
-import main.utils.NamedProcess;
-import main.utils.UtilsOS;
-
 import java.io.File;
 import java.io.IOException;
 
