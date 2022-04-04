@@ -23,9 +23,11 @@ import main.UI.I18NLabel;
 import main.UI.I18NProgressButton;
 import main.UI.I18NText;
 import main.UI.Translator;
+import main.process.InterAACtionGazeNamedProcessCreator;
 import main.utils.UtilsOS;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ExitMenu extends BorderPane {
 
@@ -67,6 +69,8 @@ public class ExitMenu extends BorderPane {
 
         StackPane exitButton = createAppI18NButtonLauncher(translator,
                 (e) -> {
+                    InterAACtionGazeNamedProcessCreator gaze = new InterAACtionGazeNamedProcessCreator();
+                    gaze.close();
                     if (graphicalMenus.process != null && graphicalMenus.process.get() != null) {
                         graphicalMenus.process.destroy();
                         graphicalMenus.process.set(null);
@@ -124,7 +128,6 @@ public class ExitMenu extends BorderPane {
     }
 
     private StackPane createAppI18NButtonLauncher(Translator translator, EventHandler eventHandler, String name, String imageURL, Configuration configuration) {
-
         I18NProgressButton progressButton = new I18NProgressButton();
         progressButton.getButton().setRadius(graphicalMenus.primaryStage.getWidth() / 10);
         progressButton.getButton().setStroke(Color.BLACK);
