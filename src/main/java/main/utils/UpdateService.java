@@ -47,11 +47,33 @@ public class UpdateService {
     public void checkUpdate(boolean testBool) {
         if (!updateURL.equals("") && testBool) {
             try {
-                if (name.equals("GazePlay") || name.equals("InterAACtionGaze") || name.equals("InterAACtionBox_Interface-linux")) {
+                if (name.equals("GazePlay")) {
                     JSONObject softwareJson = JsonReader.readJsonFromUrl(updateURL);
                     if (softwareJson != null) {
                         File directory = new File(System.getProperty("user.home") + "/" + softwareJson.get("name"));
                         File directoryspace = new File(System.getProperty("user.home") + "/ " + softwareJson.get("name"));
+                        this.version = "" + softwareJson.get("name");
+                        log.info(directory.getAbsolutePath());
+                        Platform.runLater(() -> {
+                            updateProperty.set(!((directory.exists() && directory.isDirectory()) || (directoryspace.exists() && directoryspace.isDirectory())));
+                        });
+                    }
+                }else if (name.equals("InterAACtionGaze")) {
+                    JSONObject softwareJson = JsonReader.readJsonFromUrl(updateURL);
+                    if (softwareJson != null) {
+                        File directory = new File(System.getProperty("user.home") + "/InterAACtionGaze");
+                        File directoryspace = new File(System.getProperty("user.home") + "/ InterAACtionGaze");
+                        this.version = "" + softwareJson.get("name");
+                        log.info(directory.getAbsolutePath());
+                        Platform.runLater(() -> {
+                            updateProperty.set(!((directory.exists() && directory.isDirectory()) || (directoryspace.exists() && directoryspace.isDirectory())));
+                        });
+                    }
+                }else if (name.equals("InterAACtionBox_Interface-linux")){
+                    JSONObject softwareJson = JsonReader.readJsonFromUrl(updateURL);
+                    if (softwareJson != null) {
+                        File directory = new File(System.getProperty("user.home") + "/InterAACtionBox_Interface-linux");
+                        File directoryspace = new File(System.getProperty("user.home") + "/ InterAACtionBox_Interface-linux");
                         this.version = "" + softwareJson.get("name");
                         log.info(directory.getAbsolutePath());
                         Platform.runLater(() -> {
