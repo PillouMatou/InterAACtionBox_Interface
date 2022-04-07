@@ -37,8 +37,8 @@ then
     sed -i "s/Nom utilisateur : $2/Nom utilisateur : xxxxx/" ~/.email/emailFrDev.txt
     sed -i "s/Prenom utilisateur : $1/Prenom utilisateur : xxxxx/" ~/.email/emailFrDev.txt
     sed -i "s/Mail utilisateur : $5/Mail utilisateur : xxxxx/" ~/.email/emailFrDev.txt
-    sed -i "s/Message : $3/Message : xxxxx" ~/.email/emailFrDev.txt
-    sed -i "s/Subject: $4/Subject: xxxxx" ~/.email/emailFrDev.txt
+    sed -i "s/Message : $3/Message : xxxxx/" ~/.email/emailFrDev.txt
+    sed -i "s/Subject: $4/Subject: xxxxx/" ~/.email/emailFrDev.txt
 
 else
 
@@ -68,8 +68,8 @@ else
     sed -i "s/User lastname : $2/User lastname : xxxxx/" ~/.email/emailEnDev.txt
     sed -i "s/User firstname : $1/User firstname : xxxxx/" ~/.email/emailEnDev.txt
     sed -i "s/User mail : $5/User mail : xxxxx/" ~/.email/emailEnDev.txt
-    sed -i "s/Message : $3/Message : xxxxx" ~/.email/emailEnDev.txt
-    sed -i "s/Subject: $4/Subject: xxxxx" ~/.email/emailEnDev.txt
+    sed -i "s/Message : $3/Message : xxxxx/" ~/.email/emailEnDev.txt
+    sed -i "s/Subject: $4/Subject: xxxxx/" ~/.email/emailEnDev.txt
 
 fi
 
