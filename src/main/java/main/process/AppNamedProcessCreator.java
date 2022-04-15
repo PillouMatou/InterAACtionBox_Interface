@@ -119,6 +119,8 @@ public interface AppNamedProcessCreator {
                         ex.printStackTrace();
                     }
                 });
+            }else{
+                progressButton.deactivate();
             }
         });
 

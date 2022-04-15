@@ -164,6 +164,9 @@ public class I18NProgressButton extends StackPane {
     }
 
     public void deactivate(){
+        timelineProgressBar.stop();
+        indicator.setOpacity(0);
+        indicator.setProgress(0);
         this.button.removeEventFilter(MouseEvent.MOUSE_ENTERED, enterButtonHandler);
         this.button.removeEventFilter(MouseEvent.MOUSE_EXITED, exitButtonHandler);
     }
