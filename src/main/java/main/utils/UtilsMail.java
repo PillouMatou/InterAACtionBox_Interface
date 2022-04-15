@@ -1,5 +1,6 @@
 package main.utils;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.Label;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +15,9 @@ import main.process.SendMailNamedProcessCreator;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.LinkedList;
 import java.util.Properties;
@@ -23,12 +26,17 @@ import java.util.Properties;
 public class UtilsMail {
     static Cipher cipher;
 
+    @SuppressFBWarnings
     public static String letMeSendIt() {
+
+        BufferedReader buffReader = null;
+        BufferedReader buffReaderpass = null;
+
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
             keyGenerator.init(128); // block size is 128bits
-            LinkedList<Integer> byteList = new LinkedList<>();
-            BufferedReader buffReader = new BufferedReader(new FileReader("../../.email/crypted_key.txt"));
+            //LinkedList<Integer> byteList = new LinkedList<>();
+            buffReader = new BufferedReader(new FileReader("../../.email/crypted_key.txt", StandardCharsets.UTF_8));
             String[] stringbyteArray = buffReader.readLine().split(",");
             byte[] realBytesArray = new byte[stringbyteArray.length];
             for (int i = 0; i < stringbyteArray.length; i++) {
@@ -52,10 +60,21 @@ public class UtilsMail {
             };
             cipher = Cipher.getInstance("AES");
 
-            BufferedReader buffReaderpass = new BufferedReader(new FileReader("../../.email/crypted_pass.txt"));
+            buffReaderpass = new BufferedReader(new FileReader("../../.email/crypted_pass.txt", StandardCharsets.UTF_8));
             return decrypt(buffReaderpass.readLine(), secretKey);
         } catch (Exception e) {
             return "";
+        } finally {
+            try {
+                if (buffReader != null){
+                    buffReader.close();
+                }
+                if (buffReaderpass != null){
+                    buffReaderpass.close();
+                }
+            }catch (IOException e2){
+                e2.printStackTrace();
+            }
         }
     }
 
@@ -156,6 +175,7 @@ public class UtilsMail {
         return new PasswordAuthentication("help.interaactionbox@gmail.com", letMeSendIt());
     }
 
+    @SuppressFBWarnings
     public static String decrypt(String encryptedText, SecretKey secretKey)
             throws Exception {
         Base64.Decoder decoder = Base64.getDecoder();

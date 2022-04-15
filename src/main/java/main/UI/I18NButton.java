@@ -19,10 +19,10 @@ public class I18NButton extends Button implements Translator.LanguageChangeListe
         translator.registerLanguageChangeListener(this);
     }
 
-    public void setTextKeys(String[] value) {
+    /*public void setTextKeys(String[] value) {
         this.textKeys = value;
         languageChanged();
-    }
+    }*/
 
     @Override
     public void languageChanged() {

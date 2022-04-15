@@ -60,7 +60,7 @@ public class HomeScreen extends BorderPane {
 
         this.getChildren().add(UtilsUI.createBackground(graphicalMenus));
 
-        String tobiiNotConnected = Arrays.toString(Tobii.gazePosition());
+        //String tobiiNotConnected = Arrays.toString(Tobii.gazePosition());
 
         centerMenu = new VBox();
 

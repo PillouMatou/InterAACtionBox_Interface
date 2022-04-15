@@ -1,8 +1,11 @@
 package main.process;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.io.IOException;
 
+@Slf4j
 public class CloseGoogleChromeProcessCreator {
 
     ProcessBuilder processBuilder;
@@ -18,10 +21,12 @@ public class CloseGoogleChromeProcessCreator {
             File fileFR = new File("~/Téléchargements/close161918.txt");
             File fileEN = new File("~/Downloads/close161918.txt");
             if(fileFR.exists()) {
-                fileFR.delete();
+                boolean deleteFrFile = fileFR.delete();
+                log.info("File delete = " + deleteFrFile);
             }
             if(fileEN.exists()) {
-                fileEN.delete();
+                boolean deleteEnFile = fileEN.delete();
+                log.info("File delete = " + deleteEnFile);
             }
             return this.processBuilder.inheritIO().start();
         } catch (IOException e) {

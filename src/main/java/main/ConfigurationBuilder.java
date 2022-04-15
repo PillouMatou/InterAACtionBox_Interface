@@ -41,7 +41,8 @@ public class ConfigurationBuilder implements Cloneable {
             if(!Files.exists(path)){
                 Files.createDirectories(path);
                 File f = new File(CONFIGPATH);
-                f.createNewFile();
+                boolean createFile = f.createNewFile();
+                log.info("File created, path = " + createFile);
             }
             properties = loadProperties();
         } catch (FileNotFoundException e) {

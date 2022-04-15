@@ -18,7 +18,8 @@ public interface XdotoolProcessCreator {
                     err.printStackTrace();
                 }
             }
-            file.delete();
+            boolean deleteFile = file.delete();
+            System.out.println(deleteFile);
             Platform.runLater(
                     () -> {
                         graphicalMenus.primaryStage.hide();
@@ -33,7 +34,8 @@ public interface XdotoolProcessCreator {
     static Process getStartingProcess(ProcessBuilder processBuilder, GraphicalMenus graphicalMenus, String name) {
         try {
             File file = new File(name + "_windowId.txt");
-            file.delete();
+            boolean deleteFile = file.delete();
+            System.out.println(deleteFile);
             XdotoolProcessCreator.startWindowIdSearcher(graphicalMenus, name);
             return processBuilder.inheritIO().start();
         } catch (IOException e) {
