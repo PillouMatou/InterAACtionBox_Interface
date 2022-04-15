@@ -28,6 +28,7 @@ import main.utils.UtilsUI;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public class UpdateMenu extends BorderPane {
@@ -482,11 +483,13 @@ public class UpdateMenu extends BorderPane {
     }
 
     void progressPercent(Process p, int index) {
+
         Thread t = new Thread(() -> {
             String s;
+            BufferedReader stdout = null;
             try {
-                BufferedReader stdout = new BufferedReader(
-                        new InputStreamReader(p.getInputStream()));
+                stdout = new BufferedReader(
+                        new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
                 while ((s = stdout.readLine()) != null) {
                     int indexPercent = s.indexOf('%');
                     if (indexPercent != -1) {
@@ -505,6 +508,14 @@ public class UpdateMenu extends BorderPane {
                 }
             } catch (IOException e) {
                 //DO NOTHING
+            } finally {
+                try {
+                    if (stdout != null){
+                        stdout.close();
+                    }
+                }catch (IOException e2){
+                    e2.printStackTrace();
+                }
             }
         });
         t.setDaemon(true);

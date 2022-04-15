@@ -1,5 +1,6 @@
 package main.utils;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -36,6 +37,7 @@ public class Utils {
         return getImages(folder, -1);
     }
 
+    @SuppressFBWarnings
     public static Image[] getImages(final String folder, final int nbMax) {
 
         File directory = new File(folder);

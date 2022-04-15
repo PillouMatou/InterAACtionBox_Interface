@@ -66,7 +66,6 @@ public class Main extends Application {
             public void handle(KeyEvent t) {
                 if (t.getCode() == KeyCode.E) {
                     Platform.exit();
-                    System.exit(0);
                 }
             }
         });
